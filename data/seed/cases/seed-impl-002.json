@@ -1,0 +1,24 @@
+{
+  "case_id": "seed-impl-002",
+  "customer_name": "Helix Manufacturing",
+  "account_name": "Helix Ops",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Need onboarding, owner is TBD.",
+  "contract_text": "No major deviations in contract.",
+  "order_form_text": "No unusual discounts.",
+  "implementation_notes": "Go-live in 3 days with unclear customer owner and dependency conflicts in migration.",
+  "security_questionnaire_text": "Security controls already signed.",
+  "metadata": {
+    "scenario": "implementation",
+    "source": "seed"
+  },
+  "expected_route": "implementation",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "unclear_customer_owner",
+    "aggressive_go_live_date",
+    "dependency_conflict"
+  ],
+  "expected_task_owner_category": "implementation",
+  "scenario_summary": "Very tight implementation schedule with ownership and dependency issues."
+}

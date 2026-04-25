@@ -24,7 +24,16 @@ jobs:
         run: python -m pip install -e ".[dev]"
 
       - name: Lint
-        run: ruff check .
+        run: python -m ruff check .
 
       - name: Test
-        run: pytest
+        run: python -m pytest
+
+      - name: Deterministic eval
+        run: |
+          python -m pytest -q tests/test_routing.py tests/test_playbook.py
+          python scripts/run_evals.py
+        continue-on-error: false
+
+      - name: Docker build
+        run: docker build -t ai-flowops .

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>KPI summary</h1>
+</section>
+
+<section class="grid">
+  <div class="card"><h2>Total cases</h2><p>{{ kpi_summary.total_cases }}</p></div>
+  <div class="card"><h2>Straight-through</h2><p>{{ kpi_summary.straight_through_count }}</p></div>
+  <div class="card"><h2>Escalation</h2><p>{{ kpi_summary.escalation_count }}</p></div>
+  <div class="card"><h2>Override</h2><p>{{ kpi_summary.override_count }}</p></div>
+  <div class="card"><h2>Rejected</h2><p>{{ kpi_summary.rejected_count }}</p></div>
+  <div class="card"><h2>Request info</h2><p>{{ kpi_summary.request_info_count }}</p></div>
+  <div class="card"><h2>Avg tasks</h2><p>{{ kpi_summary.avg_tasks | round(2) }}</p></div>
+</section>
+
+<section class="card">
+  <h2>Route distribution</h2>
+  <ul class="kv">
+    {% for route_name, count in kpi_summary.route_distribution.items() %}
+    <li><span>{{ route_name }}</span><span>{{ count }}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

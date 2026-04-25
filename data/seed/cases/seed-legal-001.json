@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-legal-001",
+  "customer_name": "Everline Robotics",
+  "account_name": "Everline R&D",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Please review revised legal terms before kickoff.",
+  "contract_text": "Contract includes unusual indemnity language and liability cap above 1x fees, with nonstandard wording.",
+  "order_form_text": "Order text is straightforward with no major discount request.",
+  "implementation_notes": "Standard migration path on supported stack.",
+  "security_questionnaire_text": "No regulated data processing specified.",
+  "metadata": {
+    "scenario": "legal",
+    "source": "seed"
+  },
+  "expected_route": "legal",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "liability_cap_above_standard",
+    "nonstandard_indemnity"
+  ],
+  "expected_task_owner_category": "legal",
+  "scenario_summary": "Contract requests nonstandard liability and indemnity treatment."
+}

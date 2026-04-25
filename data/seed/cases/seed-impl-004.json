@@ -1,0 +1,24 @@
+{
+  "case_id": "seed-impl-004",
+  "customer_name": "Vertex Logistics",
+  "account_name": "Vertex Ops",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Need project started next week; integration includes unsupported middleware.",
+  "contract_text": "No commercial legal concerns.",
+  "order_form_text": "No credits requested.",
+  "implementation_notes": "Aggressive go-live schedule plus dependency conflict between two tools.",
+  "security_questionnaire_text": "Security questionnaire complete.",
+  "metadata": {
+    "scenario": "implementation",
+    "source": "seed"
+  },
+  "expected_route": "implementation",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "aggressive_go_live_date",
+    "unsupported_integration",
+    "dependency_conflict"
+  ],
+  "expected_task_owner_category": "implementation",
+  "scenario_summary": "Fast launch request with incompatible dependencies."
+}

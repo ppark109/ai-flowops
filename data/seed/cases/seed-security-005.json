@@ -1,0 +1,24 @@
+{
+  "case_id": "seed-security-005",
+  "customer_name": "Northshore Payments",
+  "account_name": "Northshore",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer asks for strict controls and secure handling.",
+  "contract_text": "Commercial terms stay standard.",
+  "order_form_text": "No credits requested.",
+  "implementation_notes": "Go-live timeline normal.",
+  "security_questionnaire_text": "Security questionnaire has weak artifact links and residency request for specific regions.",
+  "metadata": {
+    "scenario": "security",
+    "source": "seed"
+  },
+  "expected_route": "security",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "data_residency_request",
+    "missing_dpa_for_regulated_data",
+    "regulated_data_without_security_artifact"
+  ],
+  "expected_task_owner_category": "security",
+  "scenario_summary": "Security review needed for artifact gaps and residency conditions."
+}

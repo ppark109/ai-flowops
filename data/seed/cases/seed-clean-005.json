@@ -1,0 +1,20 @@
+{
+  "case_id": "seed-clean-005",
+  "customer_name": "Cascade Education",
+  "account_name": "Cascade Foundation",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Ready to proceed on standard package with normal timeline and standard SLA.",
+  "contract_text": "Clean commercial terms. No clauses requiring exceptions.",
+  "order_form_text": "Order has normal implementation scope and a standard termination clause.",
+  "implementation_notes": "Go-live set for 6 weeks out; no dependency risk noted.",
+  "security_questionnaire_text": "DPA provided and signed. No regulated data request.",
+  "metadata": {
+    "scenario": "clean",
+    "source": "seed"
+  },
+  "expected_route": "auto_approve",
+  "expected_approval_required": false,
+  "expected_key_risk_labels": [],
+  "expected_task_owner_category": "commercial_ops",
+  "scenario_summary": "Routine clean package with explicit DPA and no exceptions."
+}

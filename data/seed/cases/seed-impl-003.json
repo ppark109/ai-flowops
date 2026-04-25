@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-impl-003",
+  "customer_name": "Atlas Mobility",
+  "account_name": "Atlas",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Rapid timeline requested and support for unsupported integration stack.",
+  "contract_text": "Contract standard and clean.",
+  "order_form_text": "Standard commercial package.",
+  "implementation_notes": "Legacy mainframe connector requested; also unclear owner details.",
+  "security_questionnaire_text": "Security details complete.",
+  "metadata": {
+    "scenario": "implementation",
+    "source": "seed"
+  },
+  "expected_route": "implementation",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "unsupported_integration",
+    "unclear_customer_owner"
+  ],
+  "expected_task_owner_category": "implementation",
+  "scenario_summary": "Legacy integration request with missing owner definition."
+}

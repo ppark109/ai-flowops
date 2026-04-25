@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Cases</h1>
+  <form method="get" class="inline-form">
+    <label for="route">Route</label>
+    <select id="route" name="route">
+      <option value="">all</option>
+      {% for route_name in ROUTES %}
+      <option value="{{ route_name }}" {% if route == route_name %}selected{% endif %}>{{ route_name }}</option>
+      {% endfor %}
+    </select>
+    <label for="status">Status</label>
+    <input id="status" name="status" value="{{ status or '' }}" placeholder="draft,completed,pending_approval" />
+    <button type="submit">Filter</button>
+  </form>
+</section>
+
+<section class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Case</th>
+          <th>Status</th>
+          <th>Customer</th>
+          <th>Expected route</th>
+          <th>Expected approval</th>
+          <th>Run</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for case in cases %}
+        <tr>
+          <td><a href="/cases/{{ case.case_id }}">{{ case.case_id }}</a></td>
+          <td>{{ case.status }}</td>
+          <td>{{ case.customer_name }}</td>
+          <td>{{ case.expected_route }}</td>
+          <td>{{ case.expected_approval_required }}</td>
+          <td>
+            <form method="post" action="/cases/{{ case.case_id }}/run">
+              <button type="submit">Run</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No cases yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

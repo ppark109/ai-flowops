@@ -1,0 +1,64 @@
+{
+  "run_id": "run-f5325a35",
+  "total": 5,
+  "route_pass": 5,
+  "approval_pass": 5,
+  "grounding_pass": 5,
+  "brief_pass": 5,
+  "route_accuracy": 1.0,
+  "approval_accuracy": 1.0,
+  "grounding_accuracy": 1.0,
+  "brief_accuracy": 1.0,
+  "rows": [
+    {
+      "case_id": "heldout-auto-001",
+      "expected_route": "auto_approve",
+      "actual_route": "auto_approve",
+      "route_pass": true,
+      "approval_pass": true,
+      "grounding_pass": true,
+      "brief_completeness_pass": true,
+      "trace_complete": true
+    },
+    {
+      "case_id": "heldout-finance-001",
+      "expected_route": "finance",
+      "actual_route": "finance",
+      "route_pass": true,
+      "approval_pass": true,
+      "grounding_pass": true,
+      "brief_completeness_pass": true,
+      "trace_complete": true
+    },
+    {
+      "case_id": "heldout-implementation-001",
+      "expected_route": "implementation",
+      "actual_route": "implementation",
+      "route_pass": true,
+      "approval_pass": true,
+      "grounding_pass": true,
+      "brief_completeness_pass": true,
+      "trace_complete": true
+    },
+    {
+      "case_id": "heldout-legal-001",
+      "expected_route": "legal",
+      "actual_route": "legal",
+      "route_pass": true,
+      "approval_pass": true,
+      "grounding_pass": true,
+      "brief_completeness_pass": true,
+      "trace_complete": true
+    },
+    {
+      "case_id": "heldout-security-001",
+      "expected_route": "security",
+      "actual_route": "security",
+      "route_pass": true,
+      "approval_pass": true,
+      "grounding_pass": true,
+      "brief_completeness_pass": true,
+      "trace_complete": true
+    }
+  ]
+}

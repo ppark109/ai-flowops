@@ -1,0 +1,22 @@
+{
+  "case_id": "seed-finance-002",
+  "customer_name": "Motive Banking",
+  "account_name": "Motive",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Contract includes unusual penalty exposure.",
+  "contract_text": "Commercial contract has a custom penalty section with unusual fees.",
+  "order_form_text": "Early termination refund terms and penalty language requested.",
+  "implementation_notes": "Implementation is clear with 90-day timeline.",
+  "security_questionnaire_text": "Security questionnaire clean.",
+  "metadata": {
+    "scenario": "finance",
+    "source": "seed"
+  },
+  "expected_route": "finance",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "unusual_penalty_terms"
+  ],
+  "expected_task_owner_category": "finance",
+  "scenario_summary": "Finance must review penalties and refund exposure."
+}

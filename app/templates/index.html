@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Dashboard</h1>
+  <p>AI workflow status for seeded and reviewed cases.</p>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Total Cases</h2>
+    <p>{{ cases|length }}</p>
+  </div>
+  <div class="card">
+    <h2>Pending Approvals</h2>
+    <p>{{ kpi_summary.pending_approvals or 0 }}</p>
+  </div>
+  <div class="card">
+    <h2>Straight-through</h2>
+    <p>{{ kpi_summary.straight_through_count }} / {{ kpi_summary.total_cases }}</p>
+  </div>
+  <div class="card">
+    <h2>Eval Pass</h2>
+    <p>{{ eval_summary.route_rate * 100 | round(0) }}%</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Route distribution</h2>
+  <ul class="kv">
+    {% for route_name, count in kpi_summary.route_distribution.items() %}
+      <li><span>{{ route_name }}</span><span>{{ count }}</span></li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Recent cases</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Case</th>
+          <th>Status</th>
+          <th>Expected route</th>
+          <th>Expected approval</th>
+          <th>Package complete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for case in cases[:10] %}
+        <tr>
+          <td><a href="/cases/{{ case.case_id }}">{{ case.case_id }}</a></td>
+          <td>{{ case.status }}</td>
+          <td>{{ case.expected_route }}</td>
+          <td>{{ case.expected_approval_required }}</td>
+          <td>{{ case.package_complete }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">No cases yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

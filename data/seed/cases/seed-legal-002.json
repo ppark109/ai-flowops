@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-legal-002",
+  "customer_name": "Pioneer Bio",
+  "account_name": "Pioneer Bio Team",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Review termination and liability deviations in attached MSA draft.",
+  "contract_text": "The contract has unlimited liability exposure and no clear cap.",
+  "order_form_text": "Standard commercial terms remain intact.",
+  "implementation_notes": "No special integrations requested.",
+  "security_questionnaire_text": "No DPA needed per team response.",
+  "metadata": {
+    "scenario": "legal",
+    "source": "seed"
+  },
+  "expected_route": "legal",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "liability_cap_above_standard",
+    "termination_terms"
+  ],
+  "expected_task_owner_category": "legal",
+  "scenario_summary": "Liability coverage deviates from standard and needs legal interpretation."
+}

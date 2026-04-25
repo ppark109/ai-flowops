@@ -1,0 +1,23 @@
+{
+  "case_id": "heldout-legal-001",
+  "customer_name": "Pulse Energy",
+  "account_name": "Pulse",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Please review custom legal terms and indemnity language before kickoff.",
+  "contract_text": "Nonstandard indemnity, conflicting clauses, and liability language above standard.",
+  "order_form_text": "Standard order form with no unusual credits.",
+  "implementation_notes": "Implementation owner is clear and timeline standard.",
+  "security_questionnaire_text": "Security artifacts are complete.",
+  "metadata": {
+    "scenario": "held_out"
+  },
+  "expected_route": "legal",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "nonstandard_indemnity",
+    "conflicting_terms",
+    "liability_cap_above_standard"
+  ],
+  "expected_task_owner_category": "legal",
+  "scenario_summary": "Manual legal deviations for eval coverage."
+}

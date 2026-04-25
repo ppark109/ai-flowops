@@ -1,0 +1,24 @@
+{
+  "case_id": "seed-impl-005",
+  "customer_name": "North Valley Analytics",
+  "account_name": "North Valley",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer onboarding notes include unclear owner, integration unknown, and aggressive schedule.",
+  "contract_text": "Standard contract language.",
+  "order_form_text": "Standard order terms.",
+  "implementation_notes": "Dependency conflict and unclear customer owner are top issues.",
+  "security_questionnaire_text": "Security forms complete.",
+  "metadata": {
+    "scenario": "implementation",
+    "source": "seed"
+  },
+  "expected_route": "implementation",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "unclear_customer_owner",
+    "dependency_conflict",
+    "aggressive_go_live_date"
+  ],
+  "expected_task_owner_category": "implementation",
+  "scenario_summary": "Implementation readiness is ambiguous with several execution risks."
+}

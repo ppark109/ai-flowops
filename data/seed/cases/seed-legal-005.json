@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-legal-005",
+  "customer_name": "Vertex Retail",
+  "account_name": "Vertex",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "MSA is mostly standard but includes unusual legal definitions.",
+  "contract_text": "Contract includes conflicting legal definitions and liability terms above standard.",
+  "order_form_text": "Order form is valid and complete.",
+  "implementation_notes": "No implementation concerns at this time.",
+  "security_questionnaire_text": "No PII requested.",
+  "metadata": {
+    "scenario": "legal",
+    "source": "seed"
+  },
+  "expected_route": "legal",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "liability_cap_above_standard",
+    "conflicting_terms"
+  ],
+  "expected_task_owner_category": "legal",
+  "scenario_summary": "Multiple legal deviations with potential exposure."
+}

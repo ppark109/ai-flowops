@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-finance-004",
+  "customer_name": "Iris Energy",
+  "account_name": "Iris",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Pricing exceptions request with credits and discount.",
+  "contract_text": "Standard contract text.",
+  "order_form_text": "Requesting 60% discount, custom SLA credits and custom bonus terms.",
+  "implementation_notes": "No integration complexity.",
+  "security_questionnaire_text": "Security forms complete.",
+  "metadata": {
+    "scenario": "finance",
+    "source": "seed"
+  },
+  "expected_route": "finance",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "discount_above_threshold",
+    "custom_sla_credits"
+  ],
+  "expected_task_owner_category": "finance",
+  "scenario_summary": "Multiple finance exceptions with significant commercial exposure."
+}

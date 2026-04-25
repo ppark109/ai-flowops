@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Playbook</h1>
+</section>
+
+<section class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>id</th><th>route</th><th>severity</th><th>approval required</th><th>evidence</th><th>description</th></tr>
+      </thead>
+      <tbody>
+        {% for rule in rules %}
+        <tr>
+          <td>{{ rule.id }}</td>
+          <td>{{ rule.route }}</td>
+          <td>{{ rule.severity }}</td>
+          <td>{{ rule.approval_required }}</td>
+          <td>{{ ", ".join(rule.required_evidence) }}</td>
+          <td>{{ rule.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

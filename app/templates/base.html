@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI FlowOps</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">AI FlowOps</div>
+      <nav>
+        <a href="/">Dashboard</a>
+        <a href="/cases">Cases</a>
+        <a href="/approvals">Approvals</a>
+        <a href="/evals">Evals</a>
+        <a href="/kpis">KPIs</a>
+        <a href="/playbook">Playbook</a>
+      </nav>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

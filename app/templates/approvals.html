@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Approvals</h1>
+</section>
+
+<section class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Case</th><th>Original route</th><th>Final route</th><th>Status</th><th>Created</th></tr>
+      </thead>
+      <tbody>
+        {% for approval in approvals %}
+        <tr>
+          <td><a href="/approvals/{{ approval.approval_id }}">{{ approval.approval_id }}</a></td>
+          <td><a href="/cases/{{ approval.case_id }}">{{ approval.case_id }}</a></td>
+          <td>{{ approval.original_route }}</td>
+          <td>{{ approval.final_route or "-" }}</td>
+          <td>{{ approval.status }}</td>
+          <td>{{ approval.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No active approvals.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

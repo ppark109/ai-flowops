@@ -1,0 +1,23 @@
+{
+  "case_id": "heldout-implementation-001",
+  "customer_name": "Northstar Freight",
+  "account_name": "Northstar",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer asks for unsupported custom CRM integration and rapid rollout.",
+  "contract_text": "Commercial terms standard.",
+  "order_form_text": "Order form is standard.",
+  "implementation_notes": "Go-live in 4 days; unsupported integration with legacy dependency conflict.",
+  "security_questionnaire_text": "Security complete.",
+  "metadata": {
+    "scenario": "held_out"
+  },
+  "expected_route": "implementation",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "unsupported_integration",
+    "dependency_conflict",
+    "aggressive_go_live_date"
+  ],
+  "expected_task_owner_category": "implementation",
+  "scenario_summary": "Held-out implementation risk mix."
+}

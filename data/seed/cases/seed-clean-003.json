@@ -1,0 +1,20 @@
+{
+  "case_id": "seed-clean-003",
+  "customer_name": "Summit Retail",
+  "account_name": "Summit Retail Ops",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Prospect submitted full intake and contract references and requested standard rollout.",
+  "contract_text": "The agreement uses our standard indemnity and liability with no nonstandard provisions.",
+  "order_form_text": "Billing in USD and regular service package with normal discounts.",
+  "implementation_notes": "Known stack with supported integration and clear owner Jacob Field.",
+  "security_questionnaire_text": "No regulated data processing. No residency constraints.",
+  "metadata": {
+    "scenario": "clean",
+    "source": "seed"
+  },
+  "expected_route": "auto_approve",
+  "expected_approval_required": false,
+  "expected_key_risk_labels": [],
+  "expected_task_owner_category": "commercial_ops",
+  "scenario_summary": "Routine onboarding with supported integration and clear implementation path."
+}

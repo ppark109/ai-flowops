@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Eval results</h1>
+  <form method="post" action="/evals/run">
+    <button type="submit">Run held-out eval</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Latest eval summary</h2>
+  <ul class="kv">
+    <li><span>Route pass</span><span>{{ eval_summary.route_rate * 100 | round(1) }}%</span></li>
+    <li><span>Approval pass</span><span>{{ eval_summary.approval_rate * 100 | round(1) }}%</span></li>
+    <li><span>Grounding pass</span><span>{{ eval_summary.grounding_rate * 100 | round(1) }}%</span></li>
+    <li><span>Brief pass</span><span>{{ eval_summary.brief_rate * 100 | round(1) }}%</span></li>
+  </ul>
+</section>
+
+<section class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Case</th><th>Expected route</th><th>Actual route</th><th>Route pass</th><th>Approval pass</th><th>Grounding</th><th>Brief</th></tr>
+      </thead>
+      <tbody>
+        {% for row in evals %}
+        <tr>
+          <td>{{ row.case_id }}</td>
+          <td>{{ row.expected_route }}</td>
+          <td>{{ row.actual_route }}</td>
+          <td>{{ row.route_pass }}</td>
+          <td>{{ row.approval_pass }}</td>
+          <td>{{ row.grounding_pass }}</td>
+          <td>{{ row.brief_completeness_pass }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7">No evals yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

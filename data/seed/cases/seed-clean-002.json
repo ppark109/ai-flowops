@@ -1,0 +1,20 @@
+{
+  "case_id": "seed-clean-002",
+  "customer_name": "Harbor Logistics",
+  "account_name": "Harbor Account",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Please onboard new customer under existing standard terms.",
+  "contract_text": "Standard contract package with normal limitation of liability cap and no unusual clauses.",
+  "order_form_text": "Order form includes normal commercial terms and payment schedule by invoice.",
+  "implementation_notes": "Go-live after 45 days. Customer owner is operations lead Maya Lee.",
+  "security_questionnaire_text": "Security questionnaire completed and signed off by customer.",
+  "metadata": {
+    "scenario": "clean",
+    "source": "seed"
+  },
+  "expected_route": "auto_approve",
+  "expected_approval_required": false,
+  "expected_key_risk_labels": [],
+  "expected_task_owner_category": "commercial_ops",
+  "scenario_summary": "All required fields complete and contract terms appear standard."
+}

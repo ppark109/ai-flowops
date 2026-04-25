@@ -1,0 +1,22 @@
+{
+  "case_id": "seed-legal-003",
+  "customer_name": "Aster Finance",
+  "account_name": "Aster Platform",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer asks legal to resolve conflicting contract clauses.",
+  "contract_text": "Conflicting terms for audit rights and liability appear inconsistent with template.",
+  "order_form_text": "No unusual credits. No penalty section anomaly.",
+  "implementation_notes": "Implementation is straightforward and supported.",
+  "security_questionnaire_text": "Security questionnaire complete. No residency constraints.",
+  "metadata": {
+    "scenario": "legal",
+    "source": "seed"
+  },
+  "expected_route": "legal",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "conflicting_terms"
+  ],
+  "expected_task_owner_category": "legal",
+  "scenario_summary": "Contractual clause conflicts trigger legal routing."
+}

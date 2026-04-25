@@ -1,0 +1,19 @@
+{
+  "case_id": "heldout-auto-001",
+  "customer_name": "Pinecrest Retail",
+  "account_name": "Pinecrest",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Everything is complete and ready to proceed with standard process.",
+  "contract_text": "Clean standard contract with no unusual terms.",
+  "order_form_text": "Normal order form with no unusual terms or discount.",
+  "implementation_notes": "Supported integrations and clear owner.",
+  "security_questionnaire_text": "Security questionnaire fully completed and signed.",
+  "metadata": {
+    "scenario": "held_out"
+  },
+  "expected_route": "auto_approve",
+  "expected_approval_required": false,
+  "expected_key_risk_labels": [],
+  "expected_task_owner_category": "commercial_ops",
+  "scenario_summary": "Held-out clean case for route sanity check."
+}

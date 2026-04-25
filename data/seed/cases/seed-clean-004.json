@@ -1,0 +1,20 @@
+{
+  "case_id": "seed-clean-004",
+  "customer_name": "Orion Healthcare Services",
+  "account_name": "Orion Clinics",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer has full MSA package and standard implementation checklist.",
+  "contract_text": "Termination, liability, and indemnity are all aligned to starter terms.",
+  "order_form_text": "Service credits not requested and no unusual billing mechanics.",
+  "implementation_notes": "Standard onboarding plan; customer has designated admin.",
+  "security_questionnaire_text": "Health data will be pseudonymized; no data residency constraints. Standard controls cited.",
+  "metadata": {
+    "scenario": "clean",
+    "source": "seed"
+  },
+  "expected_route": "auto_approve",
+  "expected_approval_required": false,
+  "expected_key_risk_labels": [],
+  "expected_task_owner_category": "commercial_ops",
+  "scenario_summary": "Healthy intake with explicit operational ownership and complete info."
+}

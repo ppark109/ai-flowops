@@ -1,0 +1,22 @@
+{
+  "case_id": "heldout-finance-001",
+  "customer_name": "Cedar Logistics",
+  "account_name": "Cedar",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer proposes discounts and custom terms.",
+  "contract_text": "Commercial terms standard.",
+  "order_form_text": "Order form includes 50% discount and custom penalty clause.",
+  "implementation_notes": "Implementation plan is clear.",
+  "security_questionnaire_text": "Security questionnaire complete.",
+  "metadata": {
+    "scenario": "held_out"
+  },
+  "expected_route": "finance",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "discount_above_threshold",
+    "unusual_penalty_terms"
+  ],
+  "expected_task_owner_category": "finance",
+  "scenario_summary": "Held-out finance case with deep discount and penalties."
+}

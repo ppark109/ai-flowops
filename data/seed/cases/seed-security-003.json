@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-security-003",
+  "customer_name": "FinCloud Analytics",
+  "account_name": "FinCloud",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer requests data residency for APAC and EU jurisdictions.",
+  "contract_text": "No unusual commercial terms.",
+  "order_form_text": "Pricing and credit terms normal.",
+  "implementation_notes": "Rollout plan mentions geo-fenced deployment.",
+  "security_questionnaire_text": "Incomplete response for DPA and security controls.",
+  "metadata": {
+    "scenario": "security",
+    "source": "seed"
+  },
+  "expected_route": "security",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "data_residency_request",
+    "missing_dpa_for_regulated_data"
+  ],
+  "expected_task_owner_category": "security",
+  "scenario_summary": "Residency and missing DPA questions defer to security review."
+}

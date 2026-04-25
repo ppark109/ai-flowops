@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Case {{ case.case_id }}</h1>
+</section>
+
+<section class="grid">
+  <div class="card">
+    <h2>Intake</h2>
+    <p><strong>Customer:</strong> {{ case.intake.customer_name }}</p>
+    <p><strong>Account:</strong> {{ case.intake.account_name or "-" }}</p>
+    <p><strong>Submitted:</strong> {{ case.intake.submitted_at }}</p>
+    <p><strong>Summary:</strong> {{ case.intake.scenario_summary }}</p>
+  </div>
+  <div class="card">
+    <h2>State</h2>
+    <p><strong>State:</strong> {{ case.state }}</p>
+    <p><strong>Route:</strong> {{ case.routing_decision.recommended_route if case.routing_decision else "n/a" }}</p>
+    <p><strong>Approval required:</strong> {{ case.routing_decision.approval_required if case.routing_decision else "n/a" }}</p>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Findings</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Rule</th><th>Severity</th><th>Route</th><th>Summary</th></tr>
+      </thead>
+      <tbody>
+        {% for f in case.findings %}
+        <tr>
+          <td>{{ f.rule_id }}</td>
+          <td>{{ f.severity }}</td>
+          <td>{{ f.route }}</td>
+          <td>{{ f.summary }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">No findings.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Brief</h2>
+  {% if case.brief %}
+  <p><strong>Route:</strong> {{ case.brief.final_route }}</p>
+  <p><strong>Risk summary:</strong> {{ case.brief.risk_summary }}</p>
+  <p><strong>Next steps:</strong></p>
+  <ul>{% for item in case.brief.recommended_next_steps %}<li>{{ item }}</li>{% endfor %}</ul>
+  {% else %}
+  <p>No brief yet.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Tasks</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Task</th><th>Owner</th><th>Priority</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for task in case.tasks %}
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.owner_function }}</td>
+          <td>{{ task.priority }}</td>
+          <td>{{ task.status }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4">No tasks yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Trace</h2>
+  <ol class="timeline">
+    {% for trace in case.traces %}
+    <li>{{ trace.created_at }} - {{ trace.agent_name }} / {{ trace.step_name }} :: {{ trace.outputs_summary }}</li>
+    {% else %}
+    <li>No trace records yet.</li>
+    {% endfor %}
+  </ol>
+</section>
+
+{% if case.approval %}
+<section class="card">
+  <h2>Approval</h2>
+  <p><strong>Approval id:</strong> {{ case.approval.approval_id }}</p>
+  <p><strong>Status:</strong> {{ case.approval.status }}</p>
+  <p><strong>Reviewer:</strong> {{ case.approval.reviewer or "-" }}</p>
+  <p><strong>Comments:</strong> {{ case.approval.comments or "-" }}</p>
+  <p><a href="/approvals/{{ case.approval.approval_id }}">Open approval queue item</a></p>
+</section>
+{% endif %}
+{% endblock %}

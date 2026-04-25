@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-finance-003",
+  "customer_name": "Signal Freight",
+  "account_name": "Signal",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Discount request and special credits requested after onboarding.",
+  "contract_text": "Standard legal terms.",
+  "order_form_text": "Customer asks 40% discount and custom refund penalty terms.",
+  "implementation_notes": "Standard rollout with one integrator.",
+  "security_questionnaire_text": "Security questionnaire complete.",
+  "metadata": {
+    "scenario": "finance",
+    "source": "seed"
+  },
+  "expected_route": "finance",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "discount_above_threshold",
+    "unusual_penalty_terms"
+  ],
+  "expected_task_owner_category": "finance",
+  "scenario_summary": "Large discount plus unusual commercial penalty conditions."
+}

@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-finance-001",
+  "customer_name": "Cobalt Telecom",
+  "account_name": "Cobalt",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer requests 45% discount and custom credits.",
+  "contract_text": "No legal issues.",
+  "order_form_text": "Requesting 45% discount and 2 months SLA credits due to launch support.",
+  "implementation_notes": "Implementation owner assigned and integration supported.",
+  "security_questionnaire_text": "Security questionnaire completed.",
+  "metadata": {
+    "scenario": "finance",
+    "source": "seed"
+  },
+  "expected_route": "finance",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "discount_above_threshold",
+    "custom_sla_credits"
+  ],
+  "expected_task_owner_category": "finance",
+  "scenario_summary": "Discount above threshold and custom SLA credits requested."
+}

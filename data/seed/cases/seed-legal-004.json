@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-legal-004",
+  "customer_name": "Harborwave Utilities",
+  "account_name": "Harborwave",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Contract review request: indemnity section needs custom language.",
+  "contract_text": "Nonstandard indemnity and unusual termination clause require legal rewrite.",
+  "order_form_text": "Billing remains standard and accepted.",
+  "implementation_notes": "One technical owner assigned with standard rollout date.",
+  "security_questionnaire_text": "No sensitive data processed.",
+  "metadata": {
+    "scenario": "legal",
+    "source": "seed"
+  },
+  "expected_route": "legal",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "nonstandard_indemnity",
+    "termination_terms"
+  ],
+  "expected_task_owner_category": "legal",
+  "scenario_summary": "Legal clause rework required for indemnity and termination terms."
+}

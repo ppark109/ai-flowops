@@ -1,0 +1,20 @@
+{
+  "case_id": "seed-clean-001",
+  "customer_name": "Northline Manufacturing",
+  "account_name": "Northline Growth",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer requests a standard MSA with CRM sync to Salesforce. All required docs attached.",
+  "contract_text": "Standard liability cap and indemnity terms are included. Termination is standard.",
+  "order_form_text": "Order value $95,000, annual term 12 months, 10% early usage discount request.",
+  "implementation_notes": "Implementation date is 30 days out with standard onboarding and one owner assigned.",
+  "security_questionnaire_text": "No sensitive data; no regulated data fields. Data residency request not needed.",
+  "metadata": {
+    "scenario": "clean",
+    "source": "seed"
+  },
+  "expected_route": "auto_approve",
+  "expected_approval_required": false,
+  "expected_key_risk_labels": [],
+  "expected_task_owner_category": "commercial_ops",
+  "scenario_summary": "Standard commercial package with no deviations and complete intake."
+}

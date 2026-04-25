@@ -1,0 +1,22 @@
+{
+  "case_id": "heldout-security-001",
+  "customer_name": "Astra Finance",
+  "account_name": "Astra",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Data residency requested for regulated customer records.",
+  "contract_text": "No unusual legal content.",
+  "order_form_text": "No credits requested.",
+  "implementation_notes": "Standard implementation plan.",
+  "security_questionnaire_text": "Missing DPA and security artifacts, plus residency mention.",
+  "metadata": {
+    "scenario": "held_out"
+  },
+  "expected_route": "security",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "missing_dpa_for_regulated_data",
+    "data_residency_request"
+  ],
+  "expected_task_owner_category": "security",
+  "scenario_summary": "Held-out security case with missing artifacts."
+}

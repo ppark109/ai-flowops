@@ -1,0 +1,23 @@
+{
+  "case_id": "seed-security-004",
+  "customer_name": "Blue Ridge Insurance",
+  "account_name": "Blue Ridge",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Need a review for data transfer rules and controls.",
+  "contract_text": "No nonstandard commercial language.",
+  "order_form_text": "No unusual billing adjustments requested.",
+  "implementation_notes": "System handles customer-owned storage in region.",
+  "security_questionnaire_text": "Missing DPA attachment and security certification list not provided. Includes pci and phi references.",
+  "metadata": {
+    "scenario": "security",
+    "source": "seed"
+  },
+  "expected_route": "security",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "missing_dpa_for_regulated_data",
+    "regulated_data_without_security_artifact"
+  ],
+  "expected_task_owner_category": "security",
+  "scenario_summary": "Security controls and regulatory artifacts incomplete."
+}

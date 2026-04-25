@@ -1,1 +1,47 @@
-"""Shared Pydantic schemas."""
+"""Shared Pydantic schemas for AI FlowOps."""
+
+from schemas.case import (
+    Approval,
+    ApprovalStatus,
+    CaseWorkflowState,
+    DocumentRef,
+    EvalResult,
+    EvidenceSpan,
+    Finding,
+    GeneratedBrief,
+    GeneratedTask,
+    IntakePackage,
+    KPIRecord,
+    NormalizedCase,
+    RoutingDecision,
+    RoutingResult,
+    SeedCase,
+    Status,
+    TraceRecord,
+    WorkflowRunResult,
+)
+from schemas.playbook import Playbook, PlaybookRule, PlaybookValidationError
+
+__all__ = [
+    "Approval",
+    "ApprovalStatus",
+    "CaseWorkflowState",
+    "DocumentRef",
+    "EvidenceSpan",
+    "EvalResult",
+    "GeneratedBrief",
+    "GeneratedTask",
+    "IntakePackage",
+    "KPIRecord",
+    "NormalizedCase",
+    "RoutingDecision",
+    "RoutingResult",
+    "SeedCase",
+    "Playbook",
+    "PlaybookRule",
+    "PlaybookValidationError",
+    "Status",
+    "TraceRecord",
+    "WorkflowRunResult",
+    "Finding",
+]

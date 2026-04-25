@@ -1,70 +1,126 @@
 # AI FlowOps
 
-AI-first workflow automation for commercial intake, risk routing, operational
-handoff, human approval, and KPI-driven process improvement.
+AI FlowOps demonstrates how a manual commercial intake workflow can become a
+governed, inspectable multi-agent AI process.  
+The project is intentionally production-realistic and portfolio-oriented.
 
-This project showcases how a regular business process can be redesigned as an
-AI-managed operation. The system turns a messy commercial intake package into a
-structured case file, extracts evidence-backed obligations and risks, compares
-them against a declarative playbook, routes the case to the right function,
-pauses for human approval when needed, and records outcomes for evals and KPI
-tracking.
+## Problem
 
-## MVP Scope
+Commercial intake typically combines contract text, order form details, implementation
+notes, and security questionnaire signals across humans and static documents.
+That makes routing decisions inconsistent and difficult to audit.
 
-- Five routes: auto-approval, legal, security, implementation, and finance.
-- Structured case files backed by Pydantic schemas.
-- Declarative playbook rules for inspectable business policy.
-- Evidence-first extraction and routing workflow.
-- Human-in-the-loop approval queue for risky or low-confidence cases.
-- Mock downstream task creation instead of real enterprise integrations.
-- Trace, eval, and KPI records suitable for regression testing.
+## AI Workflow
 
-## Repository Map
+1. Intake package is normalized.
+2. Evidence-backed snippets are extracted.
+3. Specialist agents issue risk findings (legal, security, implementation, finance).
+4. Deterministic playbook rules overlay the findings.
+5. Critic and routing rules decide auto-approve vs approval-required.
+6. HITL reviewers can approve, reject, override, or request more info.
+7. Briefs, tasks, traces, KPIs, and eval records are persisted.
 
-| Path | Purpose |
-|---|---|
-| `app/` | FastAPI entrypoint, API routes, settings, and future persistence adapters. |
-| `agents/` | Specialist agent prompts, configs, and extraction/critic modules. |
-| `workflows/` | Orchestration, routing, approval, and playbook logic. |
-| `schemas/` | Pydantic models for case files, findings, routing, tasks, and approvals. |
-| `playbooks/` | YAML business rules that drive risk, routing, and approval behavior. |
-| `data/` | Seed cases, synthetic intake artifacts, held-out eval cases, and local runtime data. |
-| `evals/` | Eval configs, graders, datasets, and baseline result artifacts. |
-| `dashboard/` | Future review dashboard assets and UI code. |
-| `docs/` | Strategy report, architecture diagram, and human-in-the-loop flow chart. |
-| `traces/` | Local trace fixtures or exported trace samples. |
-| `scripts/` | Dataset, seeding, maintenance, and batch-run helper scripts. |
-| `tests/` | Unit, schema, routing, and regression tests. |
+### Why this is useful for a portfolio
 
-## Local Development
+- Showcases deterministic policy over hidden prompt-only behavior.
+- Demonstrates auditability (trace/eval/KPI) and HITL governance.
+- Includes API + server-rendered UI, seeded synthetic data, scripts, CI, and Docker.
+
+## Repository Structure
+
+- `app/` FastAPI app, API routes, HTML pages, static assets.
+- `agents/` Specialist deterministic agents with traceable outputs.
+- `schemas/` Contracted data models for the workflow.
+- `workflows/` Orchestrator, playbook loading, routing, and persistence.
+- `playbooks/` YAML policy rules.
+- `data/seed/cases` Synthetic seed cases (24 total).
+- `data/held_out/cases` Reserved eval cases (5 total).
+- `evals/` Deterministic evaluator and baseline artifacts.
+- `scripts/` CLI tools for reset/seed/run/eval.
+- `docs/` Public architecture and process documentation.
+
+## Architecture and Visuals
+
+- [Build plan](docs/build-plan.md)
+- [Architecture overview](docs/architecture.md)
+- [Demo script](docs/demo-script.md)
+- `docs/system-architecture.png`
+- `docs/human-in-the-loop.png`
+
+## Local Setup
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
-uvicorn app.main:app --reload
+
+uvicorn app.main:app --reload --port 8000
 ```
 
-Run the test suite:
+Open:
+
+- `http://127.0.0.1:8000`
+
+## CLI Commands
 
 ```powershell
+python scripts/demo_reset.py
+python scripts/run_evals.py
+python scripts/run_case.py <case_id>
+python scripts/seed_cases.py
+python scripts/reset_db.py
+```
+
+## Validation Commands
+
+```powershell
+git status -sb
+git check-ignore -v docs/AI-Business-Operations-Orchestrator.md
+python -m ruff check .
 pytest
+python scripts/demo_reset.py
+python scripts/run_evals.py
+docker build -t ai-flowops .
 ```
 
-Run linting:
+## API and Dashboard
+
+- API:
+  - `GET /healthz`
+  - `GET /meta`
+  - `GET /api/cases`
+  - `POST /api/cases/seed`
+  - `POST /api/cases`
+  - `POST /api/cases/{case_id}/run`
+  - `GET /api/approvals`
+  - `POST /api/approvals/{approval_id}/approve`
+  - `POST /api/approvals/{approval_id}/reject`
+  - `POST /api/approvals/{approval_id}/override`
+  - `POST /api/approvals/{approval_id}/request-info`
+  - `GET /api/kpis`
+  - `GET /api/evals`
+  - `POST /api/evals/run`
+  - `GET /api/traces/{case_id}`
+- Dashboard pages:
+  - `/`, `/cases`, `/cases/{case_id}`, `/approvals`, `/approvals/{approval_id}`,
+    `/evals`, `/kpis`, `/playbook`
+
+## Docker
 
 ```powershell
-ruff check .
+docker build -t ai-flowops .
+docker run --rm -p 8000:8000 ai-flowops
 ```
 
-## Project Context
+Optional:
 
-Start with the report and diagrams in `docs/`:
+```powershell
+docker compose up --build
+```
 
-- `docs/system-architecture.png`
-- `docs/human-in-the-loop.png`
+## AI Assistance Disclosure
 
-The first version should stay focused on realistic orchestration quality:
-structured inputs, evidence-backed findings, transparent rules, correct routing,
-approval governance, traceability, and regression tests.
+Built with AI-assisted development using ChatGPT/Codex for planning, implementation,
+and evaluation support.
+
+This repo does not include real customer data or live production integrations in v1.

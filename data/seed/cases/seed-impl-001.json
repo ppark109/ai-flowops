@@ -1,0 +1,24 @@
+{
+  "case_id": "seed-impl-001",
+  "customer_name": "Nova Aerospace",
+  "account_name": "Nova Platform",
+  "submitted_at": "2026-04-24T12:00:00+00:00",
+  "intake_email_text": "Customer wants unsupported custom SAP plugin and unclear owner.",
+  "contract_text": "Legal terms standard.",
+  "order_form_text": "Standard fees; no unusual commercial adjustments.",
+  "implementation_notes": "Aggressive go-live date next week and unsupported integration requested.",
+  "security_questionnaire_text": "Security questionnaire complete.",
+  "metadata": {
+    "scenario": "implementation",
+    "source": "seed"
+  },
+  "expected_route": "implementation",
+  "expected_approval_required": true,
+  "expected_key_risk_labels": [
+    "unsupported_integration",
+    "aggressive_go_live_date",
+    "unclear_customer_owner"
+  ],
+  "expected_task_owner_category": "implementation",
+  "scenario_summary": "Implementation risks from fast timeline and unsupported integration request."
+}

@@ -1,72 +1,197 @@
-name: default-commercial-intake-playbook
-version: "0.1.0"
+﻿name: default-commercial-intake-playbook
+version: "1.0.0"
 approval_policy: on_high_risk
 rules:
-  - id: liability_cap_above_standard
-    description: Route contracts with nonstandard liability exposure to legal.
+  - id: clean_standard_package
+    description: Allow fully complete, low-risk commercial packages to auto-approve.
     when:
-      clause_type: limitation_of_liability
-      comparator: exceeds
-      threshold: 1x_fees
+      contains_all:
+        - "standard"
+        - "complete"
+    severity: low
+    route: auto_approve
+    approval_required: false
+    required_evidence:
+      - intake_span
+      - contract_span
+    task_template: Generate standard onboarding package for commercial operations.
+
+  - id: liability_cap_above_standard
+    description: Liability cap exceeds standard commercial threshold.
+    when:
+      contains_any:
+        - "liability cap"
+        - "above 1x"
+        - "liability above"
     severity: high
     route: legal
     approval_required: true
     required_evidence:
       - contract_span
-    task_template: Summarize liability deviation and required legal decision.
+    task_template: Route to legal for liability cap exception review.
+
+  - id: nonstandard_indemnity
+    description: Nonstandard indemnity clause requires legal review.
+    when:
+      contains_any:
+        - "nonstandard indemnity"
+        - "broader indemnity"
+        - "indemnity above"
+    severity: high
+    route: legal
+    approval_required: true
+    required_evidence:
+      - contract_span
+    task_template: Route to legal for indemnity language exception.
 
   - id: missing_dpa_for_regulated_data
-    description: Route missing data protection artifacts to security review.
+    description: Missing DPA where data processing is regulated or sensitive.
     when:
-      artifact: dpa
-      status: missing
-      data_classification:
-        - regulated
-        - sensitive
+      required_signals:
+        - "data_regulation_risk"
     severity: high
     route: security
     approval_required: true
     required_evidence:
       - questionnaire_span
       - contract_span
-    task_template: Request DPA or document security exception.
+    task_template: Request a signed DPA before approval.
 
-  - id: unsupported_integration
-    description: Route unsupported integrations to implementation review.
+  - id: data_residency_request
+    description: Explicit data-residency request needs security review.
     when:
-      field: requested_integrations
       contains_any:
-        - custom_sap_plugin
-        - legacy_mainframe_connector
+        - "data residency"
+        - "residency request"
+    severity: medium
+    route: security
+    approval_required: true
+    required_evidence:
+      - contract_span
+    task_template: Validate legal and security policy for residency.
+
+  - id: regulated_data_without_security_artifact
+    description: Regulated data references without complete security artifacts.
+    when:
+      contains_any:
+        - "regulated data"
+      required_signals:
+        - "missing_dpa_for_reg"
+    severity: high
+    route: security
+    approval_required: true
+    required_evidence:
+      - questionnaire_span
+    task_template: Confirm data classification and required security exceptions.
+
+  - id: aggressive_go_live_date
+    description: Unusually fast implementation schedule increases delivery risk.
+    when:
+      contains_any:
+        - "aggressive"
+        - "next week"
+        - "7 days"
+        - "two days"
+        - "48"
     severity: medium
     route: implementation
     approval_required: true
     required_evidence:
       - notes_span
-    task_template: Validate integration feasibility and implementation owner.
+    task_template: Validate timeline feasibility and resourcing.
+
+  - id: unsupported_integration
+    description: Requested unsupported integration must be reviewed by implementation.
+    when:
+      contains_any:
+        - "custom sap plugin"
+        - "legacy mainframe connector"
+        - "unsupported integration"
+        - "custom connector"
+    severity: medium
+    route: implementation
+    approval_required: true
+    required_evidence:
+      - notes_span
+    task_template: Review integration feasibility and implementation plan.
+
+  - id: unclear_customer_owner
+    description: Missing or unclear customer owner slows implementation planning.
+    when:
+      contains_any:
+        - "unclear owner"
+        - "no owner"
+        - "owner to be determined"
+    severity: medium
+    route: implementation
+    approval_required: true
+    required_evidence:
+      - notes_span
+    task_template: Obtain clear internal customer owner before kickoff.
+
+  - id: missing_sow
+    description: Missing statement of work/reference requires implementation triage.
+    when:
+      required_signals:
+        - "missing_sow"
+    severity: medium
+    route: implementation
+    approval_required: true
+    required_evidence:
+      - notes_span
+    task_template: Pause until missing statement of work is supplied.
 
   - id: discount_above_threshold
-    description: Route unusual commercial concessions to finance review.
+    description: Discount above internal threshold requires finance approval.
     when:
-      field: discount_percent
-      comparator: greater_than
-      threshold: 35
+      contains_any:
+        - "45%"
+        - "50%"
+        - "above 40%"
+        - "deep discount"
     severity: medium
     route: finance
     approval_required: true
     required_evidence:
       - order_form_span
-    task_template: Review pricing exception and approval authority.
+    task_template: Review pricing exception and approver matrix.
 
-  - id: clean_standard_package
-    description: Allow clean complete packages to proceed without specialist review.
+  - id: custom_sla_credits
+    description: Custom SLA credits or penalties require finance review.
     when:
-      package_complete: true
-      standard_terms: true
-      supported_integration: true
-    severity: low
-    route: auto_approve
-    approval_required: false
+      contains_any:
+        - "sla credits"
+        - "custom credit"
+        - "unusual credit"
+    severity: medium
+    route: finance
+    approval_required: true
     required_evidence:
-      - intake_summary
-    task_template: Generate standard onboarding brief and task plan.
+      - order_form_span
+    task_template: Validate credit terms and downside protection.
+
+  - id: unusual_penalty_terms
+    description: Non-standard penalty terms need finance review.
+    when:
+      contains_any:
+        - "unusual penalty"
+        - "penalty"
+        - "termination penalty"
+    severity: medium
+    route: finance
+    approval_required: true
+    required_evidence:
+      - contract_span
+    task_template: Check unusual penalty exposure before execution.
+
+  - id: incomplete_intake_package
+    description: Incomplete intake information requires reviewer follow-up.
+    when:
+      required_signals:
+        - "incomplete_intake_package"
+    severity: medium
+    route: implementation
+    approval_required: true
+    required_evidence:
+      - intake_span
+    task_template: Request missing intake details and defer approval.
