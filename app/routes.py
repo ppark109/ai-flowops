@@ -222,6 +222,7 @@ def _dashboard_payload(request: Request) -> dict[str, object]:
 def home(request: Request) -> HTMLResponse:
     payload = _dashboard_payload(request)
     return _templates(request).TemplateResponse(
+        request,
         "index.html",
         {
             "request": request,
@@ -244,6 +245,7 @@ def cases_page(
         and (status is None or item.get("status") == status)
     ]
     return _templates(request).TemplateResponse(
+        request,
         "cases.html",
         {
             "request": request,
@@ -263,6 +265,7 @@ def case_detail_page(request: Request, case_id: str) -> HTMLResponse:
     except KeyError as exc:
         raise HTTPException(status_code=404, detail="Case not found") from exc
     return _templates(request).TemplateResponse(
+        request,
         "case_detail.html",
         {
             "request": request,
@@ -283,6 +286,7 @@ def case_run(request: Request, case_id: str) -> str:
 def approvals_page(request: Request) -> HTMLResponse:
     approvals = _orchestrator(request).store.list_pending_approvals()
     return _templates(request).TemplateResponse(
+        request,
         "approvals.html",
         {
             "request": request,
@@ -303,6 +307,7 @@ def approval_detail_page(
         raise HTTPException(status_code=404, detail="Approval not found")
     case = orchestrator.store.get_case_state(approval.case_id)
     return _templates(request).TemplateResponse(
+        request,
         "approval_detail.html",
         {
             "request": request,
@@ -389,6 +394,7 @@ def evals_page(request: Request) -> HTMLResponse:
     eval_rows = orchestrator.store.get_eval_results()
     eval_summary = orchestrator.store.get_eval_summary()
     return _templates(request).TemplateResponse(
+        request,
         "evals.html",
         {
             "request": request,
@@ -411,6 +417,7 @@ def run_evals_form(request: Request) -> str:
 def kpi_page(request: Request) -> HTMLResponse:
     orchestrator = _orchestrator(request)
     return _templates(request).TemplateResponse(
+        request,
         "kpis.html",
         {
             "request": request,
@@ -423,6 +430,7 @@ def kpi_page(request: Request) -> HTMLResponse:
 def playbook_page(request: Request) -> HTMLResponse:
     orchestrator = _orchestrator(request)
     return _templates(request).TemplateResponse(
+        request,
         "playbook.html",
         {
             "request": request,
