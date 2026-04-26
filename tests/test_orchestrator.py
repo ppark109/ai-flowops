@@ -115,3 +115,24 @@ def test_request_info_stays_in_active_approval_queue(tmp_path: Path) -> None:
         assert result.approval_id in active_ids
     finally:
         orchestrator.close()
+
+
+def test_findings_use_rule_specific_evidence(tmp_path: Path) -> None:
+    orchestrator = WorkflowOrchestrator(db_path=tmp_path / "evidence.sqlite3")
+    try:
+        orchestrator.seed("data/seed/cases", overwrite=True)
+        orchestrator.run_case("seed-legal-001")
+        state = orchestrator.store.get_case_state("seed-legal-001")
+
+        liability_findings = [
+            finding
+            for finding in state.findings
+            if finding.rule_id in {"playbook-liability-cap", "liability_cap_above_standard"}
+        ]
+        assert liability_findings
+        for finding in liability_findings:
+            assert finding.evidence
+            assert all(span.source_document_type == "contract" for span in finding.evidence)
+            assert any("liability" in span.normalized_fact for span in finding.evidence)
+    finally:
+        orchestrator.close()

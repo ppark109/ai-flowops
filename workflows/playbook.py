@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import yaml
 
+from agents.evidence import select_evidence_for_rule
 from schemas.case import EvidenceSpan, Finding, NormalizedCase
 from schemas.playbook import Playbook
 from workflows.routing import ROUTES
@@ -120,9 +121,24 @@ def match_rules(
                 severity=rule.severity,
                 route=rule.route,
                 summary=f"Playbook rule '{rule.id}' matched: {rule.description}",
-                evidence=evidence[:1],
+                evidence=select_evidence_for_rule(
+                    evidence,
+                    rule_id=rule.id,
+                    keywords=tuple(_rule_keywords(rule.when)),
+                    required_evidence=tuple(rule.required_evidence),
+                    max_items=2,
+                ),
                 confidence=0.95,
                 source_agent="playbook",
             )
             findings.append(finding)
     return findings
+
+
+def _rule_keywords(rule_when: dict[str, Any]) -> list[str]:
+    keywords: list[str] = []
+    for key in ("contains_any", "contains_all", "required_signals"):
+        for value in rule_when.get(key, []):
+            if value not in keywords:
+                keywords.append(value)
+    return keywords

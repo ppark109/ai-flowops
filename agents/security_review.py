@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 
 from agents.base import build_trace
+from agents.evidence import select_evidence_for_rule
 from schemas.case import EvidenceSpan, Finding, IntakePackage, NormalizedCase, TraceRecord
 
 
@@ -29,6 +30,8 @@ class SecurityReviewAgent:
                     "security",
                     evidence,
                     confidence=0.96,
+                    keywords=("missing dpa", "dpa", "not provided"),
+                    required_evidence=("questionnaire_span", "contract_span"),
                 )
             )
 
@@ -42,6 +45,8 @@ class SecurityReviewAgent:
                     "security",
                     evidence,
                     confidence=0.95,
+                    keywords=("data residency", "residency request"),
+                    required_evidence=("questionnaire_span", "contract_span"),
                 )
             )
 
@@ -59,6 +64,8 @@ class SecurityReviewAgent:
                         "security",
                         evidence,
                         confidence=0.9,
+                        keywords=("regulated data", "regulated", "sensitive", "pii", "phi"),
+                        required_evidence=("questionnaire_span",),
                     )
                 )
 
@@ -82,6 +89,8 @@ def _finding(
     evidence: list[EvidenceSpan],
     *,
     confidence: float,
+    keywords: tuple[str, ...],
+    required_evidence: tuple[str, ...],
 ) -> Finding:
     return Finding(
         finding_id=f"{case_id}-{rule_id}",
@@ -90,7 +99,12 @@ def _finding(
         severity=severity,
         route=route,
         summary=summary,
-        evidence=evidence[:2],
+        evidence=select_evidence_for_rule(
+            evidence,
+            rule_id=rule_id,
+            keywords=keywords,
+            required_evidence=required_evidence,
+        ),
         confidence=confidence,
         source_agent="SecurityReviewAgent",
     )

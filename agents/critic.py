@@ -23,6 +23,8 @@ class CriticEvaluatorAgent:
         for finding in findings:
             if not finding.evidence and finding.route != "auto_approve":
                 issues.append(f"missing_evidence:{finding.rule_id}")
+            elif finding.route != "auto_approve" and not _finding_has_supporting_evidence(finding):
+                issues.append(f"unsupported_evidence:{finding.rule_id}")
             if finding.route != "auto_approve" and finding.severity not in {
                 "low",
                 "medium",
@@ -39,3 +41,37 @@ class CriticEvaluatorAgent:
             if not clean_evidence:
                 issues.append("missing_critical_evidence")
         return issues
+
+
+def _finding_has_supporting_evidence(finding: Finding) -> bool:
+    terms = _support_terms(finding)
+    if not terms:
+        return bool(finding.evidence)
+    for span in finding.evidence:
+        haystack = f"{span.normalized_fact} {span.quote}".lower()
+        if any(term in haystack for term in terms):
+            return True
+    return False
+
+
+def _support_terms(finding: Finding) -> list[str]:
+    raw = f"{finding.rule_id} {finding.summary}".replace("_", " ").replace("-", " ").lower()
+    stopwords = {
+        "for",
+        "the",
+        "and",
+        "with",
+        "route",
+        "rule",
+        "playbook",
+        "matched",
+        "requires",
+        "review",
+        "needs",
+        "standard",
+    }
+    return [
+        token
+        for token in raw.split()
+        if len(token) > 3 and token not in stopwords
+    ]

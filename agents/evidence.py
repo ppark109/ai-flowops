@@ -5,6 +5,70 @@ import time
 from agents.base import build_trace, quote_from_text
 from schemas.case import EvidenceSpan, IntakePackage, NormalizedCase, TraceRecord
 
+EVIDENCE_TYPE_TO_SOURCE: dict[str, set[str]] = {
+    "intake_span": {"intake_email"},
+    "contract_span": {"contract"},
+    "order_form_span": {"order_form"},
+    "notes_span": {"implementation_notes"},
+    "questionnaire_span": {"security_questionnaire"},
+}
+
+
+def select_evidence_for_rule(
+    evidence: list[EvidenceSpan],
+    *,
+    rule_id: str,
+    required_evidence: list[str] | tuple[str, ...] = (),
+    keywords: list[str] | tuple[str, ...] = (),
+    max_items: int = 2,
+) -> list[EvidenceSpan]:
+    """Select evidence tied to the rule by source and normalized fact text."""
+    allowed_sources = {
+        source
+        for evidence_type in required_evidence
+        for source in EVIDENCE_TYPE_TO_SOURCE.get(evidence_type, set())
+    }
+    search_terms = _evidence_terms(rule_id, keywords)
+
+    source_and_term = [
+        item
+        for item in evidence
+        if _source_matches(item, allowed_sources) and _term_matches(item, search_terms)
+    ]
+    term_only = [
+        item
+        for item in evidence
+        if item not in source_and_term and _term_matches(item, search_terms)
+    ]
+    source_only = [
+        item
+        for item in evidence
+        if item not in source_and_term
+        and item not in term_only
+        and _source_matches(item, allowed_sources)
+    ]
+    selected = [*source_and_term, *term_only, *source_only]
+    return selected[:max_items]
+
+
+def _evidence_terms(rule_id: str, keywords: list[str] | tuple[str, ...]) -> list[str]:
+    raw_terms = [*keywords, rule_id.replace("playbook-", "").replace("_", " ").replace("-", " ")]
+    terms: list[str] = []
+    for term in raw_terms:
+        normalized = term.strip().lower()
+        if normalized and normalized not in terms:
+            terms.append(normalized)
+    return terms
+
+
+def _source_matches(evidence: EvidenceSpan, allowed_sources: set[str]) -> bool:
+    return not allowed_sources or evidence.source_document_type in allowed_sources
+
+
+def _term_matches(evidence: EvidenceSpan, terms: list[str]) -> bool:
+    haystack = f"{evidence.normalized_fact} {evidence.quote}".lower()
+    return not terms or any(term in haystack for term in terms)
+
 
 def _collect_documents(payload: IntakePackage) -> list[tuple[str, str]]:
     return [

@@ -4,6 +4,7 @@ import re
 import time
 
 from agents.base import build_trace
+from agents.evidence import select_evidence_for_rule
 from schemas.case import EvidenceSpan, Finding, IntakePackage, NormalizedCase, TraceRecord
 
 
@@ -30,6 +31,8 @@ class FinanceReviewAgent:
                     "finance",
                     evidence,
                     confidence=0.95,
+                    keywords=("discount", "45%", "50%", "above"),
+                    required_evidence=("order_form_span",),
                 )
             )
 
@@ -43,6 +46,8 @@ class FinanceReviewAgent:
                     "finance",
                     evidence,
                     confidence=0.93,
+                    keywords=("sla credits", "custom credits", "credit"),
+                    required_evidence=("order_form_span",),
                 )
             )
 
@@ -56,6 +61,8 @@ class FinanceReviewAgent:
                     "finance",
                     evidence,
                     confidence=0.9,
+                    keywords=("penalty", "penal"),
+                    required_evidence=("contract_span", "order_form_span"),
                 )
             )
 
@@ -79,6 +86,8 @@ def _finding(
     evidence: list[EvidenceSpan],
     *,
     confidence: float,
+    keywords: tuple[str, ...],
+    required_evidence: tuple[str, ...],
 ) -> Finding:
     return Finding(
         finding_id=f"{case_id}-{rule_id}",
@@ -87,7 +96,12 @@ def _finding(
         severity=severity,
         route=route,
         summary=summary,
-        evidence=evidence[:2],
+        evidence=select_evidence_for_rule(
+            evidence,
+            rule_id=rule_id,
+            keywords=keywords,
+            required_evidence=required_evidence,
+        ),
         confidence=confidence,
         source_agent="FinanceReviewAgent",
     )

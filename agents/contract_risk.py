@@ -4,6 +4,7 @@ import re
 import time
 
 from agents.base import build_trace
+from agents.evidence import select_evidence_for_rule
 from schemas.case import EvidenceSpan, Finding, IntakePackage, NormalizedCase, TraceRecord
 
 
@@ -29,6 +30,8 @@ class ContractRiskAgent:
                     "high",
                     "legal",
                     evidence,
+                    keywords=("liability cap", "above 1x", "liability above"),
+                    required_evidence=("contract_span",),
                 )
             )
 
@@ -41,6 +44,8 @@ class ContractRiskAgent:
                     "high",
                     "legal",
                     evidence,
+                    keywords=("nonstandard indemnity", "broader indemnity", "unusual indemnity"),
+                    required_evidence=("contract_span",),
                 )
             )
 
@@ -53,6 +58,8 @@ class ContractRiskAgent:
                     "medium",
                     "finance",
                     evidence,
+                    keywords=("unusual penalty", "penalty terms", "penalty"),
+                    required_evidence=("contract_span",),
                 )
             )
 
@@ -65,6 +72,8 @@ class ContractRiskAgent:
                     "medium",
                     "implementation",
                     evidence,
+                    keywords=("conflict", "conflicting"),
+                    required_evidence=("contract_span",),
                 )
             )
 
@@ -86,6 +95,9 @@ def _finding(
     severity: str,
     route: str,
     evidence: list[EvidenceSpan],
+    *,
+    keywords: tuple[str, ...],
+    required_evidence: tuple[str, ...],
 ) -> Finding:
     return Finding(
         finding_id=f"{case_id}-{rule_id}",
@@ -94,7 +106,12 @@ def _finding(
         severity=severity,
         route=route,
         summary=summary,
-        evidence=evidence[:2],
+        evidence=select_evidence_for_rule(
+            evidence,
+            rule_id=rule_id,
+            keywords=keywords,
+            required_evidence=required_evidence,
+        ),
         confidence=0.92,
         source_agent="ContractRiskAgent",
     )

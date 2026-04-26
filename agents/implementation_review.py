@@ -4,6 +4,7 @@ import re
 import time
 
 from agents.base import build_trace
+from agents.evidence import select_evidence_for_rule
 from schemas.case import EvidenceSpan, Finding, IntakePackage, NormalizedCase, TraceRecord
 
 
@@ -30,6 +31,8 @@ class ImplementationReviewAgent:
                     "implementation",
                     evidence,
                     confidence=0.95,
+                    keywords=("aggressive", "next week", "asap", "urgent", "rush"),
+                    required_evidence=("notes_span", "intake_span"),
                 )
             )
 
@@ -43,6 +46,8 @@ class ImplementationReviewAgent:
                     "implementation",
                     evidence,
                     confidence=0.93,
+                    keywords=("custom sap plugin", "unsupported integration", "legacy"),
+                    required_evidence=("notes_span",),
                 )
             )
 
@@ -56,6 +61,8 @@ class ImplementationReviewAgent:
                     "implementation",
                     evidence,
                     confidence=0.9,
+                    keywords=("unclear owner", "no owner", "owner to be determined"),
+                    required_evidence=("notes_span",),
                 )
             )
 
@@ -69,6 +76,8 @@ class ImplementationReviewAgent:
                     "implementation",
                     evidence,
                     confidence=0.9,
+                    keywords=("statement of work", "missing sow"),
+                    required_evidence=("notes_span",),
                 )
             )
 
@@ -82,6 +91,8 @@ class ImplementationReviewAgent:
                     "implementation",
                     evidence,
                     confidence=0.94,
+                    keywords=("incomplete", "missing"),
+                    required_evidence=("intake_span",),
                 )
             )
 
@@ -105,6 +116,8 @@ def _finding(
     evidence: list[EvidenceSpan],
     *,
     confidence: float,
+    keywords: tuple[str, ...],
+    required_evidence: tuple[str, ...],
 ) -> Finding:
     return Finding(
         finding_id=f"{case_id}-{rule_id}",
@@ -113,7 +126,12 @@ def _finding(
         severity=severity,
         route=route,
         summary=summary,
-        evidence=evidence[:2],
+        evidence=select_evidence_for_rule(
+            evidence,
+            rule_id=rule_id,
+            keywords=keywords,
+            required_evidence=required_evidence,
+        ),
         confidence=confidence,
         source_agent="ImplementationReviewAgent",
     )

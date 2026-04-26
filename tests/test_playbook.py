@@ -2,6 +2,8 @@ from pathlib import Path
 
 import yaml
 
+from agents.critic import CriticEvaluatorAgent
+from schemas.case import EvidenceSpan, Finding, IntakePackage, NormalizedCase
 from workflows.playbook import load_default_playbook, rule_ids_by_route, validate_playbook
 from workflows.routing import ROUTES
 
@@ -113,3 +115,42 @@ def test_invalid_playbook_rejects_high_without_approval(tmp_path: Path) -> None:
     bad = load_playbook(playbook_path)
     with pytest.raises(ValueError, match="requires approval"):
         validate_playbook(bad)
+
+
+def test_critic_flags_irrelevant_evidence_for_finding() -> None:
+    finding = Finding(
+        finding_id="f1",
+        rule_id="liability_cap_above_standard",
+        finding_type="policy",
+        severity="high",
+        route="legal",
+        summary="liability cap exceeds standard",
+        evidence=[
+            EvidenceSpan(
+                source_document_type="order_form",
+                locator="order_form:0",
+                quote="Standard billing cadence.",
+                normalized_fact="billing cadence",
+                confidence=0.9,
+            )
+        ],
+        confidence=0.9,
+        source_agent="test",
+    )
+    intake = IntakePackage(
+        case_id="case-1",
+        customer_name="Test Customer",
+        intake_email_text="Standard intake.",
+        contract_text="Liability cap above standard.",
+        order_form_text="Standard billing cadence.",
+        implementation_notes="Standard implementation.",
+        security_questionnaire_text="Standard security.",
+    )
+    issues = CriticEvaluatorAgent().run(
+        intake,
+        NormalizedCase(case_id="case-1", customer_name="Test Customer"),
+        finding.evidence,
+        [finding],
+    )
+
+    assert "unsupported_evidence:liability_cap_above_standard" in issues
