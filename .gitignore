@@ -33,6 +33,9 @@ traces/*
 # Local-only raw research notes
 /docs/AI-Business-Operations-Orchestrator.md
 
+# Local-only deployment notes for private hosts and shared infrastructure
+/deploy/local/
+
 # OS and editor files
 .DS_Store
 Thumbs.db
