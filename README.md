@@ -75,7 +75,6 @@ python scripts/reset_db.py
 
 ```powershell
 git status -sb
-git check-ignore -v docs/AI-Business-Operations-Orchestrator.md
 python -m ruff check .
 pytest
 python scripts/demo_reset.py
