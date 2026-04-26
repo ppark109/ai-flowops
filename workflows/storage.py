@@ -179,7 +179,14 @@ class WorkflowStore:
         where = "WHERE status = ?" if status else ""
         args: tuple[str, ...] = (status,) if status else tuple()
         rows = self.conn.execute(
-            f"SELECT case_id, status, intake_payload, normalized_payload FROM cases {where} ORDER BY case_id",
+            f"""
+            SELECT cases.case_id, cases.status, cases.intake_payload, cases.normalized_payload,
+                   routing_decisions.routing_payload
+            FROM cases
+            LEFT JOIN routing_decisions ON routing_decisions.case_id = cases.case_id
+            {where}
+            ORDER BY cases.case_id
+            """,
             args,
         ).fetchall()
         output: list[dict[str, object]] = []
@@ -188,12 +195,14 @@ class WorkflowStore:
             normalized = (
                 json.loads(row["normalized_payload"]) if row["normalized_payload"] else None
             )
+            routing = json.loads(row["routing_payload"]) if row["routing_payload"] else None
             output.append(
                 {
                     "case_id": row["case_id"],
                     "status": row["status"],
                     "customer_name": intake_payload["customer_name"],
                     "account_name": intake_payload.get("account_name"),
+                    "actual_route": routing.get("recommended_route") if routing else None,
                     "expected_route": intake_payload.get("expected_route"),
                     "expected_approval_required": intake_payload.get("expected_approval_required"),
                     "package_complete": normalized.get("package_complete") if normalized else None,

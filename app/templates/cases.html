@@ -24,6 +24,7 @@
           <th>Case</th>
           <th>Status</th>
           <th>Customer</th>
+          <th>Actual route</th>
           <th>Expected route</th>
           <th>Expected approval</th>
           {% if admin_mode %}<th>Run</th>{% endif %}
@@ -35,6 +36,7 @@
           <td><a href="/cases/{{ case.case_id }}{% if admin_mode %}?admin_token={{ admin_token }}{% endif %}">{{ case.case_id }}</a></td>
           <td>{{ case.status }}</td>
           <td>{{ case.customer_name }}</td>
+          <td>{{ case.actual_route or "-" }}</td>
           <td>{{ case.expected_route }}</td>
           <td>{{ case.expected_approval_required }}</td>
           {% if admin_mode %}
@@ -48,7 +50,7 @@
           {% endif %}
         </tr>
         {% else %}
-        <tr><td colspan="{% if admin_mode %}6{% else %}5{% endif %}">No cases yet.</td></tr>
+        <tr><td colspan="{% if admin_mode %}7{% else %}6{% endif %}">No cases yet.</td></tr>
         {% endfor %}
       </tbody>
     </table>

@@ -469,7 +469,7 @@ def cases_page(
     filtered = [
         item
         for item in cases
-        if (route is None or item.get("expected_route") == route)
+        if (route is None or item.get("actual_route") == route)
         and (status is None or item.get("status") == status)
     ]
     return _templates(request).TemplateResponse(

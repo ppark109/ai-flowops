@@ -41,6 +41,7 @@
         <tr>
           <th>Case</th>
           <th>Status</th>
+          <th>Actual route</th>
           <th>Expected route</th>
           <th>Expected approval</th>
           <th>Package complete</th>
@@ -51,12 +52,13 @@
         <tr>
           <td><a href="/cases/{{ case.case_id }}">{{ case.case_id }}</a></td>
           <td>{{ case.status }}</td>
+          <td>{{ case.actual_route or "-" }}</td>
           <td>{{ case.expected_route }}</td>
           <td>{{ case.expected_approval_required }}</td>
           <td>{{ case.package_complete }}</td>
         </tr>
         {% else %}
-        <tr><td colspan="5">No cases yet.</td></tr>
+        <tr><td colspan="6">No cases yet.</td></tr>
         {% endfor %}
       </tbody>
     </table>

@@ -51,6 +51,30 @@ def test_kpi_summary_counts_cases_not_only_kpi_rows(tmp_path: Path) -> None:
         orchestrator.close()
 
 
+def test_case_list_reports_actual_route_separately_from_expected_route(tmp_path: Path) -> None:
+    orchestrator = WorkflowOrchestrator(db_path=tmp_path / "routes.sqlite3")
+    try:
+        orchestrator.seed("data/seed/cases", overwrite=True)
+        before = {
+            row["case_id"]: row
+            for row in orchestrator.list_cases()
+            if row["case_id"] == "seed-legal-001"
+        }["seed-legal-001"]
+        assert before["actual_route"] is None
+        assert before["expected_route"] == "legal"
+
+        orchestrator.run_case("seed-legal-001")
+        after = {
+            row["case_id"]: row
+            for row in orchestrator.list_cases()
+            if row["case_id"] == "seed-legal-001"
+        }["seed-legal-001"]
+        assert after["actual_route"] == "legal"
+        assert after["expected_route"] == "legal"
+    finally:
+        orchestrator.close()
+
+
 def test_eval_summary_total_rate_uses_real_outcomes(tmp_path: Path) -> None:
     orchestrator = WorkflowOrchestrator(db_path=tmp_path / "eval-summary.sqlite3")
     try:
