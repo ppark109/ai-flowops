@@ -3,6 +3,7 @@ from pathlib import Path
 import yaml
 
 from agents.critic import CriticEvaluatorAgent
+from agents.evidence import KNOWN_RISK_SIGNALS
 from schemas.case import EvidenceSpan, Finding, IntakePackage, NormalizedCase
 from workflows.playbook import load_default_playbook, rule_ids_by_route, validate_playbook
 from workflows.routing import ROUTES
@@ -26,6 +27,17 @@ def test_default_playbook_covers_all_mvp_routes() -> None:
     route_map = rule_ids_by_route(load_default_playbook())
 
     assert set(route_map) == set(ROUTES)
+
+
+def test_default_playbook_required_signals_are_known() -> None:
+    playbook = load_default_playbook()
+    required_signals = {
+        signal
+        for rule in playbook.rules
+        for signal in rule.when.get("required_signals", [])
+    }
+
+    assert required_signals.issubset(KNOWN_RISK_SIGNALS)
 
 
 def test_invalid_playbook_rejects_duplicate_rule_id(tmp_path: Path) -> None:

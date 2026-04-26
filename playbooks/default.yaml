@@ -48,7 +48,7 @@ rules:
     description: Missing DPA where data processing is regulated or sensitive.
     when:
       required_signals:
-        - "data_regulation_risk"
+        - "missing_dpa_for_regulated_data"
     severity: high
     route: security
     approval_required: true
@@ -76,7 +76,7 @@ rules:
       contains_any:
         - "regulated data"
       required_signals:
-        - "missing_dpa_for_reg"
+        - "regulated_data_without_security_artifact"
     severity: high
     route: security
     approval_required: true

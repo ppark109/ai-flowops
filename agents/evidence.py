@@ -13,6 +13,35 @@ EVIDENCE_TYPE_TO_SOURCE: dict[str, set[str]] = {
     "questionnaire_span": {"security_questionnaire"},
 }
 
+PHRASE_TO_SIGNAL: dict[str, str] = {
+    "liability cap": "liability_cap_above_standard",
+    "indemnity": "nonstandard_indemnity",
+    "dpa": "missing_dpa_for_regulated_data",
+    "data residency": "data_residency_request",
+    "regulated data": "regulated_data_without_security_artifact",
+    "missing dpa": "missing_dpa_for_regulated_data",
+    "aggressive": "aggressive_go_live_date",
+    "next week": "aggressive_go_live_date",
+    "unsupported": "unsupported_integration",
+    "custom sap plugin": "unsupported_integration",
+    "unclear owner": "unclear_customer_owner",
+    "no owner": "unclear_customer_owner",
+    "discount": "discount_above_threshold",
+    "sla credits": "custom_sla_credits",
+    "penalty": "unusual_penalty_terms",
+    "statement of work": "missing_sow",
+    "conflict": "conflicting_terms",
+    "incomplete": "incomplete_intake_package",
+    "critical": "regulatory_conflict",
+}
+
+KNOWN_RISK_SIGNALS = frozenset(
+    {
+        *PHRASE_TO_SIGNAL.values(),
+        "incomplete_intake_package",
+    }
+)
+
 
 def select_evidence_for_rule(
     evidence: list[EvidenceSpan],
@@ -91,33 +120,11 @@ class EvidenceExtractionAgent:
         evidence: list[EvidenceSpan] = []
         risk_signals = []
 
-        phrase_to_signal = {
-            "liability cap": "liability_cap_above_standard",
-            "indemnity": "nonstandard_indemnity",
-            "dpa": "missing_dpa_for_regulated_data",
-            "data residency": "data_residency_request",
-            "regulated data": "regulated_data_without_security_artifact",
-            "missing dpa": "missing_dpa_for_regulated_data",
-            "aggressive": "aggressive_go_live_date",
-            "next week": "aggressive_go_live_date",
-            "unsupported": "unsupported_integration",
-            "custom sap plugin": "unsupported_integration",
-            "unclear owner": "unclear_customer_owner",
-            "no owner": "unclear_customer_owner",
-            "discount": "discount_above_threshold",
-            "sla credits": "custom_sla_credits",
-            "penalty": "unusual_penalty_terms",
-            "statement of work": "missing_sow",
-            "conflict": "conflicting_terms",
-            "incomplete": "incomplete_intake_package",
-            "critical": "regulatory_conflict",
-        }
-
         for source, text in _collect_documents(payload):
             if not text.strip():
                 continue
             low = text.lower()
-            for phrase, signal in phrase_to_signal.items():
+            for phrase, signal in PHRASE_TO_SIGNAL.items():
                 if phrase in low:
                     if signal not in risk_signals:
                         risk_signals.append(signal)
