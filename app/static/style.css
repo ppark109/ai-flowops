@@ -202,6 +202,15 @@ button {
   padding: 0.18rem 0.5rem;
 }
 
+.read-only-note {
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 8px;
+  color: #7c2d12;
+  font-weight: 700;
+  padding: 0.6rem 0.75rem;
+}
+
 .workflow-strip,
 .case-gallery,
 .routing-board,

@@ -102,6 +102,10 @@ def guided_demo_view_model(active_step: str = "documents", active_tab: str = "so
         "metadata_rows": _metadata_rows(case),
         "kpi_cards": _kpi_cards(),
         "charts": _chart_cards(),
+        "read_only_notice": (
+            "Read-only precomputed demo. Public viewers cannot run AI, reset data, "
+            "import/export bundles, or mutate workflow records from these pages."
+        ),
     }
 
 

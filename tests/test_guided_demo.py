@@ -66,3 +66,30 @@ def test_guided_demo_unknown_case_returns_404() -> None:
     response = client.get("/demo/cases/not-a-real-case")
 
     assert response.status_code == 404
+
+
+def test_guided_demo_pages_do_not_expose_mutating_controls() -> None:
+    client = TestClient(create_app())
+    case = load_guided_demo_case()
+    forbidden_fragments = [
+        "<form",
+        "method=\"post\"",
+        "/run",
+        "/api/cases",
+        "/api/approvals",
+        "/api/evals/run",
+        "admin_token",
+    ]
+
+    for path in [
+        "/demo",
+        "/demo/cases",
+        f"/demo/cases/{case.case_id}",
+        "/demo/architecture",
+    ]:
+        response = client.get(path)
+        assert response.status_code == 200
+        page = response.text.lower()
+        assert "read-only precomputed demo" in page
+        for fragment in forbidden_fragments:
+            assert fragment not in page

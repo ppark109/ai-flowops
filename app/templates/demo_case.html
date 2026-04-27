@@ -16,6 +16,7 @@
   </aside>
 
   <section class="guided-main">
+    <p class="read-only-note">{{ read_only_notice }}</p>
     {% if active_step in ["documents", "extraction"] %}
       <div class="step-head">
         <p class="eyebrow">Step {{ "1" if active_step == "documents" else "2" }}</p>
