@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 
 from app.guided_demo import resolve_evidence_references
 from app.main import create_app
+from app.settings import Settings
 from schemas.case import IntakePackage
 from scripts.prepare_guided_demo_ai import validate_candidate
 from workflows.orchestrator import WorkflowOrchestrator
@@ -14,6 +15,10 @@ from workflows.storage import WorkflowStorage
 
 def _client() -> TestClient:
     return TestClient(create_app())
+
+
+def _public_demo_client() -> TestClient:
+    return TestClient(create_app(Settings(public_demo_mode=True)))
 
 
 def test_home_and_demo_render_case_room_hero() -> None:
@@ -156,6 +161,57 @@ def test_public_demo_pages_do_not_expose_mutating_controls() -> None:
         assert "/api/cases" not in response.text
         assert "/api/approvals" not in response.text
         assert "admin token" not in response.text.lower()
+
+
+def test_public_demo_mode_blocks_operational_routes_and_mutations() -> None:
+    client = _public_demo_client()
+
+    allowed_paths = (
+        "/",
+        "/demo",
+        "/demo/cases/demo-gov-benefits-001?step=received",
+        "/demo/evidence-map",
+        "/demo/source-document",
+        "/demo/document-package",
+        "/demo/document/rfp",
+        "/demo/department-packet",
+        "/demo/kpis",
+        "/demo/architecture",
+        "/healthz",
+        "/static/style.css",
+    )
+    for path in allowed_paths:
+        response = client.get(path)
+        assert response.status_code == 200
+
+    blocked_get_paths = (
+        "/technical-dashboard",
+        "/cases",
+        "/approvals",
+        "/evals",
+        "/kpis",
+        "/playbook",
+        "/api/cases",
+        "/api/kpis",
+        "/api/evals",
+        "/meta",
+        "/docs",
+        "/redoc",
+        "/openapi.json",
+    )
+    for path in blocked_get_paths:
+        response = client.get(path)
+        assert response.status_code == 404
+
+    blocked_post_paths = (
+        "/api/cases/seed",
+        "/api/cases/demo-gov-benefits-001/run",
+        "/api/evals/run",
+        "/approvals/demo/action",
+    )
+    for path in blocked_post_paths:
+        response = client.post(path)
+        assert response.status_code == 404
 
 
 def test_evidence_references_resolve_to_source_phrases() -> None:

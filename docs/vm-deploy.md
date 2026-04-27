@@ -18,8 +18,9 @@ deploy by itself.
 8. Updates `/opt/ai-flowops` to the workflow commit.
 9. Builds `ai-flowops:local` on the VM.
 10. Replaces only the `ai-flowops-app` container.
-11. Keeps the app bound privately at `127.0.0.1:18080:8000`.
-12. Verifies `http://127.0.0.1:18080/healthz` on the VM.
+11. Runs the container with `PUBLIC_DEMO_MODE=true`.
+12. Keeps the app bound privately at `127.0.0.1:18080:8000`.
+13. Verifies `http://127.0.0.1:18080/healthz` on the VM.
 
 ## Required GitHub Secrets
 
@@ -36,6 +37,21 @@ Set these repository or environment secrets before running the workflow:
 `AI_FLOWOPS_VM_SSH_KEY` is the private key used for the deployment SSH user.
 
 No OpenAI API key, Codex credential, or local `.env` file is required or copied.
+
+## Public Demo Mode
+
+The VM deployment enables `PUBLIC_DEMO_MODE=true`. In that mode, the app only
+serves read-only public demo routes:
+
+- `/`
+- `/demo`
+- `/demo/*`
+- `/healthz`
+- `/static/*`
+
+Operational pages, API routes, mutating approval actions, OpenAPI docs, and
+technical dashboards return `404`. This keeps the guided demo safe to expose
+through Tailscale Funnel later.
 
 ## VM Resource Boundaries
 

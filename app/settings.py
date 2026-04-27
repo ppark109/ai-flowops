@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     database_path: str = "data/runtime/app.sqlite3"
     enable_api_agents: bool = False
+    public_demo_mode: bool = False
 
 
 @lru_cache

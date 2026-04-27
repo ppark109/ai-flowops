@@ -84,6 +84,7 @@ jobs:
           docker run -d \
             --name "$CONTAINER" \
             --restart unless-stopped \
+            -e PUBLIC_DEMO_MODE=true \
             -p "$PORT_BIND" \
             -v "$VOLUME:/app/data/runtime" \
             "$IMAGE"
