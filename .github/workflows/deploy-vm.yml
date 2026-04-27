@@ -1,0 +1,100 @@
+name: deploy-vm
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-ai-flowops-private-vm
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy private VM demo
+    runs-on: ubuntu-latest
+    environment: private-vm-demo
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Test
+        run: pytest
+
+      - name: Build Docker image
+        run: docker build -t ai-flowops:ci .
+
+      - name: Connect to tailnet
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          version: latest
+          ping: ${{ secrets.AI_FLOWOPS_VM_HOST }}
+
+      - name: Configure SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.AI_FLOWOPS_VM_SSH_KEY }}" > ~/.ssh/ai-flowops-vm
+          chmod 600 ~/.ssh/ai-flowops-vm
+          ssh-keyscan -H "${{ secrets.AI_FLOWOPS_VM_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy ai-flowops-app
+        env:
+          VM_HOST: ${{ secrets.AI_FLOWOPS_VM_HOST }}
+          VM_USER: ${{ secrets.AI_FLOWOPS_VM_USER }}
+          DEPLOY_SHA: ${{ github.sha }}
+        run: |
+          ssh -i ~/.ssh/ai-flowops-vm "$VM_USER@$VM_HOST" "DEPLOY_SHA=$DEPLOY_SHA bash -se" <<'REMOTE'
+          set -euo pipefail
+
+          APP_DIR=/opt/ai-flowops
+          IMAGE=ai-flowops:local
+          CONTAINER=ai-flowops-app
+          VOLUME=ai-flowops-data
+          PORT_BIND=127.0.0.1:18080:8000
+
+          cd "$APP_DIR"
+          git fetch --prune origin main
+          git checkout -B main "$DEPLOY_SHA"
+          git reset --hard "$DEPLOY_SHA"
+
+          docker build -t "$IMAGE" .
+          docker volume create "$VOLUME" >/dev/null
+
+          if docker ps -a --format '{{.Names}}' | grep -Fx "$CONTAINER" >/dev/null; then
+            docker rm -f "$CONTAINER"
+          fi
+
+          docker run -d \
+            --name "$CONTAINER" \
+            --restart unless-stopped \
+            -p "$PORT_BIND" \
+            -v "$VOLUME:/app/data/runtime" \
+            "$IMAGE"
+
+          for _ in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18080/healthz; then
+              exit 0
+            fi
+            sleep 2
+          done
+
+          docker logs --tail=200 "$CONTAINER"
+          exit 1
+          REMOTE

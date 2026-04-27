@@ -1,0 +1,13 @@
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+data/runtime/*
+!data/runtime/.gitkeep
+*.sqlite
+*.sqlite3
+*.db
+.env
+docs/AI-Business-Operations-Orchestrator.md

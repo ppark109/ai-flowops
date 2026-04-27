@@ -86,6 +86,8 @@ Optional:
 docker compose up --build
 ```
 
+Then open: `http://127.0.0.1:18080`
+
 ## QA Commands
 
 ```powershell
@@ -132,8 +134,12 @@ GitHub Actions validates:
 
 - lint (`ruff`)
 - tests (`pytest`)
-- deterministic evals
 - Docker build
+
+Manual private VM deployment is available through the `deploy-vm` GitHub
+Actions workflow. It connects to the VM over Tailscale + SSH, rebuilds only the
+`ai-flowops-app` container, keeps the app bound to `127.0.0.1:18080`, and does
+not copy `.env` files or AI credentials. See `docs/vm-deploy.md`.
 
 ## AI-assisted development disclosure
 

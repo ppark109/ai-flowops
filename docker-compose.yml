@@ -1,0 +1,14 @@
+services:
+  ai-flowops:
+    build: .
+    image: ai-flowops:local
+    container_name: ai-flowops-app
+    ports:
+      - "127.0.0.1:18080:8000"
+    volumes:
+      - ai-flowops-data:/app/data/runtime
+    restart: unless-stopped
+
+volumes:
+  ai-flowops-data:
+    name: ai-flowops-data

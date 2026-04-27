@@ -28,3 +28,6 @@ jobs:
 
       - name: Test
         run: pytest
+
+      - name: Build Docker image
+        run: docker build -t ai-flowops:ci .
