@@ -29,7 +29,7 @@ def test_home_and_demo_render_case_room_hero() -> None:
         assert "Promoted this RFP" in response.text or "promoted this RFP" in response.text
         assert "Walk through the case" in response.text
         assert "/demo/cases/demo-gov-benefits-001?step=received" in response.text
-        assert "All data precomputed - no live AI calls" in response.text
+        assert "Read-only guided demo of a completed AI-processed workflow." in response.text
 
 
 def test_demo_cases_no_longer_lists_smaller_examples() -> None:
