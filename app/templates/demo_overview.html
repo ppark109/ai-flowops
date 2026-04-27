@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell hero-shell">
+  <div class="case-topbar">
+    <strong>AI FlowOps</strong>
+    <nav aria-label="Demo sections">
+      <a href="/demo/architecture">Architecture</a>
+      <a href="/demo/kpis">Dashboard -></a>
+    </nav>
+  </div>
+
+  <div class="hero-panel">
+    <p class="eyebrow">Live case walkthrough</p>
+    <h1>{{ case.question }}</h1>
+    <p class="hero-copy">{{ case.subtitle }}</p>
+
+    <section class="screening-panel hero-screening" aria-label="Overnight AI screening">
+      <p class="muted-label">Before the case opened</p>
+      <h2>{{ demo.intake_automation.headline }}</h2>
+      <p>{{ demo.intake_automation.summary }}</p>
+      <div class="screening-stats">
+        <span><strong>{{ demo.intake_automation.opportunities_scanned }}</strong> opportunities scanned</span>
+        <span><strong>{{ demo.intake_automation.candidates_filtered_out }}</strong> filtered out</span>
+        <span><strong>{{ demo.intake_automation.screening_confidence }}</strong> screening confidence</span>
+        <span><strong>{{ demo.intake_automation.screening_time_saved }}</strong> saved before review</span>
+      </div>
+    </section>
+
+    <div class="hero-meta" aria-label="Case summary">
+      <div>
+        <span>Case</span>
+        <strong>{{ case.short_title }}</strong>
+      </div>
+      <div>
+        <span>Contract value</span>
+        <strong>{{ case.contract_value }}</strong>
+      </div>
+      <div>
+        <span>Status</span>
+        <strong class="pill pill-warning">{{ case.status }}</strong>
+      </div>
+      <div>
+        <span>Outcome</span>
+        <strong class="pill pill-info">{{ case.outcome }}</strong>
+      </div>
+    </div>
+
+    <div class="hero-actions">
+      <a class="button-primary" href="/demo/cases/{{ case.id }}?step=received">Walk through the case -></a>
+      <a class="button-secondary" href="/demo/document-package">Open document package</a>
+    </div>
+  </div>
+
+  <div class="hero-stat-strip">
+    {% for stat in demo.hero_stats %}
+      <div class="hero-stat">
+        <strong>{{ stat.value }}</strong>
+        <span>{{ stat.label }}</span>
+      </div>
+    {% endfor %}
+    <p>All data precomputed - no live AI calls</p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Approval {{ approval.approval_id }}</h1>
+
+<section class="card">
+  <p><strong>Case:</strong> {{ case.case_id }}</p>
+  <p><strong>Status:</strong> {{ approval.status }}</p>
+  <p><strong>Original Route:</strong> {{ approval.original_route }}</p>
+</section>
+
+<section class="card">
+  <h2>Evidence-backed findings</h2>
+  <ul>
+    {% for finding in findings %}
+      <li>{{ finding.summary }}</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Routing Recommendation</h2>
+  <p>{{ routing.recommended_route }}</p>
+</section>
+
+<section class="card">
+  <form method="post" action="/approvals/{{ approval.approval_id }}/action">
+    <label>Action</label>
+    <select name="action">
+      <option value="approve">Approve</option>
+      <option value="reject">Reject</option>
+      <option value="request-info">Request Info</option>
+      <option value="override">Override</option>
+    </select>
+
+    <label>Reviewer</label>
+    <input type="text" name="reviewer" placeholder="optional reviewer id" />
+
+    <label>Comments</label>
+    <textarea name="comments" rows="3"></textarea>
+
+    <label>Requested Info</label>
+    <textarea name="requested_info" rows="2"></textarea>
+
+    <label>Override Route</label>
+    <select name="route">
+      <option value=""></option>
+      <option value="auto_approve">auto_approve</option>
+      <option value="legal">legal</option>
+      <option value="security">security</option>
+      <option value="implementation">implementation</option>
+      <option value="finance">finance</option>
+    </select>
+    <button type="submit">Apply Action</button>
+  </form>
+</section>
+{% endblock %}

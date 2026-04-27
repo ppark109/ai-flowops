@@ -5,8 +5,8 @@ from workflows.routing import ROUTES
 def test_default_playbook_loads() -> None:
     playbook = load_default_playbook()
 
-    assert playbook.name == "default-commercial-intake-playbook"
-    assert len(playbook.rules) == 5
+    assert playbook.name == "ai-flowops-default-playbook"
+    assert len(playbook.rules) == 18
 
 
 def test_default_playbook_routes_are_supported() -> None:

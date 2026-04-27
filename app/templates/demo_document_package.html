@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell proof-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo/cases/{{ case.id }}?step=received">&lt;- Case walkthrough</a>
+      <span>/</span>
+      <strong>Initial document package</strong>
+    </nav>
+    <span>{{ case.short_title }} - {{ case.rfp_ref }}</span>
+  </div>
+
+  <div class="proof-page">
+    <p class="eyebrow">Source package</p>
+    <h1>Documents received before AI analysis</h1>
+    <p class="stage-lede">
+      These are the synthetic documents the demo case is built from. Technical reviewers can open the full package,
+      then compare the source text against the evidence map and specialist packets.
+    </p>
+
+    <div class="document-card-grid">
+      {% for document in demo.source_documents %}
+        <a class="document-card" href="/demo/document/{{ document.id }}">
+          <p class="muted-label">{{ document.pages }} page{% if document.pages != "1" %}s{% endif %}</p>
+          <h2>{{ document.title }}</h2>
+          <p>{{ document.description }}</p>
+          <span>Open {{ document.filename }} -></span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

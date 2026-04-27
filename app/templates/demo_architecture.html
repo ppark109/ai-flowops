@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell proof-shell architecture-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo">&lt;- Overview</a>
+      <span>/</span>
+      <strong>Architecture</strong>
+    </nav>
+    <span>Read-only guided demo - precomputed data</span>
+  </div>
+
+  <div class="proof-page">
+    <p class="eyebrow">System design</p>
+    <h1>How AI FlowOps turns {{ case.short_title }} into a governed business decision</h1>
+    <p class="stage-lede">
+      The public Case Room is a read-only view over precomputed workflow data. It shows the same operating pattern the
+      backend supports: opportunity screening, intake, extraction, specialist routing, human review, synthesis, decision logging, and KPI capture.
+    </p>
+
+    <div class="architecture-flow" aria-label="Architecture flow">
+      <div class="flow-ai">Opportunity Discovery / AI Screening<span>Monitor feeds, download notices, filter likely contract-fit RFPs</span></div>
+      <div>Document Inputs<span>RFPs, contracts, notes</span></div>
+      <div>Ingestion Layer<span>Parse and normalize</span></div>
+      <div class="flow-ai">AI Decision Engine<span>Extract, classify, recommend</span></div>
+      <div>Workflow Engine<span>Rules, routes, packets</span></div>
+      <div class="flow-hitl">Specialist HITL Layer<span>Legal, Security, Finance, Implementation</span></div>
+      <div class="flow-ai">AI Synthesis Layer<span>Collate reviews and prepare BD/Ops packet</span></div>
+      <div class="flow-hitl">BD/Ops HITL Layer<span>Own final bid/no-bid decision</span></div>
+      <div>Database / Audit Log<span>Cases, events, traces</span></div>
+      <div>Dashboard Layer<span>KPIs and proof views</span></div>
+    </div>
+
+    <div class="chart-grid">
+      <section class="chart-card">
+        <h2>Technical stack</h2>
+        <ul class="stack-list">
+          <li><strong>Frontend</strong><span>Server-rendered Jinja templates and repo-owned CSS</span></li>
+          <li><strong>Backend</strong><span>FastAPI application routes and workflow APIs</span></li>
+          <li><strong>Database</strong><span>SQLite persistence for cases, traces, approvals, and KPIs</span></li>
+          <li><strong>AI workflow</strong><span>Local Codex prep generates screening, analysis, packets, and synthesis; public pages stay precomputed</span></li>
+        </ul>
+      </section>
+      <section class="chart-card">
+        <h2>Deployment flow</h2>
+        <div class="deployment-flow">
+          <span>Local Development</span>
+          <span>GitHub</span>
+          <span>GitHub Actions</span>
+          <span>Private VM Demo</span>
+        </div>
+      </section>
+    </div>
+
+    <section class="section-block">
+      <h2>What this proves</h2>
+      <div class="summary-grid">
+        <div class="finding-card">
+          <p class="muted-label">Product design</p>
+          <strong>End-to-end operations workflow</strong>
+          <span>One business question moves through AI, specialists, BD/Ops, and audit records.</span>
+        </div>
+        <div class="finding-card">
+          <p class="muted-label">AI system design</p>
+          <strong>Grounded decisions</strong>
+          <span>Every major claim links back to a source phrase and an extracted fact.</span>
+        </div>
+        <div class="finding-card">
+          <p class="muted-label">Workflow automation</p>
+          <strong>Department-specific packets</strong>
+          <span>The AI generates different packets for Legal, Security, Finance, and Implementation.</span>
+        </div>
+        <div class="finding-card">
+          <p class="muted-label">Governance</p>
+          <strong>Human-owned decision</strong>
+          <span>AI recommends; specialist reviewers and BD/Ops own the final decision.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

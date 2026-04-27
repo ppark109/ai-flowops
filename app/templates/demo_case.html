@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell walkthrough-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo">&lt;- Overview</a>
+      <span>/</span>
+      <strong>{{ case.short_title }}</strong>
+    </nav>
+    {% if stage_id == "decision" %}<span class="pill pill-success">Complete</span>{% endif %}
+  </div>
+
+  <div class="case-layout">
+    <aside class="stage-rail" aria-label="Case workflow stages">
+      {% for item in stages %}
+        <a class="stage-link {% if item.id in active_steps %}active{% endif %} {% if item.status == 'complete' %}complete{% endif %}"
+           href="/demo/cases/{{ case.id }}?step={{ item.id }}">
+          <span class="stage-dot"></span>
+          <span>
+            <strong>{{ item.label }}</strong>
+            <small>{{ item.time }}</small>
+          </span>
+        </a>
+      {% endfor %}
+    </aside>
+
+    <article class="stage-panel">
+      {% if view == "decision" %}
+        <section class="outcome-hero">
+          <div>
+            <p class="muted-label">BD/Ops decision</p>
+            <span class="pill pill-success big-pill">{{ case.final_decision }}</span>
+          </div>
+          <div>
+            <p class="muted-label">AI synthesis summary</p>
+            <h1>{{ demo.ai_synthesis.headline }}</h1>
+            <p>{{ demo.ai_synthesis.summary }}</p>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <h2>Conditions assigned</h2>
+          <div class="condition-list">
+            {% for condition in demo.conditions %}
+              <div class="condition-row">
+                <span>{{ condition.number }}</span>
+                <strong>{{ condition.text }}</strong>
+                <em class="dept-tag dept-{{ condition.department | lower }}">{{ condition.department }}</em>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="section-block">
+          <h2>Value created by the workflow</h2>
+          <div class="metric-grid">
+            {% for metric in demo.value_metrics %}
+              <div class="metric-card">
+                <strong>{{ metric.value }}</strong>
+                <span>{{ metric.label }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section class="section-block proof-layer" id="audit-log">
+          <h2>Proof - for technical reviewers</h2>
+          <nav class="tab-row" aria-label="Proof views">
+            {% for tab in demo.proof_tabs %}
+              <a href="{{ tab.href }}" class="{% if loop.first %}active{% endif %}">{{ tab.label }}</a>
+            {% endfor %}
+          </nav>
+          <div class="audit-log">
+            {% for event in demo.audit_events %}
+              <div class="audit-row">
+                <time>{{ event.time }}</time>
+                <span></span>
+                <p>{{ event.event }}</p>
+              </div>
+            {% endfor %}
+          </div>
+          <p class="proof-note">Evidence map, department packets, source documents, and KPI charts are available in the tabs above.</p>
+        </section>
+      {% else %}
+        <p class="eyebrow">{{ stage.eyebrow }}</p>
+        <h1>{{ stage.title }}</h1>
+        <p class="stage-lede">{{ stage.body }}</p>
+
+        {% if view == "extraction" %}
+          <div class="divider"></div>
+          <div class="finding-grid">
+            {% for card in demo.extraction_cards %}
+              <div class="finding-card">
+                <p class="muted-label">{{ card.label }}</p>
+                <strong>{{ card.value }}</strong>
+                <span>{{ card.detail }}</span>
+              </div>
+            {% endfor %}
+          </div>
+
+          <h2>Risk flags identified ({{ demo.risk_flags | length }})</h2>
+          <div class="risk-list">
+            {% for risk in demo.risk_flags %}
+              <div class="risk-row">
+                <span class="risk-icon">!</span>
+                <strong>{{ risk.label }}</strong>
+                <em class="dept-tag dept-{{ risk.department | lower }}">{{ risk.department }}</em>
+              </div>
+            {% endfor %}
+          </div>
+
+          <details class="proof-toggle">
+            <summary>Show extracted data and source phrases</summary>
+            <div class="proof-grid">
+              <div>
+                <h3>Structured fields passed downstream</h3>
+                <p class="proof-note">This is the operational form of the AI extraction: values the workflow can route, audit, and hand off instead of leaving the RFP as unstructured prose.</p>
+                <pre>{{ demo.extracted_json | tojson(indent=2) }}</pre>
+              </div>
+              <div>
+                <h3>Source evidence phrases ({{ demo.evidence_items | length }})</h3>
+                <p class="proof-note">The AI extracted 23 structured facts from the package. These are the cited source phrases used to ground the major findings and reviewer packets.</p>
+                <ul class="evidence-list-compact">
+                  {% for item in demo.evidence_items %}
+                    <li><a href="/demo/source-document?active={{ item.id }}">{{ item.source_phrase }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </details>
+        {% elif view == "recommendation_routing" %}
+          <div class="divider"></div>
+          <section class="routing-logic-panel">
+            <p class="muted-label">What the AI did</p>
+            <p>{{ demo.routing_logic_intro }}</p>
+            <div class="routing-logic">
+              {% for item in demo.routing_logic %}
+                <div>
+                  <strong>{{ item.department }}</strong>
+                  <p>{{ item.reason }}</p>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
+
+          <section class="recommendation-banner">
+            <p class="muted-label">AI recommendation</p>
+            <strong>{{ case.recommendation }}</strong>
+            <span>Risk level: {{ case.risk_level }} - Confidence: {{ case.confidence }}</span>
+          </section>
+
+          <h2>Specialist packets routed to</h2>
+          <div class="department-grid">
+            {% for dept in departments %}
+              <a class="department-card dept-border-{{ dept.id }}" href="/demo/department-packet?department={{ dept.id }}">
+                <h3>{{ dept.name }}</h3>
+                <ul>
+                  {% for fact in dept.facts %}
+                    <li>{{ fact }}</li>
+                  {% endfor %}
+                </ul>
+                <span class="pill pill-success">{{ dept.status }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        {% elif view == "received" %}
+          <section class="screening-panel">
+            <p class="muted-label">Overnight opportunity screening</p>
+            <h2>{{ demo.intake_automation.screening_recommendation }}</h2>
+            <p>{{ demo.intake_automation.summary }}</p>
+            <div class="screening-stats">
+              <span><strong>{{ demo.intake_automation.source_monitored }}</strong> source monitored</span>
+              <span><strong>{{ demo.intake_automation.opportunities_downloaded }}</strong> opportunities downloaded</span>
+              <span><strong>1 opportunity promoted</strong> {{ demo.intake_automation.candidate_promoted }}</span>
+              <span><strong>{{ demo.intake_automation.screening_time_saved }}</strong> screening time saved</span>
+            </div>
+          </section>
+
+          <div class="summary-grid">
+            {% for item in demo.received_summary %}
+              <div class="finding-card">
+                <p class="muted-label">{{ item.label }}</p>
+                <strong>{{ item.value }}</strong>
+                <span>{{ item.detail }}</span>
+              </div>
+            {% endfor %}
+          </div>
+          <details class="proof-toggle">
+            <summary>Show source document package</summary>
+            <p>Open the full synthetic intake package or inspect highlighted evidence in the RFP viewer.</p>
+            <div class="stage-actions inline-actions">
+              <a class="button-secondary" href="/demo/document-package">Open document package -></a>
+              <a class="button-secondary" href="/demo/source-document">View highlighted source -></a>
+            </div>
+          </details>
+        {% elif view == "reviews" %}
+          <div class="review-grid">
+            {% for dept in departments %}
+              <article class="review-card">
+                <span class="avatar">{{ dept.reviewer_initials }}</span>
+                <div>
+                  <p class="muted-label">{{ dept.name }}</p>
+                  <h3>{{ dept.decision }}</h3>
+                  <p>{{ dept.summary }}</p>
+                  <div class="condition-list compact review-conditions">
+                    {% for condition in dept.conditions %}
+                      <div class="condition-row">
+                        <span>{{ loop.index }}</span>
+                        <p>{{ condition }}</p>
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <small>{{ dept.reviewer }} - {{ dept.review_time }}</small>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% elif view == "synthesis" %}
+          <section class="synthesis-document">
+            <p class="muted-label">AI synthesis</p>
+            <h2>{{ demo.ai_synthesis.document_title }}</h2>
+            <p class="synthesis-summary">{{ demo.ai_synthesis.headline }}</p>
+            {% for section in demo.ai_synthesis.document_sections %}
+              <section>
+                <h3>{{ section.heading }}</h3>
+                <p>{{ section.body }}</p>
+              </section>
+            {% endfor %}
+            <section>
+              <h3>Source packet links</h3>
+              <div class="synthesis-links">
+                {% for document in demo.source_documents %}
+                  <a href="/demo/document/{{ document.id }}">{{ document.title }}</a>
+                {% endfor %}
+              </div>
+            </section>
+            <p class="proof-note">{{ demo.ai_synthesis.note }}</p>
+          </section>
+          <div class="condition-list compact">
+            {% for condition in demo.conditions %}
+              <div class="condition-row">
+                <span>{{ condition.number }}</span>
+                <strong>{{ condition.text }}</strong>
+                <em class="dept-tag dept-{{ condition.department | lower }}">{{ condition.department }}</em>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <div class="stage-actions">
+          {% if previous_step %}
+            <a class="button-secondary" href="/demo/cases/{{ case.id }}?step={{ previous_step }}">&lt;- Previous</a>
+          {% endif %}
+          {% if next_step %}
+            <a class="button-primary" href="/demo/cases/{{ case.id }}?step={{ next_step }}">Next: {{ next_step | replace("_", " ") }} -></a>
+          {% else %}
+            <a class="button-primary" href="/demo/cases/{{ case.id }}?step=decision">View outcome -></a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </article>
+  </div>
+</section>
+{% endblock %}

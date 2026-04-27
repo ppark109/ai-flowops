@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell document-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo/evidence-map">&lt;- Evidence map</a>
+      <span>/</span>
+      <strong>Source evidence viewer</strong>
+    </nav>
+    <a href="/demo/document-package">{{ evidence_items | length }} phrases highlighted - open package</a>
+  </div>
+
+  <div class="document-layout">
+    <aside class="evidence-sidebar">
+      <p class="muted-label">Evidence phrases</p>
+      {% for item in evidence_items %}
+        <a class="evidence-nav-item {% if item.id == active_item.id %}active{% endif %} dept-left-{{ item.department | lower }}"
+           href="/demo/source-document?active={{ item.id }}">
+          <span>{{ item.department }}</span>
+          <strong>{{ item.extracted_fact }}</strong>
+          <small>{{ item.document }}, p. {{ item.page }}</small>
+        </a>
+      {% endfor %}
+      <div class="highlight-key">
+        <span>Highlight key:</span>
+        <em class="key legal-key"></em> Legal
+        <em class="key security-key"></em> Security
+        <em class="key finance-key"></em> Finance
+        <em class="key implementation-key"></em> Implementation
+      </div>
+    </aside>
+
+    <article class="document-preview">
+      <h1>{{ active_item.document }} - highlighted evidence</h1>
+      <div class="doc-meta">
+        <span>Case: {{ case.short_title }}</span>
+        <span>RFP ref: {{ case.rfp_ref }}</span>
+        <span>Active page: {{ active_item.page }}</span>
+      </div>
+
+      <hr />
+
+      {% for item in evidence_items %}
+        <section class="source-excerpt {% if item.id == active_item.id %}active{% endif %}">
+          <p class="muted-label">{{ item.document }}, p. {{ item.page }} - {{ item.locator }}</p>
+          <p>
+            <mark class="hl {{ item.department | lower }}">{{ item.full_source }}</mark>
+          </p>
+          {% if item.id == active_item.id %}
+            <aside class="ai-note">
+              <p class="muted-label">AI note - active highlight</p>
+              <strong>{{ item.extracted_fact }}</strong>
+              <p>{{ item.ai_reasoning }}</p>
+              <a href="/demo/document/{{ item.document_id }}">Open full source document -></a>
+            </aside>
+          {% endif %}
+        </section>
+      {% endfor %}
+    </article>
+  </div>
+</section>
+{% endblock %}

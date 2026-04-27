@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Cases</h1>
+
+<section class="card">
+  <form method="get" action="/cases">
+    <label>Route</label>
+    <select name="route">
+      <option value=""></option>
+      <option value="auto_approve" {% if route == "auto_approve" %}selected{% endif %}>auto_approve</option>
+      <option value="legal" {% if route == "legal" %}selected{% endif %}>legal</option>
+      <option value="security" {% if route == "security" %}selected{% endif %}>security</option>
+      <option value="implementation" {% if route == "implementation" %}selected{% endif %}>implementation</option>
+      <option value="finance" {% if route == "finance" %}selected{% endif %}>finance</option>
+    </select>
+    <label>State</label>
+    <input type="text" name="state" value="{{ state or '' }}" />
+    <label>Search</label>
+    <input type="text" name="search" value="{{ search or '' }}" />
+    <button type="submit">Filter</button>
+  </form>
+</section>
+
+<section class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Case</th>
+        <th>State</th>
+        <th>Final Route</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cases %}
+      <tr>
+        <td>
+          <a href="/cases/{{ item.case_id }}">{{ item.customer_name }}</a><br />
+          <small>{{ item.case_id }}</small>
+        </td>
+        <td><span class="badge">{{ item.state }}</span></td>
+        <td><span class="badge route {{ item.route or 'auto_approve' }}">{{ item.route or "auto_approve" }}</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

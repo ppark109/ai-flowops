@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Pending Approvals</h1>
+<section class="card">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>Case</th><th>Status</th><th>Original Route</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for approval in approvals %}
+      <tr>
+        <td>{{ approval.approval_id }}</td>
+        <td>{{ approval.case_id }}</td>
+        <td>{{ approval.status }}</td>
+        <td>{{ approval.original_route }}</td>
+        <td><a href="/approvals/{{ approval.approval_id }}">open</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

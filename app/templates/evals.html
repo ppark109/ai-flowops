@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Eval Summary</h1>
+<section class="card">
+  <p>Passed: {{ pass_count }} / {{ total }}</p>
+  <table>
+    <thead>
+      <tr><th>Case</th><th>Expected</th><th>Actual</th><th>Route Pass</th><th>Approval Pass</th><th>Brief Pass</th><th>Grounding</th></tr>
+    </thead>
+    <tbody>
+      {% for item in evals %}
+      <tr>
+        <td>{{ item.case_id }}</td>
+        <td>{{ item.expected_route }}</td>
+        <td>{{ item.actual_route }}</td>
+        <td>{{ item.route_pass }}</td>
+        <td>{{ item.approval_pass }}</td>
+        <td>{{ item.brief_completeness_pass }}</td>
+        <td>{{ item.grounding_pass }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

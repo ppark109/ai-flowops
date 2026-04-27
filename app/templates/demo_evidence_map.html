@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell proof-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo/cases/{{ case.id }}?step=decision">&lt;- Case walkthrough</a>
+      <span>/</span>
+      <strong>Evidence map</strong>
+    </nav>
+    <span>{{ case.short_title }} - {{ demo.evidence_items | length }} evidence items</span>
+  </div>
+
+  <div class="proof-page">
+    <p class="proof-intro">
+      Every AI decision for {{ case.short_title }} traces back to a specific phrase in the source document. This map shows the full chain:
+      source phrase -> extracted fact -> department routed -> specialist conclusion -> final condition.
+    </p>
+
+    <nav class="filter-row" aria-label="Evidence filters">
+      <a class="{% if selected_department == 'all' and not risks_only %}active{% endif %}" href="/demo/evidence-map">All</a>
+      {% for dept in departments %}
+        <a class="{% if selected_department == dept.id %}active{% endif %}" href="/demo/evidence-map?department={{ dept.id }}">{{ dept.name }}</a>
+      {% endfor %}
+      <a class="risk-filter {% if risks_only %}active{% endif %}" href="/demo/evidence-map?risks_only=true">Risks only</a>
+    </nav>
+
+    <div class="table-scroll">
+      <table class="evidence-table">
+        <thead>
+          <tr>
+            <th>Source phrase</th>
+            <th>Extracted fact</th>
+            <th>Dept.</th>
+            <th>Confidence</th>
+            <th>Conclusion / condition</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in evidence_items %}
+            <tr class="{% if loop.first %}expanded-row{% endif %}">
+              <td>
+                <a href="/demo/source-document?active={{ item.id }}"><em>"{{ item.source_phrase }}"</em></a>
+                <small>{{ item.document }}, p. {{ item.page }}</small>
+              </td>
+              <td>{{ item.extracted_fact }}</td>
+              <td><span class="dept-tag dept-{{ item.department | lower }}">{{ item.department }}</span></td>
+              <td>
+                <span class="confidence-bar"><span style="width: {{ item.confidence }}%"></span></span>
+                {{ item.confidence }}%
+              </td>
+              <td>{% if item.risk %}! {% else %}✓ {% endif %}{{ item.conclusion }}</td>
+            </tr>
+            {% if loop.first %}
+              <tr class="detail-row">
+                <td colspan="5">
+                  <div class="evidence-detail-grid">
+                    <div>
+                      <p class="muted-label">Full source extract</p>
+                      <blockquote>{{ item.full_source }}</blockquote>
+                      <a href="/demo/source-document?active={{ item.id }}">View in source document -></a>
+                    </div>
+                    <div>
+                      <p class="muted-label">AI reasoning</p>
+                      <p>{{ item.ai_reasoning }}</p>
+                    </div>
+                    <div>
+                      <p class="muted-label">Specialist conclusion</p>
+                      <p>{{ item.specialist_conclusion }}</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <p class="proof-note">Showing {{ evidence_items | length }} of {{ demo.evidence_items | length }} evidence items. Filter by department or risk to narrow.</p>
+  </div>
+</section>
+{% endblock %}

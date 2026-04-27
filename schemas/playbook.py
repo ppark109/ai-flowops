@@ -23,3 +23,7 @@ class Playbook(BaseModel):
     version: str
     approval_policy: ApprovalPolicy = "on_high_risk"
     rules: list[PlaybookRule]
+
+
+class PlaybookValidationError(ValueError):
+    """Raised when the playbook violates local deterministic-policy constraints."""

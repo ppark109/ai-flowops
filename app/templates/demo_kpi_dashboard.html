@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell proof-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo/cases/{{ case.id }}?step=decision">&lt;- Case walkthrough</a>
+      <span>/</span>
+      <strong>KPIs and workflow performance</strong>
+    </nav>
+    <span>{{ case.short_title }} - {{ case.rfp_ref }}</span>
+  </div>
+
+  <div class="kpi-page">
+    <p class="proof-note">
+      This dashboard is case-level because the public demo currently has one flagship case. The time-saved estimate
+      includes overnight AI opportunity screening plus downstream document review, routing, human review, and BD/Ops decision support.
+    </p>
+    <div class="metric-grid kpi-summary">
+      {% for metric in kpi_dashboard.summary %}
+        <div class="metric-card">
+          <span>{{ metric.label }}</span>
+          <strong>{{ metric.value }}</strong>
+          <small>{{ metric.detail }}</small>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="chart-grid">
+      <section class="chart-card stage-time-card">
+        <h2>Time per workflow stage</h2>
+        <p>Seconds - AI screening, normalization, enrichment, extraction, and routing are fast; human review and BD/Ops decision take the real time</p>
+        <div class="bar-chart">
+          {% for item in kpi_dashboard.stage_times %}
+            <div class="bar-wrap">
+              <span>{% if item.seconds >= 60 %}{{ ((item.seconds / 60) | round(0, 'ceil')) | int }}m{% else %}{{ item.seconds }}s{% endif %}</span>
+              <div class="bar bar-{{ item.group }}" style="height: {{ (item.seconds / max_stage_seconds * 100) | round(0, 'ceil') }}%"></div>
+              <small>{{ item.label }}</small>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="legend">
+          <span><em class="key finance-key"></em> AI screening and workflow stages</span>
+          <span><em class="key human-key"></em> Specialist review</span>
+          <span><em class="key decision-key"></em> BD/Ops decision</span>
+        </div>
+      </section>
+
+      <section class="chart-card">
+        <h2>Evidence by department</h2>
+        <p>Distribution of extracted facts routed</p>
+        <div class="donut-layout">
+          <div class="donut"><span>23<br />facts</span></div>
+          <ul class="donut-list">
+            {% for item in kpi_dashboard.department_counts %}
+              <li><span class="dept-dot dept-bg-{{ item.department | lower }}"></span>{{ item.department }} <strong>{{ item.count }}</strong></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <section class="chart-card wide">
+      <h2>Audit trail activity</h2>
+      <p>Each bar marks workflow audit records created by the system, AI agents, human reviewers, or BD/Ops. Click a bar to see the records for that moment.</p>
+      <div class="density-chart">
+        {% for item in kpi_dashboard.audit_density %}
+          <div class="density-wrap">
+            <a class="density-link" href="#audit-bucket-{{ item.time | replace(':', '') }}" aria-label="View audit events at {{ item.time }}">
+              <span>{{ item.count }}</span>
+              <span class="density-bar density-{{ item.group }}" style="height: {{ (item.count / max_audit_count * 100) | round(0, 'ceil') }}%"></span>
+              <small>{{ item.time }}</small>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="audit-bucket-list">
+        {% for item in kpi_dashboard.audit_density %}
+          <section class="audit-bucket" id="audit-bucket-{{ item.time | replace(':', '') }}">
+            <header>
+              <strong>{{ item.time }}</strong>
+              <span class="pill density-pill density-pill-{{ item.group }}">{{ item.group | capitalize }}</span>
+              <small>{{ item.events | length }} record{% if (item.events | length) != 1 %}s{% endif %}</small>
+            </header>
+            <ul>
+              {% for event in item.events %}
+                <li><time>{{ event.time }}</time><span>{{ event.event }}</span></li>
+              {% endfor %}
+            </ul>
+          </section>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</section>
+{% endblock %}

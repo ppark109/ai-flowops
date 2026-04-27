@@ -1,0 +1,902 @@
+{
+  "case": {
+    "id": "demo-gov-benefits-001",
+    "rfp_ref": "DSS-2024-0041",
+    "title": "State Benefits Portal Modernization RFP",
+    "short_title": "State Benefits Portal Modernization",
+    "agency": "Department of Social Services",
+    "question": "A $4.8M government RFP arrived. Should we bid?",
+    "subtitle": "Overnight AI screening selected this RFP from a broader opportunity feed, normalized the document package, then routed specialist packets and delivered a governed BD/Ops decision end to end.",
+    "contract_value": "$4.8M",
+    "deadline": "May 14, 2026",
+    "status": "Conditional bid",
+    "outcome": "Decision logged",
+    "final_decision": "BID - conditional",
+    "recommendation": "Conditional bid - pursue with 4 conditions resolved",
+    "risk_level": "Medium",
+    "confidence": "89%",
+    "received_at": "12:08 AM",
+    "pages": 12,
+    "exhibits": 3
+  },
+  "hero_stats": [
+    {
+      "value": "43",
+      "label": "opportunities screened"
+    },
+    {
+      "value": "4",
+      "label": "departments routed"
+    },
+    {
+      "value": "23",
+      "label": "structured facts"
+    },
+    {
+      "value": "~2.3d",
+      "label": "total time saved"
+    }
+  ],
+  "intake_automation": {
+    "headline": "Overnight AI screening promoted this RFP before the case opened.",
+    "summary": "The system monitored a government opportunity API, downloaded each opportunity record, normalized the data, enriched it with business-fit context, and used AI to filter low-fit notices before sending this RFP into bid/no-bid analysis.",
+    "source_monitored": "State procurement opportunity feed",
+    "opportunities_scanned": 43,
+    "opportunities_downloaded": 43,
+    "candidates_filtered_out": 42,
+    "candidate_promoted": "State Benefits Portal Modernization RFP",
+    "enrichment_context_added": "Public-sector modernization fit, legacy integration scope, regulated-data exposure, contract value, deadline, and likely department owners.",
+    "screening_recommendation": "Promote for bid/no-bid analysis",
+    "screening_confidence": "88%",
+    "screening_time_saved": "4h",
+    "screening_reasons": [
+      "Contract value and scope align with target public-sector modernization work.",
+      "The RFP includes portal modernization, citizen workflow, legacy mainframe integration, and regulated-data handling.",
+      "The package contains enough detail to route Legal, Security, Finance, and Implementation reviews without manual triage."
+    ]
+  },
+  "source_documents": [
+    {
+      "id": "intake_email",
+      "title": "Intake email",
+      "filename": "intake_email.md",
+      "pages": "1",
+      "description": "BD intake note framing the opportunity and bid/no-bid request."
+    },
+    {
+      "id": "rfp",
+      "title": "Request for Proposal",
+      "filename": "rfp.md",
+      "pages": "12",
+      "description": "Primary RFP document with scope, contract terms, security requirements, and delivery milestones."
+    },
+    {
+      "id": "pricing_exhibit",
+      "title": "Pricing and SLA exhibit",
+      "filename": "pricing_exhibit.md",
+      "pages": "6",
+      "description": "Fixed-fee price, milestone billing, and service-credit language."
+    },
+    {
+      "id": "implementation_exhibit",
+      "title": "Implementation exhibit",
+      "filename": "implementation_exhibit.md",
+      "pages": "5",
+      "description": "Mainframe integration, production launch, staffing, and milestone expectations."
+    },
+    {
+      "id": "security_questionnaire",
+      "title": "Security questionnaire",
+      "filename": "security_questionnaire.md",
+      "pages": "5",
+      "description": "Security controls requested by the agency, with DPA and residency gaps."
+    }
+  ],
+  "stages": [
+    {
+      "id": "received",
+      "label": "Document received",
+      "time": "12:08 AM",
+      "status": "complete",
+      "eyebrow": "Stage 1 of 7 - Intake",
+      "title": "What came in?",
+      "body": "Overnight AI screening promoted this RFP from a broader opportunity feed. By the time the case opened, the documents had already been downloaded, normalized, enriched, and packaged for bid/no-bid analysis."
+    },
+    {
+      "id": "extraction",
+      "label": "AI extraction",
+      "time": "12:08 AM",
+      "status": "complete",
+      "eyebrow": "Stage 2 of 7 - AI extraction",
+      "title": "What did AI read from the RFP?",
+      "body": "The AI parsed the full document package and pulled structured facts: contract terms, risk clauses, deadlines, and integration requirements without a human reading it first."
+    },
+    {
+      "id": "recommendation",
+      "label": "AI recommendation",
+      "time": "12:09 AM",
+      "status": "complete",
+      "eyebrow": "Stages 3 + 4 of 7 - Recommendation and routing",
+      "title": "What did AI decide - and who did it call?",
+      "body": "The AI weighed extracted facts against bid criteria and issued a recommendation. It then generated tailored review packets for each specialist team."
+    },
+    {
+      "id": "routing",
+      "label": "Department routing",
+      "time": "12:10 AM",
+      "status": "complete",
+      "eyebrow": "Stages 3 + 4 of 7 - Recommendation and routing",
+      "title": "What did AI decide - and who did it call?",
+      "body": "The AI weighed extracted facts against bid criteria and issued a recommendation. It then generated tailored review packets for each specialist team."
+    },
+    {
+      "id": "reviews",
+      "label": "Specialist reviews",
+      "time": "10:30 AM",
+      "status": "complete",
+      "eyebrow": "Stage 5 of 7 - Specialist reviews",
+      "title": "What did humans decide?",
+      "body": "Legal, Security, Finance, and Implementation reviewed the AI-generated packets. Each team returned a conclusion with conditions, notes, and evidence links."
+    },
+    {
+      "id": "synthesis",
+      "label": "AI synthesis",
+      "time": "10:31 AM",
+      "status": "complete",
+      "eyebrow": "Stage 6 of 7 - AI synthesis",
+      "title": "How were the reviews summarized?",
+      "body": "The AI compiled specialist conclusions into a single BD/Ops packet. It recommended a conditional bid but left ownership of the business decision with BD/Ops."
+    },
+    {
+      "id": "decision",
+      "label": "BD/Ops decision",
+      "time": "11:30 AM",
+      "status": "complete",
+      "eyebrow": "Stage 7 of 7 - BD/Ops decision",
+      "title": "What did BD/Ops do?",
+      "body": "BD/Ops accepted the recommendation, logged a conditional bid decision, assigned four conditions, and closed the case with an auditable record."
+    }
+  ],
+  "received_summary": [
+    {
+      "label": "Overnight AI screening",
+      "value": "43 opportunities downloaded",
+      "detail": "42 low-fit notices filtered before this RFP was promoted"
+    },
+    {
+      "label": "Document package",
+      "value": "12-page RFP",
+      "detail": "3 supporting exhibits attached"
+    },
+    {
+      "label": "Customer",
+      "value": "Dept. of Social Services",
+      "detail": "State benefits modernization program"
+    },
+    {
+      "label": "AI screening decision",
+      "value": "1 opportunity promoted",
+      "detail": "State Benefits Portal Modernization RFP"
+    },
+    {
+      "label": "Deadline",
+      "value": "May 14, 2026",
+      "detail": "Qualification package due before final bid decision"
+    }
+  ],
+  "extraction_cards": [
+    {
+      "label": "Contract value",
+      "value": "$4.8M fixed-fee",
+      "detail": "Service credits up to 15% on SLA breach"
+    },
+    {
+      "label": "Timeline",
+      "value": "12-week launch",
+      "detail": "Production, not pilot - mainframe integration required"
+    },
+    {
+      "label": "Data classification",
+      "value": "Regulated citizen data",
+      "detail": "DPA absent from RFP - residency unspecified"
+    },
+    {
+      "label": "Liability cap",
+      "value": "Missing / silent",
+      "detail": "Indemnity clause broad - requires legal review"
+    }
+  ],
+  "risk_flags": [
+    {
+      "label": "Compressed production deadline",
+      "department": "Implementation"
+    },
+    {
+      "label": "Legacy integration uncertainty",
+      "department": "Implementation"
+    },
+    {
+      "label": "Unlimited indemnity exposure",
+      "department": "Legal"
+    },
+    {
+      "label": "No stated liability cap",
+      "department": "Legal"
+    },
+    {
+      "label": "Fixed-fee margin pressure",
+      "department": "Finance"
+    },
+    {
+      "label": "Privacy and data processing terms unresolved",
+      "department": "Security"
+    }
+  ],
+  "extracted_json": {
+    "document_type": "Government RFP",
+    "estimated_value": 4800000,
+    "deadline": "2026-05-14",
+    "requires_legal_review": true,
+    "requires_security_review": true,
+    "requires_finance_review": true,
+    "requires_implementation_review": true,
+    "primary_risks": [
+      "liability_cap_absent",
+      "missing_dpa",
+      "fixed_fee_scope_risk",
+      "compressed_launch_timeline"
+    ]
+  },
+  "metadata": [
+    {
+      "label": "Received",
+      "value": "Apr 27, 2026, 12:08 AM"
+    },
+    {
+      "label": "File type",
+      "value": "RFP package"
+    },
+    {
+      "label": "Pages",
+      "value": "12"
+    },
+    {
+      "label": "Extraction status",
+      "value": "Complete"
+    },
+    {
+      "label": "Linked workflow",
+      "value": "Government RFP bid/no-bid"
+    }
+  ],
+  "departments": [
+    {
+      "id": "legal",
+      "name": "Legal",
+      "status": "Review complete",
+      "action": "Review contract terms and identify blockers before proposal commitment.",
+      "task": "Determine whether terms are acceptable or require negotiation.",
+      "facts": [
+        "Liability cap absent from RFP",
+        "Indemnity clause review",
+        "Insurance requirements",
+        "Audit rights scope"
+      ],
+      "packet_precis": "The RFP is commercially attractive but should not proceed to a final bid until the liability exposure is bounded. The indemnity clause is broad, applies to all claims and expenses, and the RFP states no separate monetary liability cap. Insurance coverage appears manageable, but the uncapped indemnity and seven-year audit-rights language should be treated as negotiation items.",
+      "packet_recommendation": "Recommend conditional legal approval for qualification only. Require a liability cap at or below contract value before contract execution, and request an indemnity carve-out for gross negligence and willful misconduct. If the agency refuses any liability cap, escalate to BD/Ops as a no-bid risk.",
+      "packet_questions": [
+        "Can Legal accept qualification-stage work before the cap is negotiated?",
+        "What minimum liability cap would Legal approve for final bid submission?",
+        "Does the $5M insurance requirement require any new coverage or only a certificate?"
+      ],
+      "reviewer": "S. Reyes - Legal counsel",
+      "reviewer_initials": "SR",
+      "review_time": "10:26:22 AM",
+      "decision": "Conditional approval",
+      "summary": "Opportunity is commercially viable from a legal standpoint. The unlimited indemnity clause is the primary blocker and must be addressed before contract execution.",
+      "conditions": [
+        "Negotiate liability cap to <= contract value ($4.8M) before signing. Walk away if agency refuses.",
+        "Request carve-out for gross negligence in indemnity clause during negotiation.",
+        "Insurance requirement is within existing coverage. No action required."
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "status": "Review complete",
+      "action": "Assess regulated-data handling, DPA requirements, and residency constraints.",
+      "task": "Confirm required privacy/security artifacts before bid submission.",
+      "facts": [
+        "Sensitive citizen data handling",
+        "DPA gap - not present in RFP",
+        "Data residency unspecified",
+        "Access control and audit-log requirements"
+      ],
+      "packet_precis": "The RFP requires processing sensitive citizen benefits data, including eligibility, payment, household records, uploaded documents, case-worker notes, administrative records, integration credentials, and audit logs. The package does not include a signed data processing agreement and does not specify whether residency must be state-only, US-only, or otherwise restricted. Security can support qualification only if privacy, residency, support-access, and audit-log requirements are clarified before final commitment.",
+      "packet_recommendation": "Recommend conditional security approval. Require a signed DPA, confirmation of state data residency requirements, and completion of the agency security questionnaire before contract execution.",
+      "packet_questions": [
+        "Is a state-provided DPA available before proposal submission?",
+        "Are residency obligations state-only, US-only, or unspecified?",
+        "Can existing access controls satisfy the questionnaire without new platform work?"
+      ],
+      "reviewer": "M. Chen - Security lead",
+      "reviewer_initials": "MC",
+      "review_time": "10:28:08 AM",
+      "decision": "Conditional approval",
+      "summary": "Security can support the bid only if a signed DPA is obtained and residency requirements are confirmed before implementation planning.",
+      "conditions": [
+        "Obtain signed DPA before contract execution.",
+        "Confirm state data residency requirements before architecture signoff.",
+        "Complete agency security questionnaire before qualification package."
+      ]
+    },
+    {
+      "id": "finance",
+      "name": "Finance",
+      "status": "Review complete",
+      "action": "Assess margin exposure from fixed-fee delivery and SLA service credits.",
+      "task": "Create preliminary cost model and flag pricing risk.",
+      "facts": [
+        "Fixed-fee implementation risk",
+        "Margin pressure assessment",
+        "Service-credit exposure (15%)",
+        "Milestone acceptance dependency"
+      ],
+      "packet_precis": "The RFP uses a $4.8M fixed fee that includes deliverables, integrations, transition activities, training, launch support, and stabilization. That structure creates margin risk because mainframe integration is required while documentation, access, and test data depend on the agency. The SLA exhibit also introduces service credits up to 15% of monthly fees and states that credits do not replace remediation obligations.",
+      "packet_recommendation": "Recommend conditional finance approval. Re-price the bid with a mainframe integration contingency, model worst-case service-credit exposure, and require a staffing estimate before final margin approval.",
+      "packet_questions": [
+        "What contingency should be added for unknown mainframe integration scope?",
+        "Do SLA credits materially change target margin at the proposed price?",
+        "Is fixed-fee pricing acceptable if week-one technical discovery is required?"
+      ],
+      "reviewer": "J. Patel - Finance reviewer",
+      "reviewer_initials": "JP",
+      "review_time": "10:30:16 AM",
+      "decision": "Conditional approval",
+      "summary": "Finance supports qualification if the pricing model includes a mainframe integration contingency and SLA credit exposure is capped in the margin model.",
+      "conditions": [
+        "Re-price fixed-fee proposal with mainframe integration contingency.",
+        "Model worst-case service-credit exposure before bid committee.",
+        "Require delivery staffing estimate before final margin approval."
+      ]
+    },
+    {
+      "id": "implementation",
+      "name": "Implementation",
+      "status": "Review complete",
+      "action": "Assess whether delivery can meet the 12-week production schedule.",
+      "task": "Confirm staffing feasibility and implementation risks.",
+      "facts": [
+        "12-week production launch",
+        "Legacy mainframe integration",
+        "Senior staffing feasibility",
+        "Agency dependency risk"
+      ],
+      "packet_precis": "The RFP requires production go-live within 12 weeks of contract award, not a pilot. The implementation exhibit requires legacy mainframe integration before production and expects senior technical staff during kickoff, integration readiness, testing, production readiness, and launch support. The timeline is feasible only if staff are reserved and agency integration access, test data, and decision makers are available early.",
+      "packet_recommendation": "Recommend implementation approval with conditions. Reserve two senior engineers before final bid, require mainframe access during week one, and treat the first milestone as an integration-readiness gate.",
+      "packet_questions": [
+        "Can two senior engineers be held for the 12-week delivery window?",
+        "What agency dependency would block week-one mainframe access?",
+        "Should the proposal explicitly condition schedule on agency access?"
+      ],
+      "reviewer": "A. Morgan - Delivery lead",
+      "reviewer_initials": "AM",
+      "review_time": "10:21:47 AM",
+      "decision": "Approved with condition",
+      "summary": "Implementation can support qualification if two senior engineers are reserved before final bid and agency integration access is available in week one.",
+      "conditions": [
+        "Confirm staff availability for the 12-week schedule.",
+        "Require mainframe access during project kickoff.",
+        "Treat first milestone as integration-readiness gate."
+      ]
+    }
+  ],
+  "routing_logic_intro": "The AI did not send one generic summary. It mapped extracted facts to specialist ownership, then generated four department-specific packets with only the facts and questions each reviewer needed.",
+  "routing_logic": [
+    {
+      "department": "Legal",
+      "reason": "Contract terms, indemnity, insurance, and audit rights were detected."
+    },
+    {
+      "department": "Security",
+      "reason": "Regulated citizen data, missing DPA, and residency uncertainty were detected."
+    },
+    {
+      "department": "Finance",
+      "reason": "Fixed-fee value, SLA credits, and scope risk exceeded review thresholds."
+    },
+    {
+      "department": "Implementation",
+      "reason": "12-week production launch and legacy integration created delivery risk."
+    }
+  ],
+  "ai_synthesis": {
+    "headline": "BD/Ops should pursue this as a conditional bid only if contract risk, integration feasibility, and security terms are cleared quickly.",
+    "summary": "Decision logged by BD/Ops. Codex AI synthesis recommended conditional pursuit; BD/Ops assigned four conditions and kept final decision ownership.",
+    "owner": "BD/Ops Lead",
+    "note": "AI synthesis recommends the path; BD/Ops owns the final business decision.",
+    "document_title": "AI synthesis packet for BD/Ops",
+    "document_sections": [
+      {
+        "heading": "RFP summary",
+        "body": "The Department of Social Services is requesting modernization of the State Benefits Portal. The vendor must support eligibility, payment, and household-record workflows, complete legacy mainframe integration, submit a security questionnaire, and reach production go-live within 12 weeks of contract award. The commercial package is a $4.8M fixed-fee bid with milestone billing and SLA service credits."
+      },
+      {
+        "heading": "Recommendation",
+        "body": "Proceed to qualification as a conditional bid. Codex identified the opportunity as strategically attractive because it is a single-award, $4.8M public-sector modernization with broad workflow scope and clear production expectations. Final bid approval should depend on four conditions: liability exposure, DPA/residency confirmation, fixed-fee delivery risk, and staffing/integration feasibility."
+      },
+      {
+        "heading": "Specialist findings",
+        "body": "Legal approved qualification only if liability is capped before signing. Security approved only if a signed DPA and residency position are obtained. Finance approved only if mainframe integration and SLA-credit exposure are priced into the margin model. Implementation approved only if senior staff and week-one agency access are confirmed."
+      },
+      {
+        "heading": "Decision request for BD/Ops",
+        "body": "BD/Ops should decide whether to invest in qualification work now while tracking the four conditions as pre-bid gates. Codex AI recommends proceeding only as a governed conditional bid because the largest blockers are not whether there is enough work, but whether the team can absorb integration uncertainty and legal exposure without destroying schedule or margin."
+      }
+    ]
+  },
+  "conditions": [
+    {
+      "number": 1,
+      "text": "Negotiate liability cap before contract execution",
+      "department": "Legal"
+    },
+    {
+      "number": 2,
+      "text": "Obtain signed DPA and confirm data residency",
+      "department": "Security"
+    },
+    {
+      "number": 3,
+      "text": "Re-price fixed-fee with mainframe risk contingency",
+      "department": "Finance"
+    },
+    {
+      "number": 4,
+      "text": "Confirm staff availability for 12-week schedule",
+      "department": "Implementation"
+    }
+  ],
+  "value_metrics": [
+    {
+      "value": "~2.3d",
+      "label": "total time saved"
+    },
+    {
+      "value": "4h",
+      "label": "screening time saved"
+    },
+    {
+      "value": "6",
+      "label": "risks surfaced"
+    },
+    {
+      "value": "23",
+      "label": "structured facts"
+    }
+  ],
+  "proof_tabs": [
+    {
+      "label": "Audit log",
+      "href": "/demo/cases/demo-gov-benefits-001?step=decision#audit-log"
+    },
+    {
+      "label": "Evidence map",
+      "href": "/demo/evidence-map"
+    },
+    {
+      "label": "Dept. packets",
+      "href": "/demo/department-packet"
+    },
+    {
+      "label": "Source docs",
+      "href": "/demo/document-package"
+    },
+    {
+      "label": "KPI charts",
+      "href": "/demo/kpis"
+    }
+  ],
+  "audit_events": [
+    {
+      "time": "00:01:05",
+      "event": "Opportunity API scan started - 43 government opportunities queued for AI screening"
+    },
+    {
+      "time": "00:03:18",
+      "event": "43 opportunities downloaded from procurement API for AI screening"
+    },
+    {
+      "time": "00:05:42",
+      "event": "Opportunity data normalized and enriched - agency, value, deadline, scope, and fit context added"
+    },
+    {
+      "time": "00:07:56",
+      "event": "AI screening promoted State Benefits Portal Modernization for bid/no-bid analysis, confidence 88%"
+    },
+    {
+      "time": "00:08:20",
+      "event": "RFP document package ingested - 12-page RFP, 3 exhibits"
+    },
+    {
+      "time": "00:08:58",
+      "event": "AI extraction complete - 23 structured facts, 6 risk flags, 11 cited evidence phrases"
+    },
+    {
+      "time": "00:09:31",
+      "event": "Recommendation generated - conditional bid, confidence 89%"
+    },
+    {
+      "time": "00:10:00",
+      "event": "Routing complete - packets sent to Legal, Security, Finance, Implementation"
+    },
+    {
+      "time": "10:21:47",
+      "event": "Implementation review returned - approved with condition"
+    },
+    {
+      "time": "10:26:22",
+      "event": "Legal review returned - conditional approval"
+    },
+    {
+      "time": "10:28:08",
+      "event": "Security review returned - conditional approval"
+    },
+    {
+      "time": "10:30:16",
+      "event": "Finance review returned - conditional approval"
+    },
+    {
+      "time": "10:31:02",
+      "event": "AI synthesis generated - 4 conditions compiled for BD/Ops"
+    },
+    {
+      "time": "11:30:43",
+      "event": "BD/Ops decision logged - BID conditional, conditions assigned"
+    }
+  ],
+  "evidence_items": [
+    {
+      "id": "ev-liability-cap",
+      "source_phrase": "Contractor shall indemnify the State against all claims... without monetary limitation",
+      "full_source": "Contractor shall indemnify, defend, and hold harmless the State, its officers, agents, and employees from and against any and all claims, damages, losses, costs, and expenses, including attorney's fees, without monetary limitation.",
+      "extracted_fact": "Liability cap absent - unlimited indemnity exposure",
+      "document": "Request for Proposal",
+      "document_id": "rfp",
+      "page": "10",
+      "locator": "Contract terms, indemnification, insurance, and audit rights",
+      "department": "Legal",
+      "confidence": 96,
+      "conclusion": "Condition 1 - negotiate cap before signing",
+      "ai_reasoning": "Absence of a liability cap in a fixed-fee contract creates unlimited financial exposure. Standard practice is to cap at contract value or 2x.",
+      "specialist_conclusion": "Legal reviewer confirmed: proceed only if cap is negotiated to contract value. Assigned as Condition 1 in BD/Ops decision packet.",
+      "risk": true
+    },
+    {
+      "id": "ev-dpa",
+      "source_phrase": "The RFP package does not include a signed data processing agreement",
+      "full_source": "The RFP package does not include a signed data processing agreement. Vendors must identify any privacy, residency, retention, data processing, or subcontractor terms required before implementation or production use.",
+      "extracted_fact": "DPA absent - privacy terms must be identified",
+      "document": "Security questionnaire",
+      "document_id": "security_questionnaire",
+      "page": "2",
+      "locator": "Data handling and privacy documents",
+      "department": "Security",
+      "confidence": 91,
+      "conclusion": "Condition 2 - obtain signed DPA",
+      "ai_reasoning": "The RFP references regulated data but does not include a data processing agreement or residency commitment.",
+      "specialist_conclusion": "Security reviewer required a signed DPA and residency confirmation before contract execution.",
+      "risk": true
+    },
+    {
+      "id": "ev-fixed-fee",
+      "source_phrase": "The modernization program will be contracted as a fixed fee of $4,800,000",
+      "full_source": "The modernization program will be contracted as a fixed fee of $4,800,000. The fixed fee is inclusive of all deliverables, integrations, transition activities, training materials, launch support, and post-launch stabilization required for the State Benefits Portal Modernization project.",
+      "extracted_fact": "Fixed-fee covers full modernization scope - margin risk",
+      "document": "Pricing and SLA exhibit",
+      "document_id": "pricing_exhibit",
+      "page": "2",
+      "locator": "Pricing schedule",
+      "department": "Finance",
+      "confidence": 88,
+      "conclusion": "Condition 3 - re-price with contingency",
+      "ai_reasoning": "Fixed-fee delivery with undefined legacy integration can compress margin if discovery reveals unexpected interface work.",
+      "specialist_conclusion": "Finance required a pricing contingency and staffing estimate before final margin approval.",
+      "risk": true
+    },
+    {
+      "id": "ev-timeline",
+      "source_phrase": "production go-live within 12 weeks of contract award",
+      "full_source": "The selected vendor shall complete production go-live within 12 weeks of contract award. The production timeline must include the following minimum activities:",
+      "extracted_fact": "12-week production launch - not pilot",
+      "document": "Implementation exhibit",
+      "document_id": "implementation_exhibit",
+      "page": "3",
+      "locator": "Production timeline and legacy integration",
+      "department": "Implementation",
+      "confidence": 94,
+      "conclusion": "Condition 4 - confirm staffing availability",
+      "ai_reasoning": "A production go-live within 12 weeks is feasible only if senior staff and agency integration access are available immediately.",
+      "specialist_conclusion": "Implementation approved only with staff reservation and week-one mainframe access.",
+      "risk": true
+    },
+    {
+      "id": "ev-service-credit",
+      "source_phrase": "Service credits of up to 15% of monthly fees apply on SLA breach",
+      "full_source": "Service credits of up to 15% of monthly fees shall apply in the event of a service level breach as defined in the final SLA schedule.",
+      "extracted_fact": "Service credit exposure - up to 15% monthly",
+      "document": "Pricing and SLA exhibit",
+      "document_id": "pricing_exhibit",
+      "page": "4",
+      "locator": "SLA credits",
+      "department": "Finance",
+      "confidence": 99,
+      "conclusion": "Noted - absorbed into Condition 3",
+      "ai_reasoning": "Service credits are not a blocker but must be included in the fixed-fee margin model.",
+      "specialist_conclusion": "Finance included SLA credit exposure in the re-pricing condition.",
+      "risk": true
+    },
+    {
+      "id": "ev-insurance",
+      "source_phrase": "Contractor must carry $5,000,000 in professional liability insurance",
+      "full_source": "Contractor must carry $5,000,000 in professional liability insurance and provide a certificate of coverage before contract execution.",
+      "extracted_fact": "Insurance requirement - $5M professional liability",
+      "document": "Request for Proposal",
+      "document_id": "rfp",
+      "page": "10",
+      "locator": "Insurance requirements",
+      "department": "Legal",
+      "confidence": 99,
+      "conclusion": "Within existing coverage",
+      "ai_reasoning": "Insurance requirement creates an action item but is within the vendor's existing coverage threshold.",
+      "specialist_conclusion": "Legal confirmed coverage. No blocking condition required.",
+      "risk": false
+    },
+    {
+      "id": "ev-audit-rights",
+      "source_phrase": "Audit rights may continue for seven years after contract expiration",
+      "full_source": "The State may audit vendor records related to contract performance, invoicing, security obligations, service level performance, and compliance with contractual requirements. Audit rights may continue for seven years after contract expiration unless otherwise limited by the final services agreement.",
+      "extracted_fact": "Audit rights continue for seven years - scope should be reviewed",
+      "document": "Request for Proposal",
+      "document_id": "rfp",
+      "page": "10",
+      "locator": "Audit rights",
+      "department": "Legal",
+      "confidence": 93,
+      "conclusion": "Review scope during contract negotiation",
+      "ai_reasoning": "Long audit-rights survival is not a bid blocker, but Legal should confirm audit scope and retention burden before contract execution.",
+      "specialist_conclusion": "Legal noted audit-rights scope as a negotiation point but did not make it a final bid condition.",
+      "risk": false
+    },
+    {
+      "id": "ev-data-residency",
+      "source_phrase": "The agency has not specified whether data residency must be state-only, United States-only, or otherwise restricted",
+      "full_source": "The agency has not specified whether data residency must be state-only, United States-only, or otherwise restricted. Vendors must state where production data, backups, logs, support records, analytics records, monitoring records, and administrative records will be stored.",
+      "extracted_fact": "Data residency requirement is unspecified",
+      "document": "Security questionnaire",
+      "document_id": "security_questionnaire",
+      "page": "5",
+      "locator": "Data residency",
+      "department": "Security",
+      "confidence": 94,
+      "conclusion": "Condition 2 - confirm residency before signing",
+      "ai_reasoning": "The questionnaire requires the vendor to state residency locations but does not define the agency's required residency boundary.",
+      "specialist_conclusion": "Security included residency confirmation in the final BD/Ops condition.",
+      "risk": true
+    },
+    {
+      "id": "ev-access-logging",
+      "source_phrase": "The proposed solution must log administrator actions, citizen account access events, case-worker updates",
+      "full_source": "The proposed solution must log administrator actions, citizen account access events, case-worker updates, integration failures, security events, authentication events, authorization changes, role changes, privilege changes, data exports, material configuration changes, and production support access.",
+      "extracted_fact": "Detailed audit logging required for sensitive workflows",
+      "document": "Security questionnaire",
+      "document_id": "security_questionnaire",
+      "page": "3",
+      "locator": "Access controls and audit logging",
+      "department": "Security",
+      "confidence": 92,
+      "conclusion": "Supporting requirement - include in security questionnaire response",
+      "ai_reasoning": "The audit-log requirement is specific and broad enough to require verification against the proposed platform's logging capabilities.",
+      "specialist_conclusion": "Security treated logging as required response content but not a final bid blocker.",
+      "risk": false
+    },
+    {
+      "id": "ev-remediation",
+      "source_phrase": "Service credits do not replace the vendor's obligation to remediate issues",
+      "full_source": "Service credits do not replace the vendor’s obligation to remediate issues. If a service level breach occurs, the Department may request a service impact report, root-cause analysis, remediation plan, and evidence that corrective actions have been completed.",
+      "extracted_fact": "SLA breach creates credit and remediation obligations",
+      "document": "Pricing and SLA exhibit",
+      "document_id": "pricing_exhibit",
+      "page": "4",
+      "locator": "Service level credits",
+      "department": "Finance",
+      "confidence": 95,
+      "conclusion": "Noted - include in service-credit exposure model",
+      "ai_reasoning": "The SLA exposure is broader than credits alone because remediation artifacts and corrective-action evidence may add operational cost.",
+      "specialist_conclusion": "Finance included remediation workload in the fixed-fee contingency discussion.",
+      "risk": true
+    },
+    {
+      "id": "ev-agency-dependencies",
+      "source_phrase": "The Department will provide subject-matter experts, integration access, available test data",
+      "full_source": "The Department will provide subject-matter experts, integration access, available test data, procurement clarification responses, and production readiness decision makers. Vendors must identify any Department dependency that could delay production launch if agency access is unavailable.",
+      "extracted_fact": "Launch schedule depends on agency access and decision makers",
+      "document": "Implementation exhibit",
+      "document_id": "implementation_exhibit",
+      "page": "4",
+      "locator": "Agency dependencies",
+      "department": "Implementation",
+      "confidence": 93,
+      "conclusion": "Condition 4 - confirm agency access and staffing assumptions",
+      "ai_reasoning": "The 12-week schedule depends on both vendor staffing and Department-controlled access, test data, and decision availability.",
+      "specialist_conclusion": "Implementation included agency access in the staffing and schedule condition.",
+      "risk": true
+    }
+  ],
+  "kpi_dashboard": {
+    "summary": [
+      {
+        "label": "Opportunity screening saved",
+        "value": "4h",
+        "detail": "43 opportunities downloaded and screened before humans reviewed the case"
+      },
+      {
+        "label": "Document review saved",
+        "value": "~2d",
+        "detail": "full RFP package summarized, grounded, and routed"
+      },
+      {
+        "label": "Specialist routing saved",
+        "value": "~4h",
+        "detail": "four packets generated without manual triage"
+      },
+      {
+        "label": "Total estimated time saved",
+        "value": "~2.3d",
+        "detail": "screening plus downstream workflow savings"
+      }
+    ],
+    "stage_times": [
+      {
+        "label": "Screen",
+        "seconds": 75,
+        "group": "ai"
+      },
+      {
+        "label": "Download",
+        "seconds": 133,
+        "group": "ai"
+      },
+      {
+        "label": "Normalize",
+        "seconds": 144,
+        "group": "ai"
+      },
+      {
+        "label": "Enrich",
+        "seconds": 98,
+        "group": "ai"
+      },
+      {
+        "label": "Ingest",
+        "seconds": 24,
+        "group": "ai"
+      },
+      {
+        "label": "Extract",
+        "seconds": 38,
+        "group": "ai"
+      },
+      {
+        "label": "Recommend",
+        "seconds": 33,
+        "group": "ai"
+      },
+      {
+        "label": "Route",
+        "seconds": 29,
+        "group": "ai"
+      },
+      {
+        "label": "Review",
+        "seconds": 5400,
+        "group": "human"
+      },
+      {
+        "label": "Synthesize",
+        "seconds": 42,
+        "group": "ai"
+      },
+      {
+        "label": "BD/Ops",
+        "seconds": 3600,
+        "group": "decision"
+      }
+    ],
+    "department_counts": [
+      {
+        "department": "Legal",
+        "count": 7
+      },
+      {
+        "department": "Security",
+        "count": 6
+      },
+      {
+        "department": "Finance",
+        "count": 5
+      },
+      {
+        "department": "Implementation",
+        "count": 5
+      }
+    ],
+    "audit_density": [
+      {
+        "time": "00:01",
+        "count": 4,
+        "group": "ai"
+      },
+      {
+        "time": "00:03",
+        "count": 3,
+        "group": "ai"
+      },
+      {
+        "time": "00:05",
+        "count": 5,
+        "group": "ai"
+      },
+      {
+        "time": "00:07",
+        "count": 4,
+        "group": "ai"
+      },
+      {
+        "time": "00:08",
+        "count": 3,
+        "group": "ai"
+      },
+      {
+        "time": "00:09",
+        "count": 6,
+        "group": "ai"
+      },
+      {
+        "time": "00:10",
+        "count": 4,
+        "group": "ai"
+      },
+      {
+        "time": "10:21",
+        "count": 2,
+        "group": "human"
+      },
+      {
+        "time": "10:26",
+        "count": 2,
+        "group": "human"
+      },
+      {
+        "time": "10:28",
+        "count": 1,
+        "group": "human"
+      },
+      {
+        "time": "10:30",
+        "count": 3,
+        "group": "human"
+      },
+      {
+        "time": "10:31",
+        "count": 1,
+        "group": "ai"
+      },
+      {
+        "time": "11:30",
+        "count": 1,
+        "group": "decision"
+      }
+    ]
+  }
+}

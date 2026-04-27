@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<section class="card">
+  <h2>Portfolio Summary</h2>
+  <p>Total cases: {{ summary.total_cases }}</p>
+  <p>Pending approvals: {{ summary.pending_approvals }}</p>
+  <p>Straight-through rate: {{ "%.1f"|format(summary.straight_through_rate) }}%</p>
+  <p>Override rate: {{ "%.1f"|format(summary.override_rate) }}%</p>
+  <p>Eval pass rate: {{ "%.1f"|format(summary.eval_pass_rate) }}%</p>
+</section>
+
+<section class="card">
+  <h2>Route Distribution</h2>
+  <ul>
+    {% for route, count in summary.route_distribution.items() %}
+      <li>{{ route }}: {{ count }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

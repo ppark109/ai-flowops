@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Case {{ case.case_id }}</h1>
+
+<section class="card">
+  <h2>Summary</h2>
+  <p><strong>Customer:</strong> {{ case.customer_name }}</p>
+  <p><strong>State:</strong> {{ state }}</p>
+  <p><strong>Route:</strong> {{ routing.recommended_route if routing else "n/a" }}</p>
+  <p><strong>Approval Required:</strong> {{ "yes" if routing and routing.approval_required else "no" }}</p>
+</section>
+
+<section class="card">
+  <h2>Findings</h2>
+  {% if findings %}
+    <ul>
+      {% for finding in findings %}
+      <li>{{ finding.finding_id }} — {{ finding.rule_id }} ({{ finding.route }}) — {{ finding.summary }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No findings</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Routing Decision</h2>
+  {% if routing %}
+    <p>Route: {{ routing.recommended_route }}</p>
+    <p>Confidence: {{ routing.confidence }}</p>
+    <p>Reasons: {{ ", ".join(routing.reasons) }}</p>
+  {% else %}
+    <p>No routing decision yet.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Approval</h2>
+  {% if approval %}
+    <p>Status: {{ approval.status }}</p>
+    <p>Original Route: {{ approval.original_route }}</p>
+    <p>Final Route: {{ approval.final_route or "n/a" }}</p>
+    <p>Comments: {{ approval.comments or "n/a" }}</p>
+  {% else %}
+    <p>No approval object.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Brief</h2>
+  {% if brief %}
+    <p>{{ brief.case_summary }}</p>
+    <p>Risk: {{ brief.risk_summary }}</p>
+    <p>Next Steps: {{ ", ".join(brief.recommended_next_steps) }}</p>
+  {% else %}
+    <p>No brief generated.</p>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Tasks</h2>
+  <ul>
+    {% for task in tasks %}
+      <li>{{ task.title }} — {{ task.owner_function }} ({{ task.due_category }})</li>
+    {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Trace Timeline</h2>
+  {% for trace in traces %}
+    <div class="trace-line">
+      {{ trace.created_at }} — <strong>{{ trace.step_name }}</strong> ({{ trace.agent_name }}) [{{ trace.model_provider_label }}]
+      <div>{{ trace.outputs_summary }}</div>
+    </div>
+  {% endfor %}
+</section>
+{% endblock %}

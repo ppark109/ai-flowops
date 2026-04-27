@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell proof-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo/document-package">&lt;- Document package</a>
+      <span>/</span>
+      <strong>{{ document.title }}</strong>
+    </nav>
+    <span>{{ document.filename }}</span>
+  </div>
+
+  <article class="source-doc-page">
+    <p class="muted-label">{{ case.short_title }}</p>
+    <pre>{{ document_body }}</pre>
+  </article>
+</section>
+{% endblock %}

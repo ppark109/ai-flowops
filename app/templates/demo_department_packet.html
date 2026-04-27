@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="case-shell proof-shell">
+  <div class="case-topbar">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/demo/cases/{{ case.id }}?step=routing">&lt;- Case walkthrough</a>
+      <span>/</span>
+      <strong>AI packet sent to {{ department.name }}</strong>
+    </nav>
+    <span>{{ case.short_title }}</span>
+  </div>
+
+  <nav class="dept-tabs" aria-label="Department packet tabs">
+    {% for dept in departments %}
+      <a class="{% if dept.id == department.id %}active{% endif %}" href="/demo/department-packet?department={{ dept.id }}">{{ dept.name }}</a>
+    {% endfor %}
+  </nav>
+
+  <div class="packet-document-layout">
+    <article class="packet-document">
+      <p class="muted-label">AI-generated handoff memo</p>
+      <h1>{{ department.name }} review packet</h1>
+      <p class="packet-lede">{{ department.packet_precis }}</p>
+
+      <section>
+        <h2>Recommended specialist action</h2>
+        <p>{{ department.packet_recommendation }}</p>
+      </section>
+
+      <section>
+        <h2>Main facts for review</h2>
+        <ul class="packet-fact-list">
+          {% for fact in department.facts %}
+            <li>{{ fact }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Questions for {{ department.name }}</h2>
+        <ol class="packet-question-list">
+          {% for question in department.packet_questions %}
+            <li>{{ question }}</li>
+          {% endfor %}
+        </ol>
+      </section>
+    </article>
+
+    <aside class="packet-evidence-panel">
+      <p class="muted-label">Verification references</p>
+      <h2>Source-backed facts</h2>
+      {% for item in department_evidence %}
+        <div class="packet-evidence-card">
+          <strong>{{ item.extracted_fact }}</strong>
+          <p>{{ item.document }}, p. {{ item.page }} - {{ item.locator }}</p>
+          <blockquote>{{ item.full_source }}</blockquote>
+          <div class="packet-links">
+            <a href="/demo/source-document?active={{ item.id }}">View highlighted phrase -></a>
+            <a href="/demo/document/{{ item.document_id }}">Open source document</a>
+          </div>
+        </div>
+      {% endfor %}
+    </aside>
+  </div>
+</section>
+{% endblock %}
