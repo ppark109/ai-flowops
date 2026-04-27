@@ -2,12 +2,16 @@
 {% block content %}
 <section class="demo-hero">
   <div>
-    <p class="eyebrow">Guided read-only showcase</p>
-    <h1>AI Business Operations Orchestrator</h1>
+    <p class="eyebrow">AI Business Operations Orchestrator</p>
+    <h1>A government RFP arrives. Should we bid?</h1>
     <p class="hero-copy">
-      A workflow system that ingests contracts, emails, and business documents; uses AI to make structured
-      recommendations; routes department-specific action packets; supports human review; and tracks KPIs.
+      This guided demo follows one completed workflow: AI reads the RFP packet, finds the business risks,
+      creates department-specific reviews, synthesizes the conclusions, and gives BD/Ops a decision-ready packet.
     </p>
+    <div class="answer-banner">
+      <span>Answer</span>
+      <strong>AI recommends conditional bid; BD/Ops proceeds with four conditions.</strong>
+    </div>
     <div class="actions">
       <a class="button-link" href="/demo/cases/{{ demo_case.case_id }}">View Guided Demo</a>
       <a class="button-link secondary" href="/demo/architecture">View Architecture</a>
@@ -21,7 +25,16 @@
   </aside>
 </section>
 
-<section class="workflow-strip" aria-label="Guided demo workflow">
+<section class="executive-summary">
+  {% for label, value in executive_summary %}
+    <article>
+      <span>{{ label }}</span>
+      <strong>{{ value }}</strong>
+    </article>
+  {% endfor %}
+</section>
+
+<section class="workflow-strip story-strip" aria-label="Guided demo workflow">
   {% for step in overview_flow %}
     <a class="workflow-card" href="/demo/cases/{{ demo_case.case_id }}?step={{ step.id }}">
       <span class="step-icon">{{ loop.index }}</span>

@@ -11,51 +11,61 @@ GUIDED_DEMO_STEPS = [
     {
         "id": "documents",
         "label": "Documents Received",
-        "short_label": "Input Documents",
+        "short_label": "What came in?",
         "badge": "Automated",
         "description": "RFP materials are received and normalized into a case record.",
+        "why": "This shows the system starts from messy business documents, not a hand-entered form.",
     },
     {
         "id": "extraction",
         "label": "Text Extracted",
-        "short_label": "Text Extracted",
+        "short_label": "What did AI extract?",
         "badge": "Automated",
         "description": "Key facts and source evidence are extracted from unstructured documents.",
+        "why": "This is the first AI value: turning documents into structured operational facts.",
     },
     {
         "id": "ai-decision",
         "label": "AI Decision Generated",
-        "short_label": "AI Decision",
+        "short_label": "What did AI recommend?",
         "badge": "AI-assisted",
         "description": "AI recommends a conditional bid and explains the evidence.",
+        "why": "The AI gives a business recommendation with evidence, not a vague summary.",
     },
     {
         "id": "routing",
         "label": "Department Packets Created",
-        "short_label": "Department Routing",
+        "short_label": "Why route departments?",
         "badge": "Workflow",
         "description": "The workflow creates specialist packets for each review lane.",
+        "why": "The system splits one intake into parallel expert work so no team reviews irrelevant material.",
     },
     {
         "id": "human-review",
         "label": "Human Review Completed",
-        "short_label": "Human Review",
+        "short_label": "What did humans decide?",
         "badge": "Human-in-the-loop",
         "description": "Reviewers approve with conditions or request missing information.",
+        "why": "Humans remain accountable for legal, security, finance, and delivery commitments.",
     },
     {
         "id": "final-decision",
         "label": "Final Decision Logged",
-        "short_label": "Final Decision",
+        "short_label": "What did BD/Ops do?",
         "badge": "Governed",
         "description": "AI synthesis is presented to BD/Ops for the final business decision.",
+        "why": "The final decision is owned by BD/Ops after AI synthesizes specialist conclusions.",
     },
     {
         "id": "kpis",
         "label": "KPIs Updated",
-        "short_label": "KPI Dashboard",
+        "short_label": "What value did it create?",
         "badge": "Analytics",
         "description": "Operational metrics and workflow outcomes are captured for review.",
+        "why": (
+            "This turns AI work into measurable operations outcomes: routed packets, "
+            "reviews, overrides, and time saved."
+        ),
     },
 ]
 
@@ -135,6 +145,9 @@ def guided_demo_view_model(active_step: str = "documents", active_tab: str = "so
     return {
         "demo_case": case,
         "steps": GUIDED_DEMO_STEPS,
+        "active_step_record": next(
+            step for step in GUIDED_DEMO_STEPS if step["id"] == active_step
+        ),
         "active_step": active_step,
         "active_tab": active_tab,
         "overview_flow": [
@@ -149,7 +162,19 @@ def guided_demo_view_model(active_step: str = "documents", active_tab: str = "so
             "Read-only precomputed demo. Public viewers cannot run AI, reset data, "
             "import/export bundles, or mutate workflow records from these pages."
         ),
+        "executive_summary": _executive_summary(case),
     }
+
+
+def _executive_summary(case: DemoCaseSpec) -> list[tuple[str, str]]:
+    return [
+        ("Business problem", "A state government RFP arrives; BD/Ops needs to know whether to bid."),
+        ("AI recommendation", f"{case.ai_recommendation}: route to specialists before committing proposal work."),
+        ("Departments routed", "Legal, Security, Finance, and Implementation."),
+        ("Human review result", "Specialists approved qualification with required conditions and follow-up."),
+        ("BD/Ops decision", case.final_decision),
+        ("Time/value impact", "One guided workflow creates review packets, evidence traceability, and KPI records."),
+    ]
 
 
 def _document_previews(case: DemoCaseSpec) -> list[dict[str, object]]:

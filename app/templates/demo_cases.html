@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 <section class="page-head">
-  <p class="eyebrow">Demo case gallery</p>
-  <h1>Choose a completed workflow</h1>
-  <p>The flagship case is fully precomputed so viewers can inspect the system without running live AI.</p>
+  <p class="eyebrow">Flagship guided case</p>
+  <h1>One completed workflow</h1>
+  <p>This demo intentionally uses one strong case so the workflow is easy to follow from beginning to end.</p>
   <p class="read-only-note">{{ read_only_notice }}</p>
 </section>
 
-<section class="case-gallery">
+<section class="case-gallery single-case-gallery">
   <article class="gallery-card featured">
-    <span class="status-pill">Recommended</span>
+    <span class="status-pill">Featured case</span>
     <h2>{{ demo_case.title }}</h2>
     <p>{{ demo_case.summary }}</p>
     <ul class="kv">
@@ -19,18 +19,6 @@
       <li><span>Final status</span><span>{{ demo_case.status }}</span></li>
     </ul>
     <a class="button-link" href="/demo/cases/{{ demo_case.case_id }}">Open Case</a>
-  </article>
-
-  <article class="gallery-card muted">
-    <span class="status-pill">Future example</span>
-    <h2>Customer Escalation Email</h2>
-    <p>Escalation classification across Support, Account Management, Legal, and Product.</p>
-  </article>
-
-  <article class="gallery-card muted">
-    <span class="status-pill">Future example</span>
-    <h2>Vendor Procurement Request</h2>
-    <p>Approval-path and risk routing for vendor proposal, invoice, and department request.</p>
   </article>
 </section>
 {% endblock %}

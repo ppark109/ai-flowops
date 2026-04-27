@@ -52,6 +52,7 @@ def test_guided_demo_public_pages_render() -> None:
     case = load_guided_demo_case()
 
     for path in [
+        "/",
         "/demo",
         "/demo/cases",
         f"/demo/cases/{case.case_id}",
@@ -65,6 +66,29 @@ def test_guided_demo_public_pages_render() -> None:
         response = client.get(path)
         assert response.status_code == 200
         assert "State Benefits Portal Modernization RFP" in response.text or "How the system is built" in response.text
+
+
+def test_public_home_leads_with_plain_english_flagship_story() -> None:
+    client = TestClient(create_app())
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "A government RFP arrives. Should we bid?" in response.text
+    assert "AI recommends conditional bid; BD/Ops proceeds with four conditions." in response.text
+    assert "Business problem" in response.text
+    assert "Final BD/Ops decision" not in response.text
+
+
+def test_guided_demo_gallery_only_shows_flagship_case() -> None:
+    client = TestClient(create_app())
+
+    response = client.get("/demo/cases")
+
+    assert response.status_code == 200
+    assert "State Benefits Portal Modernization RFP" in response.text
+    assert "Customer Escalation Email" not in response.text
+    assert "Vendor Procurement Request" not in response.text
 
 
 def test_guided_demo_unknown_case_returns_404() -> None:
@@ -89,6 +113,7 @@ def test_guided_demo_pages_do_not_expose_mutating_controls() -> None:
     ]
 
     for path in [
+        "/",
         "/demo",
         "/demo/cases",
         f"/demo/cases/{case.case_id}",
@@ -100,3 +125,15 @@ def test_guided_demo_pages_do_not_expose_mutating_controls() -> None:
         assert "read-only precomputed demo" in page
         for fragment in forbidden_fragments:
             assert fragment not in page
+
+
+def test_guided_case_keeps_deeper_proof_under_collapsible_sections() -> None:
+    client = TestClient(create_app())
+    case = load_guided_demo_case()
+
+    response = client.get(f"/demo/cases/{case.case_id}?step=ai-decision")
+
+    assert response.status_code == 200
+    assert "Show proof: evidence table and evidence map" in response.text
+    assert "Evidence Map" in response.text
+    assert "Why this matters" in response.text

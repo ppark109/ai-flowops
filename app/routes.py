@@ -448,6 +448,19 @@ def _dashboard_payload(request: Request) -> dict[str, object]:
 
 @router.get("/", response_class=HTMLResponse)
 def home(request: Request) -> HTMLResponse:
+    return _templates(request).TemplateResponse(
+        request,
+        "demo_overview.html",
+        {
+            "request": request,
+            **guided_demo_view_model(),
+            **_template_security_context(request),
+        },
+    )
+
+
+@router.get("/technical-dashboard", response_class=HTMLResponse)
+def technical_dashboard(request: Request) -> HTMLResponse:
     payload = _dashboard_payload(request)
     return _templates(request).TemplateResponse(
         request,
