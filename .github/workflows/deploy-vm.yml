@@ -85,6 +85,7 @@ jobs:
             --name "$CONTAINER" \
             --restart unless-stopped \
             -e PUBLIC_DEMO_MODE=true \
+            -e CASE_ROOM_DEMO_PATH=data/guided_demo/real_cases/FA875026S7002/case_room.json \
             -p "$PORT_BIND" \
             -v "$VOLUME:/app/data/runtime" \
             "$IMAGE"

@@ -89,6 +89,18 @@
 
         {% if view == "extraction" %}
           <div class="divider"></div>
+          <section class="time-saved-panel">
+            <p class="muted-label">Time saved by this AI pass</p>
+            <h2>{{ demo.extraction_time_saved.headline }}</h2>
+            <div class="time-saved-grid">
+              {% for metric in demo.extraction_time_saved.metrics %}
+                <div>
+                  <strong>{{ metric.value }}</strong>
+                  <span>{{ metric.label }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          </section>
           <div class="finding-grid">
             {% for card in demo.extraction_cards %}
               <div class="finding-card">

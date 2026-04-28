@@ -7,8 +7,8 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from app.guided_demo import (
-    CASE_ID,
     get_case_room_context,
+    get_demo_case_id,
     get_department_detail_context,
     get_document_context,
     get_document_package_context,
@@ -239,12 +239,14 @@ def page_demo(request: Request):
 
 @router.get("/demo/cases")
 def page_demo_cases():
-    return RedirectResponse(url=f"/demo/cases/{CASE_ID}?step=extraction", status_code=307)
+    return RedirectResponse(
+        url=f"/demo/cases/{get_demo_case_id()}?step=extraction", status_code=307
+    )
 
 
 @router.get("/demo/cases/{case_id}", response_class=HTMLResponse)
 def page_demo_case(request: Request, case_id: str, step: str | None = None):
-    if case_id != CASE_ID:
+    if case_id != get_demo_case_id():
         raise HTTPException(status_code=404, detail="Demo case not found")
     return templates.TemplateResponse(request, "demo_case.html", get_walkthrough_context(step=step))
 

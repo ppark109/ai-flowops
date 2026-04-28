@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -18,15 +19,36 @@ STEP_ORDER = (
     "decision",
 )
 COMBINED_ROUTE_STEPS = {"recommendation", "routing"}
+DEFAULT_EXTRACTION_TIME_SAVED = {
+    "headline": (
+        "AI converted the package into a routed review packet before humans started reading."
+    ),
+    "metrics": [
+        {"value": "4h", "label": "opportunity screening avoided"},
+        {"value": "~2d", "label": "manual document review avoided"},
+        {"value": "10m", "label": "AI extraction and routing"},
+        {"value": "23", "label": "structured facts extracted"},
+    ],
+}
 
 
 @lru_cache
 def load_case_room_demo() -> dict[str, Any]:
-    return json.loads(CASE_PATH.read_text(encoding="utf-8"))
+    return json.loads(_case_path().read_text(encoding="utf-8"))
+
+
+def get_demo_case_id() -> str:
+    return str(load_case_room_demo()["case"]["id"])
+
+
+def _case_path() -> Path:
+    override = os.environ.get("CASE_ROOM_DEMO_PATH")
+    return Path(override) if override else CASE_PATH
 
 
 def get_case_room_context() -> dict[str, Any]:
     demo = load_case_room_demo()
+    demo = {**demo, "extraction_time_saved": _extraction_time_saved(demo)}
     return {
         "demo": demo,
         "case": demo["case"],
@@ -133,7 +155,7 @@ def get_document_context(document_id: str) -> dict[str, Any]:
     )
     if document is None:
         raise KeyError(document_id)
-    path = DOCUMENTS_DIR / document["filename"]
+    path = _document_path(document)
     return {
         **get_case_room_context(),
         "document": document,
@@ -144,10 +166,8 @@ def get_document_context(document_id: str) -> dict[str, Any]:
 def resolve_evidence_references() -> bool:
     demo = load_case_room_demo()
     for item in demo["evidence_items"]:
-        document = next(
-            doc for doc in demo["source_documents"] if doc["id"] == item["document_id"]
-        )
-        path = DOCUMENTS_DIR / document["filename"]
+        document = next(doc for doc in demo["source_documents"] if doc["id"] == item["document_id"])
+        path = _document_path(document)
         document_text = _normalize_reference_text(path.read_text(encoding="utf-8"))
         full_source = _normalize_reference_text(item["full_source"])
         phrase = _normalize_reference_text(item["source_phrase"].replace("...", " "))
@@ -171,6 +191,20 @@ def _normalize_reference_text(value: str) -> str:
     )
 
 
+def _document_path(document: dict[str, Any]) -> Path:
+    if document.get("path"):
+        candidate = Path(str(document["path"]))
+        if not candidate.is_absolute():
+            candidate = _case_path().parent / candidate
+    else:
+        candidate = DOCUMENTS_DIR / document["filename"]
+    resolved = candidate.resolve()
+    data_root = Path("data").resolve()
+    if not resolved.is_relative_to(data_root):
+        raise ValueError(f"Demo document path must be under data/: {document}")
+    return resolved
+
+
 def _stage_by_id(demo: dict[str, Any], stage_id: str) -> dict[str, Any]:
     for stage in demo["stages"]:
         if stage["id"] == stage_id:
@@ -180,6 +214,23 @@ def _stage_by_id(demo: dict[str, Any], stage_id: str) -> dict[str, Any]:
 
 def _department_slug(department: str) -> str:
     return department.lower().replace("/", "-").replace(" ", "-")
+
+
+def _extraction_time_saved(demo: dict[str, Any]) -> dict[str, Any]:
+    value = demo.get("extraction_time_saved")
+    if isinstance(value, dict) and value.get("headline") and value.get("metrics"):
+        return value
+    evidence_count = len(demo.get("evidence_items", []))
+    fallback = {
+        **DEFAULT_EXTRACTION_TIME_SAVED,
+        "metrics": [dict(metric) for metric in DEFAULT_EXTRACTION_TIME_SAVED["metrics"]],
+    }
+    if evidence_count:
+        fallback["metrics"][-1] = {
+            "value": str(evidence_count),
+            "label": "source phrases grounded",
+        }
+    return fallback
 
 
 def _audit_density_with_events(demo: dict[str, Any]) -> list[dict[str, Any]]:
