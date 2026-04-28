@@ -33,6 +33,24 @@ SYSTEM_PROMPT = (
     "unsupported_integration, aggressive_go_live_date, and unclear_customer_owner."
 )
 
+PRESOLICITATION_CONTEXT_PROMPT = (
+    "Opportunity stage: presolicitation. Analyze this as a pre-bid pursuit and "
+    "capture-readiness decision, not as a final bid/no-bid decision. The business "
+    "question is whether the company should pursue this opportunity and prepare for "
+    "the next solicitation step. Missing final solicitation details are normal at "
+    "this stage; treat them as follow-up gates or open questions unless the source "
+    "documents show a true hard blocker. Distinguish normal presolicitation unknowns, "
+    "department follow-up gates, serious pursuit risks, and true do-not-pursue "
+    "blockers. Route each material issue to Legal, Security, Finance, or "
+    "Implementation using pursuit-readiness language."
+)
+
+FINAL_SOLICITATION_CONTEXT_PROMPT = (
+    "Opportunity stage: final_solicitation. Analyze this as a bid-stage commercial "
+    "intake package where unresolved legal, security, finance, or implementation "
+    "risks can affect bid/no-bid readiness."
+)
+
 
 class AIReviewEvidence(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -104,23 +122,24 @@ class CodexReviewAgent:
         ]
         evidence = _ground_evidence_quotes(evidence, payload)
 
-        findings = [
-            Finding(
-                finding_id=f"{payload.case_id}-ai-{index:02d}-{item.rule_id}",
-                rule_id=item.rule_id,
-                finding_type=item.finding_type,
-                severity=item.severity,
-                route=item.route,
-                summary=item.summary,
-                evidence=_evidence_for_quotes(evidence, item.evidence_quotes),
-                confidence=item.confidence,
-                source_agent="CodexReviewAgent",
+        findings: list[Finding] = []
+        for index, item in enumerate(parsed.findings, start=1):
+            finding_evidence = _evidence_for_quotes(evidence, item.evidence_quotes)
+            if item.route != "auto_approve" and not finding_evidence:
+                continue
+            findings.append(
+                Finding(
+                    finding_id=f"{payload.case_id}-ai-{index:02d}-{item.rule_id}",
+                    rule_id=item.rule_id,
+                    finding_type=item.finding_type,
+                    severity=item.severity,
+                    route=item.route,
+                    summary=item.summary,
+                    evidence=finding_evidence,
+                    confidence=item.confidence,
+                    source_agent="CodexReviewAgent",
+                )
             )
-            for index, item in enumerate(parsed.findings, start=1)
-        ]
-        for finding in findings:
-            if finding.route != "auto_approve" and not finding.evidence:
-                raise ValueError(f"AI finding lacks grounded evidence: {finding.rule_id}")
 
         trace = build_trace(
             case_id=payload.case_id,
@@ -152,12 +171,15 @@ class CodexReviewAgent:
                 "-o",
                 str(output_path),
                 "--",
-                prompt,
+                "-",
             ]
             completed = subprocess.run(
                 command,
                 check=False,
                 capture_output=True,
+                input=prompt,
+                encoding="utf-8",
+                errors="replace",
                 text=True,
                 timeout=timeout_seconds,
             )
@@ -194,11 +216,25 @@ def _format_documents(payload: IntakePackage) -> str:
 def _build_prompt(payload: IntakePackage) -> str:
     return (
         f"{SYSTEM_PROMPT}\n\n"
+        f"{_opportunity_stage_prompt(payload)}\n\n"
         "Return only JSON matching the supplied schema. Do not edit files. Do not run tools.\n\n"
         f"Case id: {payload.case_id}\n"
         f"Customer: {payload.customer_name}\n\n"
         f"{_format_documents(payload)}"
     )
+
+
+def _opportunity_stage(payload: IntakePackage) -> str:
+    stage = str(payload.metadata.get("opportunity_stage") or "final_solicitation").strip().lower()
+    if stage in {"presolicitation", "pre_solicitation", "pre-solicitation", "synopsis"}:
+        return "presolicitation"
+    return "final_solicitation"
+
+
+def _opportunity_stage_prompt(payload: IntakePackage) -> str:
+    if _opportunity_stage(payload) == "presolicitation":
+        return PRESOLICITATION_CONTEXT_PROMPT
+    return FINAL_SOLICITATION_CONTEXT_PROMPT
 
 
 def _resolve_executable(command: str) -> str:

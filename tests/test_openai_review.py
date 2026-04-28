@@ -64,6 +64,8 @@ def test_codex_review_agent_accepts_grounded_structured_output() -> None:
     assert SYSTEM_PROMPT in prompt
     assert "exact, contiguous substring" in prompt
     assert "Do not paraphrase quotes" in prompt
+    assert "Opportunity stage: final_solicitation" in prompt
+    assert "bid/no-bid readiness" in prompt
     assert len(evidence) == 1
     assert findings[0].route == "legal"
     assert findings[0].source_agent == "CodexReviewAgent"
@@ -136,6 +138,50 @@ def test_codex_review_agent_regrounds_paraphrased_quote_to_source_sentence() -> 
         == "The discount is above the standard approval threshold and must be reviewed by finance before booking."
     )
     assert findings[0].evidence[0].quote == evidence[0].quote
+
+
+def test_codex_review_agent_uses_presolicitation_context() -> None:
+    base_case = {item.case_id: item for item in load_case_files(Path("data/seed/cases"))}[
+        "seed-legal-001"
+    ]
+    case = base_case.model_copy(update={"metadata": {"opportunity_stage": "presolicitation"}})
+    parsed = AIReviewResult.model_validate(
+        {
+            "evidence": [
+                {
+                    "source_document_type": "contract",
+                    "locator": "contract:liability",
+                    "quote": "liability cap is above 1x fees",
+                    "normalized_fact": "liability cap above standard",
+                    "confidence": 0.94,
+                }
+            ],
+            "findings": [
+                {
+                    "rule_id": "liability_cap_above_standard",
+                    "finding_type": "ai_review",
+                    "severity": "high",
+                    "route": "legal",
+                    "summary": "Liability cap should be tracked as a pursuit gate.",
+                    "evidence_quotes": ["liability cap is above 1x fees"],
+                    "confidence": 0.92,
+                }
+            ],
+            "risk_signals": ["liability_cap_above_standard"],
+            "rationale": "Legal follow-up is needed before bid commitment.",
+        }
+    )
+    runner = _Runner(parsed)
+    agent = CodexReviewAgent(model="gpt-5.5", runner=runner)
+
+    _evidence, findings, _trace = agent.run(case)
+
+    prompt = runner.calls[0]["prompt"]
+    assert "Opportunity stage: presolicitation" in prompt
+    assert "pre-bid pursuit and capture-readiness decision" in prompt
+    assert "Missing final solicitation details are normal" in prompt
+    assert "true do-not-pursue blockers" in prompt
+    assert findings[0].route == "legal"
 
 
 def test_codex_review_agent_regrounds_quote_when_source_document_uses_alias() -> None:
