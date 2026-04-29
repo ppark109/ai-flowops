@@ -66,6 +66,7 @@ def test_codex_review_agent_accepts_grounded_structured_output() -> None:
     assert "Do not paraphrase quotes" in prompt
     assert "Opportunity stage: final_solicitation" in prompt
     assert "bid/no-bid readiness" in prompt
+    assert "Processing mode: simple_direct_ai" in prompt
     assert len(evidence) == 1
     assert findings[0].route == "legal"
     assert findings[0].source_agent == "CodexReviewAgent"
@@ -181,7 +182,53 @@ def test_codex_review_agent_uses_presolicitation_context() -> None:
     assert "pre-bid pursuit and capture-readiness decision" in prompt
     assert "Missing final solicitation details are normal" in prompt
     assert "true do-not-pursue blockers" in prompt
+    assert "Processing mode: simple_direct_ai" in prompt
     assert findings[0].route == "legal"
+
+
+def test_codex_review_agent_uses_large_package_context() -> None:
+    base_case = {item.case_id: item for item in load_case_files(Path("data/seed/cases"))}[
+        "seed-legal-001"
+    ]
+    case = base_case.model_copy(
+        update={"metadata": {"processing_mode": "large_normalized_packet"}}
+    )
+    parsed = AIReviewResult.model_validate(
+        {
+            "evidence": [
+                {
+                    "source_document_type": "contract",
+                    "locator": "contract:liability",
+                    "quote": "liability cap is above 1x fees",
+                    "normalized_fact": "liability cap above standard",
+                    "confidence": 0.94,
+                }
+            ],
+            "findings": [
+                {
+                    "rule_id": "liability_cap_above_standard",
+                    "finding_type": "ai_review",
+                    "severity": "high",
+                    "route": "legal",
+                    "summary": "Liability cap requires legal review.",
+                    "evidence_quotes": ["liability cap is above 1x fees"],
+                    "confidence": 0.92,
+                }
+            ],
+            "risk_signals": ["liability_cap_above_standard"],
+            "rationale": "Legal review is needed.",
+        }
+    )
+    runner = _Runner(parsed)
+    agent = CodexReviewAgent(model="gpt-5.5", runner=runner)
+
+    agent.run(case)
+
+    prompt = runner.calls[0]["prompt"]
+    assert "Processing mode: large_normalized_packet" in prompt
+    assert "inventory, classification, page-aware chunk review" in prompt
+    assert "Ignore generic boilerplate unless it creates a material business" in prompt
+    assert "Do not count repeated clause language as multiple independent risks" in prompt
 
 
 def test_codex_review_agent_regrounds_quote_when_source_document_uses_alias() -> None:

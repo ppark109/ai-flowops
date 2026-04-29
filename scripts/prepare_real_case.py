@@ -21,6 +21,7 @@ def main() -> None:
     from app.settings import get_settings
     from schemas.case import DocumentRef, IntakePackage
     from workflows.orchestrator import WorkflowOrchestrator
+    from workflows.package_profile import build_package_profile
 
     parser = argparse.ArgumentParser(
         description=(
@@ -45,6 +46,15 @@ def main() -> None:
         "--extract-only",
         action="store_true",
         help="Only create/update manifest and extracted text; do not run Codex or write to DB.",
+    )
+    parser.add_argument(
+        "--processing-mode",
+        choices=("auto", "simple", "large"),
+        default="auto",
+        help=(
+            "Opportunity package processing path. auto profiles the package; simple forces "
+            "direct AI review; large forces chunked normalized-packet processing."
+        ),
     )
     parser.add_argument(
         "--digest-threshold-chars",
@@ -95,11 +105,22 @@ def main() -> None:
         documents=extracted_documents,
     )
     manifest["opportunity_stage"] = opportunity_stage
+    profile = build_package_profile(
+        manifest=manifest,
+        documents=extracted_documents,
+        requested_mode=args.processing_mode,
+        total_char_threshold=args.digest_threshold_chars,
+    )
+    manifest["processing_mode"] = profile["processing_mode"]
     _write_manifest(case_dir, manifest)
+    _write_processing_artifacts(case_dir, manifest, extracted_documents, profile)
 
     print(f"case_dir={case_dir}")
     print(f"manifest={case_dir / 'manifest.local.json'}")
     print(f"opportunity_stage={opportunity_stage}")
+    print(f"processing_mode={profile['processing_mode']}")
+    print(f"complexity_score={profile['complexity_score']}")
+    print(f"trigger_reasons={','.join(profile['trigger_reasons']) or 'none'}")
     print(f"extracted={len(extracted_documents)}")
     for document in extracted_documents:
         print(
@@ -113,8 +134,7 @@ def main() -> None:
         return
 
     processing_documents = extracted_documents
-    total_chars = sum(len(item["text"]) for item in extracted_documents)
-    if args.digest_threshold_chars and total_chars > args.digest_threshold_chars:
+    if profile["processing_mode"] == "large_normalized_packet":
         processing_documents = [
             _build_ai_normalized_packet(
                 case_dir=case_dir,
@@ -128,6 +148,7 @@ def main() -> None:
                 chunk_chars=args.chunk_chars,
                 max_chunks=args.max_chunks,
                 opportunity_stage=opportunity_stage,
+                processing_profile=profile,
             )
         ]
         print(
@@ -186,6 +207,8 @@ def main() -> None:
             "manifest": str(case_dir / "manifest.local.json"),
             "real_case": True,
             "opportunity_stage": opportunity_stage,
+            "processing_mode": profile["processing_mode"],
+            "processing_profile": str(case_dir / "processing_profile.local.json"),
         },
         scenario_summary=str(manifest.get("scenario_summary") or "Real government opportunity package."),
     )
@@ -235,6 +258,7 @@ def _load_or_create_manifest(
         "account_name": account_name,
         "scenario_summary": "Real government opportunity package imported for local AI FlowOps review.",
         "opportunity_stage": "auto",
+        "processing_mode": "auto",
         "documents": [
             {
                 "file": pdf.name,
@@ -250,6 +274,82 @@ def _load_or_create_manifest(
 
 def _write_manifest(case_dir: Path, manifest: dict[str, Any]) -> None:
     (case_dir / "manifest.local.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+
+def _write_processing_artifacts(
+    case_dir: Path,
+    manifest: dict[str, Any],
+    documents: list[dict[str, Any]],
+    profile: dict[str, Any],
+) -> None:
+    _write_json(case_dir / "processing_profile.local.json", profile)
+    _write_json(case_dir / "document_inventory.local.json", _document_inventory(documents))
+    _write_json(
+        case_dir / "document_classification.local.json",
+        _document_classification(manifest, documents),
+    )
+
+
+def _write_json(path: Path, payload: Any) -> None:
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+
+
+def _document_inventory(documents: list[dict[str, Any]]) -> dict[str, Any]:
+    return {
+        "document_count": len(documents),
+        "total_pages": sum(int(item.get("page_count") or 0) for item in documents),
+        "total_chars": sum(len(str(item.get("text") or "")) for item in documents),
+        "documents": [
+            {
+                "file": item["file"],
+                "role": item["role"],
+                "description": item.get("description") or "",
+                "page_count": item["page_count"],
+                "char_count": len(str(item.get("text") or "")),
+                "sha256": item["sha256"],
+                "text_path": item["text_path"],
+            }
+            for item in documents
+        ],
+    }
+
+
+def _document_classification(
+    manifest: dict[str, Any],
+    documents: list[dict[str, Any]],
+) -> dict[str, Any]:
+    manifest_docs = {
+        str(item.get("file")): item for item in manifest.get("documents", []) if item.get("file")
+    }
+    return {
+        "classification_source": "manifest_role_with_filename_inference_fallback",
+        "documents": [
+            {
+                "file": item["file"],
+                "role": item["role"],
+                "description": item.get("description")
+                or str(manifest_docs.get(item["file"], {}).get("description") or ""),
+                "signals": _classification_signals(item["file"], item["role"]),
+            }
+            for item in documents
+        ],
+    }
+
+
+def _classification_signals(file_name: str, role: str) -> list[str]:
+    lower = f"{file_name} {role}".lower()
+    signals = []
+    if any(token in lower for token in ("amend", "update")):
+        signals.append("amendment_or_update")
+    if any(token in lower for token in ("q&a", "questions", "answers", "qa_")):
+        signals.append("qa_document")
+    if any(token in lower for token in ("synopsis", "solicitation", "rfp", "ara")):
+        signals.append("solicitation_or_program_notice")
+    if any(token in lower for token in ("pricing", "cost")):
+        signals.append("pricing_or_cost")
+    if any(token in lower for token in ("security", "cyber", "clearance")):
+        signals.append("security_or_cyber")
+    return signals
 
 
 def _extract_documents(case_dir: Path, manifest: dict[str, Any]) -> list[dict[str, Any]]:
@@ -419,6 +519,7 @@ def _build_ai_normalized_packet(
     chunk_chars: int,
     max_chunks: int,
     opportunity_stage: str,
+    processing_profile: dict[str, Any],
 ) -> dict[str, Any]:
     from agents.openai_review import CodexReviewAgent
     from schemas.case import DocumentRef, IntakePackage
@@ -442,6 +543,11 @@ def _build_ai_normalized_packet(
             "AI analysis against the original document package."
         ),
         "",
+        "## Processing profile",
+        f"- Processing mode: {processing_profile['processing_mode']}",
+        f"- Complexity score: {processing_profile['complexity_score']}",
+        f"- Trigger reasons: {', '.join(processing_profile['trigger_reasons']) or 'none'}",
+        "",
         "## Source documents processed",
     ]
     for document in documents:
@@ -453,9 +559,12 @@ def _build_ai_normalized_packet(
     finding_count = 0
     evidence_count = 0
     chunk_count = 0
+    chunk_reviews: list[dict[str, Any]] = []
     text_path = case_dir / "extracted" / "ai_normalized_packet.local.md"
+    chunk_reviews_path = case_dir / "chunk_reviews.local.json"
     for chunk in _document_chunks(documents, chunk_chars):
         chunk_count += 1
+        chunk_id = f"chunk-{chunk_count:03d}"
         if max_chunks and chunk_count > max_chunks:
             sections.extend(["", f"## Chunk limit reached for debug run: {max_chunks}"])
             break
@@ -489,15 +598,48 @@ def _build_ai_normalized_packet(
                 "source_file": chunk["file"],
                 "pages": chunk["pages"],
                 "opportunity_stage": opportunity_stage,
+                "processing_mode": "large_normalized_packet",
             },
         )
         evidence, findings, _trace = agent.run(intake)
         evidence_count += len(evidence)
         finding_count += len(findings)
+        chunk_reviews.append(
+            {
+                "chunk_id": chunk_id,
+                "source_file": chunk["file"],
+                "role": chunk["role"],
+                "pages": chunk["pages"],
+                "chars": len(chunk["text"]),
+                "evidence_count": len(evidence),
+                "finding_count": len(findings),
+                "findings": [
+                    {
+                        "rule_id": finding.rule_id,
+                        "route": finding.route,
+                        "severity": finding.severity,
+                        "summary": finding.summary,
+                        "confidence": finding.confidence,
+                        "evidence": [
+                            {
+                                "source_file": chunk["file"],
+                                "pages": chunk["pages"],
+                                "locator": item.locator,
+                                "quote": item.quote,
+                                "normalized_fact": item.normalized_fact,
+                                "confidence": item.confidence,
+                            }
+                            for item in finding.evidence
+                        ],
+                    }
+                    for finding in findings
+                ],
+            }
+        )
         sections.extend(
             [
                 "",
-                f"## AI chunk review: {chunk['file']} pages {chunk['pages']}",
+                f"## AI chunk review: {chunk_id} - {chunk['file']} pages {chunk['pages']}",
                 f"- Findings: {len(findings)}",
                 f"- Evidence items: {len(evidence)}",
             ]
@@ -516,7 +658,7 @@ def _build_ai_normalized_packet(
             for item in finding.evidence:
                 sections.extend(
                     [
-                        f"- Source: {chunk['file']} pages {chunk['pages']} / {item.locator}",
+                        f"- Source: {chunk_id} / {chunk['file']} pages {chunk['pages']} / {item.locator}",
                         f"- Quote: {item.quote}",
                         f"- Normalized fact: {item.normalized_fact}",
                     ]
@@ -535,6 +677,7 @@ def _build_ai_normalized_packet(
 
     text = "\n".join(sections).strip() + "\n"
     text_path.write_text(text, encoding="utf-8")
+    chunk_reviews_path.write_text(json.dumps(chunk_reviews, indent=2), encoding="utf-8")
     return {
         "file": text_path.name,
         "role": "ai_normalized_packet",
@@ -543,6 +686,7 @@ def _build_ai_normalized_packet(
         "text": text,
         "page_count": chunk_count,
         "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest(),
+        "chunk_reviews_path": str(chunk_reviews_path),
     }
 
 

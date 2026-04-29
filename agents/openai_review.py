@@ -51,6 +51,24 @@ FINAL_SOLICITATION_CONTEXT_PROMPT = (
     "risks can affect bid/no-bid readiness."
 )
 
+LARGE_PROCESSING_CONTEXT_PROMPT = (
+    "Processing mode: large_normalized_packet. This package is too dense for a "
+    "single raw-document review pass. Treat the text as part of a staged "
+    "document-processing workflow: inventory, classification, page-aware chunk "
+    "review, grounded extraction, reconciliation, normalized packet generation, "
+    "department routing, specialist review, AI synthesis, and BD/Ops decision. "
+    "Ignore generic boilerplate unless it creates a material business, legal, "
+    "security, finance, or implementation decision. Extract only decision-useful "
+    "facts. Preserve exact source quotes and page/file locators. Separate normal "
+    "unknowns from blockers. Identify amendment/base-document conflicts when "
+    "visible. Do not count repeated clause language as multiple independent risks."
+)
+
+SIMPLE_PROCESSING_CONTEXT_PROMPT = (
+    "Processing mode: simple_direct_ai. The package is small enough for direct AI "
+    "extraction and department routing without an intermediate normalized packet."
+)
+
 
 class AIReviewEvidence(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -217,6 +235,7 @@ def _build_prompt(payload: IntakePackage) -> str:
     return (
         f"{SYSTEM_PROMPT}\n\n"
         f"{_opportunity_stage_prompt(payload)}\n\n"
+        f"{_processing_mode_prompt(payload)}\n\n"
         "Return only JSON matching the supplied schema. Do not edit files. Do not run tools.\n\n"
         f"Case id: {payload.case_id}\n"
         f"Customer: {payload.customer_name}\n\n"
@@ -235,6 +254,19 @@ def _opportunity_stage_prompt(payload: IntakePackage) -> str:
     if _opportunity_stage(payload) == "presolicitation":
         return PRESOLICITATION_CONTEXT_PROMPT
     return FINAL_SOLICITATION_CONTEXT_PROMPT
+
+
+def _processing_mode(payload: IntakePackage) -> str:
+    mode = str(payload.metadata.get("processing_mode") or "simple_direct_ai").strip().lower()
+    if mode in {"large", "large_normalized_packet", "normalized_packet"}:
+        return "large_normalized_packet"
+    return "simple_direct_ai"
+
+
+def _processing_mode_prompt(payload: IntakePackage) -> str:
+    if _processing_mode(payload) == "large_normalized_packet":
+        return LARGE_PROCESSING_CONTEXT_PROMPT
+    return SIMPLE_PROCESSING_CONTEXT_PROMPT
 
 
 def _resolve_executable(command: str) -> str:
