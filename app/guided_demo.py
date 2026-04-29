@@ -30,6 +30,24 @@ DEFAULT_EXTRACTION_TIME_SAVED = {
         {"value": "23", "label": "structured facts extracted"},
     ],
 }
+DEFAULT_PROCESSING_PATH = {
+    "mode": "simple_direct_ai",
+    "label": "Simple direct AI path selected",
+    "summary": (
+        "This package fit in one review pass, so AI FlowOps sent the extracted documents "
+        "directly to AI analysis and department routing."
+    ),
+    "complexity_score": 0,
+    "trigger_reasons": [],
+    "metrics": [
+        {"value": "5", "label": "source documents inventoried"},
+        {"value": "47", "label": "pages normalized"},
+        {"value": "0", "label": "page-aware chunks reviewed"},
+        {"value": "0", "label": "normalized packet generated"},
+    ],
+    "document_roles": [],
+    "artifacts": ["ai_flowops_state.local.json", "ai_flowops_completed_case.local.json"],
+}
 
 
 @lru_cache
@@ -48,7 +66,11 @@ def _case_path() -> Path:
 
 def get_case_room_context() -> dict[str, Any]:
     demo = load_case_room_demo()
-    demo = {**demo, "extraction_time_saved": _extraction_time_saved(demo)}
+    demo = {
+        **demo,
+        "extraction_time_saved": _extraction_time_saved(demo),
+        "processing_path": _processing_path(demo),
+    }
     return {
         "demo": demo,
         "case": demo["case"],
@@ -231,6 +253,19 @@ def _extraction_time_saved(demo: dict[str, Any]) -> dict[str, Any]:
             "label": "source phrases grounded",
         }
     return fallback
+
+
+def _processing_path(demo: dict[str, Any]) -> dict[str, Any]:
+    value = demo.get("processing_path")
+    if isinstance(value, dict) and value.get("label") and value.get("metrics"):
+        return value
+    return {
+        **DEFAULT_PROCESSING_PATH,
+        "metrics": [dict(metric) for metric in DEFAULT_PROCESSING_PATH["metrics"]],
+        "artifacts": list(DEFAULT_PROCESSING_PATH["artifacts"]),
+        "document_roles": list(DEFAULT_PROCESSING_PATH["document_roles"]),
+        "trigger_reasons": list(DEFAULT_PROCESSING_PATH["trigger_reasons"]),
+    }
 
 
 def _audit_density_with_events(demo: dict[str, Any]) -> list[dict[str, Any]]:

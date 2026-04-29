@@ -3,7 +3,7 @@ from tempfile import TemporaryDirectory
 
 from fastapi.testclient import TestClient
 
-from app.guided_demo import resolve_evidence_references
+from app.guided_demo import load_case_room_demo, resolve_evidence_references
 from app.main import create_app
 from app.settings import Settings
 from schemas.case import IntakePackage
@@ -14,11 +14,22 @@ from workflows.storage import WorkflowStorage
 
 
 def _client() -> TestClient:
+    load_case_room_demo.cache_clear()
     return TestClient(create_app())
 
 
 def _public_demo_client() -> TestClient:
+    load_case_room_demo.cache_clear()
     return TestClient(create_app(Settings(public_demo_mode=True)))
+
+
+def _real_case_client(monkeypatch) -> TestClient:
+    monkeypatch.setenv(
+        "CASE_ROOM_DEMO_PATH",
+        "data/guided_demo/real_cases/FA875026S7002/case_room.json",
+    )
+    load_case_room_demo.cache_clear()
+    return TestClient(create_app())
 
 
 def test_home_and_demo_render_case_room_hero() -> None:
@@ -69,9 +80,12 @@ def test_architecture_flow_colors_ai_hitl_and_system_layers() -> None:
     response = client.get("/demo/architecture")
 
     assert response.status_code == 200
-    assert response.text.count("flow-ai") == 3
+    assert response.text.count("flow-ai") == 5
     assert response.text.count("flow-hitl") == 2
-    assert response.text.count("flow-system") == 5
+    assert response.text.count("flow-system") == 6
+    assert "Package Profiler" in response.text
+    assert "Simple Direct AI Path" in response.text
+    assert "Large Normalized-Packet Path" in response.text
 
 
 def test_recommendation_and_routing_show_ai_banner_and_all_departments() -> None:
@@ -293,6 +307,32 @@ def test_kpi_dashboard_includes_screening_savings() -> None:
     assert "AI synthesis generated" in response.text
     assert 'id="audit-bucket-1031"' in response.text
     assert "BD/Ops decision logged" in response.text
+
+
+def test_real_case_demo_shows_large_opportunity_processing_path(monkeypatch) -> None:
+    client = _real_case_client(monkeypatch)
+
+    response = client.get("/demo/cases/FA875026S7002?step=extraction")
+
+    assert response.status_code == 200
+    assert "Large-opportunity path selected" in response.text
+    assert "page-aware chunks reviewed" in response.text
+    assert "normalized packet generated" in response.text
+    assert "processing_profile.local.json" in response.text
+    assert "chunk_reviews.local.json" in response.text
+    assert "large_normalized_packet" in response.text
+
+
+def test_real_case_kpis_include_large_package_normalization(monkeypatch) -> None:
+    client = _real_case_client(monkeypatch)
+
+    response = client.get("/demo/kpis")
+
+    assert response.status_code == 200
+    assert "Large-package normalization" in response.text
+    assert "13 chunks" in response.text
+    assert "normalized packet reduced manual review burden" in response.text
+    assert "Chunk" in response.text
 
 
 def test_case_timestamps_match_midnight_ai_and_business_hour_reviews() -> None:

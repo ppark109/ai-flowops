@@ -23,6 +23,9 @@
       <div class="flow-ai">Opportunity Discovery / AI Screening<span>Monitor feeds, download notices, filter likely contract-fit RFPs</span></div>
       <div class="flow-system">Document Inputs<span>RFPs, contracts, notes</span></div>
       <div class="flow-system">Ingestion Layer<span>Parse and normalize</span></div>
+      <div class="flow-system">Package Profiler<span>Score size, page count, amendments, Q&A, and prompt budget</span></div>
+      <div class="flow-ai">Simple Direct AI Path<span>Small packages go straight to grounded extraction and routing</span></div>
+      <div class="flow-ai">Large Normalized-Packet Path<span>Dense packages are inventoried, chunked, reconciled, and summarized first</span></div>
       <div class="flow-ai">AI Decision Engine<span>Extract, classify, recommend</span></div>
       <div class="flow-system">Workflow Engine<span>Rules, routes, packets</span></div>
       <div class="flow-hitl">Specialist HITL Layer<span>Legal, Security, Finance, Implementation</span></div>
@@ -31,6 +34,32 @@
       <div class="flow-system">Database / Audit Log<span>Cases, events, traces</span></div>
       <div class="flow-system">Dashboard Layer<span>KPIs and proof views</span></div>
     </div>
+
+    <section class="section-block">
+      <h2>Dual-path opportunity processing</h2>
+      <div class="summary-grid">
+        <div class="finding-card">
+          <p class="muted-label">Simple path</p>
+          <strong>Small package, direct AI review</strong>
+          <span>Clean opportunity packets stay fast: extracted documents become one intake package, then AI routes Legal, Security, Finance, and Implementation packets.</span>
+        </div>
+        <div class="finding-card">
+          <p class="muted-label">Large path</p>
+          <strong>Dense package, normalized master packet</strong>
+          <span>Large government packages are inventoried, classified, chunk-reviewed, reconciled, and converted into an AI-normalized packet before routing.</span>
+        </div>
+        <div class="finding-card">
+          <p class="muted-label">Traceability</p>
+          <strong>Every normalized fact keeps its source</strong>
+          <span>Findings retain source filename, page range, quote, normalized fact, confidence, and chunk ID when chunking is used.</span>
+        </div>
+        <div class="finding-card">
+          <p class="muted-label">Presolicitation frame</p>
+          <strong>Pursue/prepare, not bid/no-bid</strong>
+          <span>Presolicitations use a more permissive capture-readiness prompt, while final solicitations keep bid-stage decision language.</span>
+        </div>
+      </div>
+    </section>
 
     <div class="chart-grid">
       <section class="chart-card">

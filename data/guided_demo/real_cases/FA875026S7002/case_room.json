@@ -14,9 +14,9 @@
     "final_decision": "PURSUE WITH CONDITIONS",
     "recommendation": "Pursue with conditions",
     "risk_level": "High",
-    "confidence": "87%",
+    "confidence": "90%",
     "received_at": "12:01 AM",
-    "pages": 0,
+    "pages": 55,
     "exhibits": 3
   },
   "hero_stats": [
@@ -29,7 +29,7 @@
       "label": "departments routed"
     },
     {
-      "value": "15",
+      "value": "14",
       "label": "evidence phrases"
     },
     {
@@ -106,7 +106,7 @@
       "status": "complete",
       "eyebrow": "Stage 2 of 7 - AI extraction",
       "title": "What did AI read from the presolicitation?",
-      "body": "The AI extracted grounded facts and 15 evidence phrases from the public package."
+      "body": "The AI extracted grounded facts and 14 evidence phrases from the public package."
     },
     {
       "id": "recommendation",
@@ -176,8 +176,56 @@
       "detail": "Capture decision with conditions"
     }
   ],
+  "processing_path": {
+    "mode": "large_normalized_packet",
+    "label": "Large-opportunity path selected",
+    "summary": "The package was too dense for a single safe review pass, so AI FlowOps inventoried the source files, classified document purpose, reviewed page-aware chunks, reconciled the results, and generated one normalized master packet before department routing.",
+    "complexity_score": 47,
+    "trigger_reasons": [
+      "Large path selected for production-realistic validation"
+    ],
+    "metrics": [
+      {
+        "value": "3",
+        "label": "source documents inventoried"
+      },
+      {
+        "value": "55",
+        "label": "pages normalized"
+      },
+      {
+        "value": "13",
+        "label": "page-aware chunks reviewed"
+      },
+      {
+        "value": "1",
+        "label": "normalized packet generated"
+      }
+    ],
+    "document_roles": [
+      {
+        "role": "Amendment Or Update",
+        "count": 1
+      },
+      {
+        "role": "Opportunity Notice",
+        "count": 1
+      },
+      {
+        "role": "Program Solicitation",
+        "count": 1
+      }
+    ],
+    "artifacts": [
+      "processing_profile.local.json",
+      "document_inventory.local.json",
+      "document_classification.local.json",
+      "chunk_reviews.local.json",
+      "extracted/ai_normalized_packet.local.md"
+    ]
+  },
   "extraction_time_saved": {
-    "headline": "AI converted the public package into a routed capture-review packet before humans started reading.",
+    "headline": "AI used the large-opportunity path to convert a dense public package into a normalized capture-review packet before humans started reading.",
     "metrics": [
       {
         "value": "4h",
@@ -188,11 +236,15 @@
         "label": "manual document review avoided"
       },
       {
-        "value": "10m",
-        "label": "AI extraction and routing"
+        "value": "13",
+        "label": "AI chunk reviews"
       },
       {
-        "value": "15",
+        "value": "55",
+        "label": "pages normalized"
+      },
+      {
+        "value": "14",
         "label": "source phrases grounded"
       }
     ]
@@ -205,7 +257,7 @@
     },
     {
       "label": "Findings routed",
-      "value": "16",
+      "value": "14",
       "detail": "Grounded findings routed downstream"
     },
     {
@@ -221,45 +273,49 @@
   ],
   "risk_flags": [
     {
-      "label": "Invitation-only proposal path",
+      "label": "This is a normal presolicitation gate, not a no-pursue blocker: capture should staff ...",
       "department": "Implementation"
     },
     {
-      "label": "White-paper timing window",
-      "department": "Implementation"
-    },
-    {
-      "label": "Funding and zero-award uncertainty",
-      "department": "Finance"
+      "label": "Classification handling is still a presolicitation unknown because DD254 guidance is ...",
+      "department": "Security"
     },
     {
       "label": "Award vehicle and terms discretion",
       "department": "Legal"
     },
     {
-      "label": "Foreign participation restriction",
-      "department": "Legal"
-    },
-    {
-      "label": "FOCI mitigation gate",
-      "department": "Legal"
-    },
-    {
-      "label": "Export-control approval gate",
-      "department": "Legal"
+      "label": "Implementation staffing is a serious pursuit risk if the delivery plan depends on non...",
+      "department": "Implementation"
     },
     {
       "label": "OCI screening required",
+      "department": "Legal"
+    },
+    {
+      "label": "Funding and zero-award uncertainty",
+      "department": "Security"
+    },
+    {
+      "label": "DISA cloud authorization path",
+      "department": "Security"
+    },
+    {
+      "label": "Foreign participation restriction",
       "department": "Legal"
     }
   ],
   "extracted_json": {
     "case_id": "FA875026S7002",
     "opportunity_stage": "presolicitation",
+    "processing_mode": "large_normalized_packet",
+    "complexity_score": 47,
+    "chunks_reviewed": 13,
+    "normalized_packet_generated": true,
     "decision_question": "Should BD/Ops pursue and prepare for the next solicitation step?",
     "ai_recommendation": "pursue_with_conditions",
     "bd_ops_decision": "pursue_with_conditions",
-    "evidence_items": 15,
+    "evidence_items": 14,
     "departments_routed": [
       "legal",
       "security",
@@ -271,19 +327,19 @@
   "routing_logic": [
     {
       "department": "Legal",
-      "reason": "Legal should qualify both FAR and OT paths before deeper capture investment because the government can choose the instrument later and negotiate terms and conditions with selectees.; This is a conditional eligibility blocker. If the planned prime, subcontractor, or staffing model relies on foreign participation, the opportunity is not pursuit-ready."
+      "reason": "Legal should clear readiness for either a FAR contract or an OT path because the Government has kept instrument type and terms open for negotiation.; Existing AFRL SETA, A&AS, or similar support by the company or a teammate is a material OCI risk that can undercut capture readiness for a technical-performer role."
     },
     {
       "department": "Security",
-      "reason": "If the proposed solution stores government or government-related data in the cloud, pursuit should continue only with a DISA-authorized hosting path at the required level.; Security readiness is a near-term gate because the solicitation expects a BASIC NIST SP 800-171 SPRS assessment before deeper pursuit investment is justified."
+      "reason": "Classification handling is still a presolicitation unknown because DD254 guidance is not yet issued; Security should treat this as a follow-up gate before the next solicitation step rather than a present blocker.; Pre-award security review is a real pursuit kill gate; the opportunity should only advance if key personnel and the organizational profile are likely to clear the Government's risk threshold."
     },
     {
       "department": "Finance",
-      "reason": "Finance should stage-gate pursuit spend because the agency expressly preserves a zero-award outcome and warns that awards depend on funding fluctuations.; If the team lacks significant nontraditional or nonprofit participation, Finance may need to support at least one-third non-federal cost share before this is capture-ready."
+      "reason": "Finance should treat OT eligibility and one-third non-Federal cost share as a major pursuit risk unless a qualifying non-traditional defense contractor or nonprofit participant will contribute to a significant extent.; If the deal moves toward a cost-reimbursement path, Finance must verify award readiness around a government-approved accounting system."
     },
     {
       "department": "Implementation",
-      "reason": "This is a gated presolicitation pursuit, not an open full-proposal bid. The immediate capture question is whether the team can produce a competitive white paper first and earn invitation into the next step.; The FY26 suggested white-paper window has already passed. Pursuit is still possible, but capture should treat this as a later-cycle effort and align to the FY27 timing unless the customer indicates otherwise."
+      "reason": "This is a normal presolicitation gate, not a no-pursue blocker: capture should staff a compliant white paper now and defer full-proposal build-out unless invited.; Implementation staffing is a serious pursuit risk if the delivery plan depends on non-U.S.-citizen personnel for base, facility, or Government-network access."
     }
   ],
   "departments": [
@@ -292,10 +348,10 @@
       "name": "Legal",
       "status": "Worth pursuing with conditions",
       "facts": [
-        "Legal should qualify both FAR and OT paths before deeper capture investment because the government can choose the instrument later and negotiate terms and conditions with selectees.",
-        "This is a conditional eligibility blocker. If the planned prime, subcontractor, or staffing model relies on foreign participation, the opportunity is not pursuit-ready.",
-        "This is a presubmission gate that can become a hard stop. Any FOCI-affected entity needs approved mitigation paperwork before a white paper or proposal can be submitted.",
-        "If the pursuit depends on non-U.S.-citizen or non-permanent-resident personnel, export-control approval becomes a pre-bid gate with explicit civil and criminal penalty exposure."
+        "Legal should clear readiness for either a FAR contract or an OT path because the Government has kept instrument type and terms open for negotiation.",
+        "Existing AFRL SETA, A&AS, or similar support by the company or a teammate is a material OCI risk that can undercut capture readiness for a technical-performer role.",
+        "DLIS registration and certification are a hard participation gate that should be verified before more capture spend is committed.",
+        "Any pursuit strategy that depends on non-SBIR data rights below unlimited rights carries negotiation risk and should be cleared early with Legal."
       ],
       "packet_precis": "Legal sees this as worth pursuing for capture review if the listed legal gates are resolved before any final bid commitment.",
       "packet_recommendation": "Worth pursuing with conditions",
@@ -317,9 +373,10 @@
       "name": "Security",
       "status": "Worth pursuing with conditions",
       "facts": [
-        "If the proposed solution stores government or government-related data in the cloud, pursuit should continue only with a DISA-authorized hosting path at the required level.",
-        "Security readiness is a near-term gate because the solicitation expects a BASIC NIST SP 800-171 SPRS assessment before deeper pursuit investment is justified.",
-        "Some work may require cleared facilities and already-cleared personnel at award, so the opportunity is risky if the company lacks a credible classified-delivery path."
+        "Classification handling is still a presolicitation unknown because DD254 guidance is not yet issued; Security should treat this as a follow-up gate before the next solicitation step rather than a present blocker.",
+        "Pre-award security review is a real pursuit kill gate; the opportunity should only advance if key personnel and the organizational profile are likely to clear the Government's risk threshold.",
+        "Any solution architecture that stores Government or Government-related data in the cloud needs an authorized provider path before the next solicitation step.",
+        "If the concept could become classified, Security needs a credible facility-clearance and cleared-personnel path because the requirement may apply at award rather than post-award."
       ],
       "packet_precis": "Security sees this as worth pursuing if clearance, cloud, and data-handling requirements are feasible.",
       "packet_recommendation": "Worth pursuing with conditions",
@@ -341,10 +398,8 @@
       "name": "Finance",
       "status": "Worth pursuing with conditions",
       "facts": [
-        "Finance should stage-gate pursuit spend because the agency expressly preserves a zero-award outcome and warns that awards depend on funding fluctuations.",
-        "If the team lacks significant nontraditional or nonprofit participation, Finance may need to support at least one-third non-federal cost share before this is capture-ready.",
-        "A cost-reimbursement path cannot be awarded without a government-approved accounting system, making finance-readiness a presolicitation gate rather than a post-selection task.",
-        "Playbook rule 'unusual_penalty_terms' matched: Non-standard penalty terms need finance review."
+        "Finance should treat OT eligibility and one-third non-Federal cost share as a major pursuit risk unless a qualifying non-traditional defense contractor or nonprofit participant will contribute to a significant extent.",
+        "If the deal moves toward a cost-reimbursement path, Finance must verify award readiness around a government-approved accounting system."
       ],
       "packet_precis": "Finance sees this as worth pursuing if cost-share and accounting requirements fit the expected opportunity value.",
       "packet_recommendation": "Worth pursuing with conditions",
@@ -364,14 +419,14 @@
     {
       "id": "implementation",
       "name": "Implementation",
-      "status": "Worth pursuing",
+      "status": "Worth pursuing with conditions",
       "facts": [
-        "This is a gated presolicitation pursuit, not an open full-proposal bid. The immediate capture question is whether the team can produce a competitive white paper first and earn invitation into the next step.",
-        "The FY26 suggested white-paper window has already passed. Pursuit is still possible, but capture should treat this as a later-cycle effort and align to the FY27 timing unless the customer indicates otherwise.",
-        "Any deliverable that relies on third-party software will need disclosure, licensing, and contracting-officer approval, so implementation should validate dependency and licensing strategy before the next solicitation step."
+        "This is a normal presolicitation gate, not a no-pursue blocker: capture should staff a compliant white paper now and defer full-proposal build-out unless invited.",
+        "Implementation staffing is a serious pursuit risk if the delivery plan depends on non-U.S.-citizen personnel for base, facility, or Government-network access.",
+        "Solutions that embed third-party software need early dependency and licensing review because proposal disclosure and later Government license approval are required."
       ],
       "packet_precis": "Implementation sees this as worth pursuing if technical scope and staffing assumptions remain plausible during capture.",
-      "packet_recommendation": "Worth pursuing",
+      "packet_recommendation": "Worth pursuing with conditions",
       "packet_questions": [
         "Can the team support the likely SDR gateware, firmware, and cyber-control work?",
         "Does the presolicitation provide enough scope to estimate capture and delivery risk?"
@@ -379,7 +434,7 @@
       "reviewer_initials": "I",
       "reviewer": "Implementation reviewer",
       "review_time": "11:05 AM",
-      "decision": "Worth pursuing",
+      "decision": "Worth pursuing with conditions",
       "summary": "Implementation sees this as worth pursuing if technical scope and staffing assumptions remain plausible during capture.",
       "conditions": [
         "Confirm technical scope fit, staffing assumptions, and feasibility of SDR, firmware, cyber-control, or integration work before bid commitment."
@@ -388,24 +443,24 @@
   ],
   "ai_synthesis": {
     "headline": "Recommend pursue with conditions - prepare for the next solicitation step.",
-    "summary": "Pursue this presolicitation as a capture effort, not a near-term full-bid commitment. The immediate objective is a competitive white paper for a later cycle, but BD/Ops should only scale pursuit after resolving eligibility, security, and finance gates that could become hard blockers.",
+    "summary": "Pursue this presolicitation opportunity through capture and white-paper preparation, but keep proposal spend gated behind resolution of legal, security, finance, and staffing readiness items. The record supports pursuit because the current step is a normal invitation-gated white paper, while the major risks are real but still diligence items rather than confirmed disqualifiers.",
     "document_title": "AI Capture Synthesis Packet",
     "document_sections": [
       {
         "heading": "Opportunity summary",
-        "body": "FA875026S7002 is a gated AFRL/ARA-style presolicitation where white papers are the current action and formal proposals are by invitation only. The FY26 suggested white-paper date has passed, but submissions remain possible through December 31, 2030, with later-year funding uncertainty. The opportunity appears technically plausible, but capture readiness depends on foreign participation limits, FOCI/OCI posture, export-control constraints, clearance/cloud compliance, and cost-share/accounting fit."
+        "body": "FA875026S7002 is in presolicitation, with only a white paper due at this stage and formal proposals by invitation only. The opportunity appears plausible for capture, but pursuit should be conditioned on confirming OCI/eligibility, DLIS and export-control readiness, clearance and cloud posture, cost-share/accounting fit, and whether the delivery team can meet U.S.-citizen access and likely SDR/firmware/cyber integration demands."
       },
       {
         "heading": "Specialist summary",
-        "body": "Legal supports pursuit with conditions because award instrument, eligibility, OCI, foreign participation, export control, and data-rights posture must be qualified before any bid commitment. Security supports pursuit with conditions because classified-clearance, SPRS/NIST readiness, and any DISA-authorized cloud path must be confirmed before proposal resources scale. Finance supports pursuit with conditions because zero-award risk, possible one-third cost share, and approved-accounting-system requirements could materially affect ROI and readiness. Implementation supports pursuit because the current step is a white paper, but technical scope, staffing, schedule realism, and third-party software/licensing dependencies still need capture validation."
+        "body": "Legal supports pursuit with conditions because award instrument, data-rights treatment, OCI exposure, foreign participation limits, and export-control participation requirements remain open and must be cleared before bid commitment. Security supports pursuit with conditions because DD254 guidance is not yet issued, but pre-award security review, possible facility/personnel clearance at award, DISA-authorized cloud use, and SPRS/NIST 800-171 readiness could become decisive gates. Finance supports pursuit with conditions because OT structure may trigger one-third non-Federal cost share absent qualifying participation, and a cost-reimbursement path may require a government-approved accounting system before award. Implementation supports pursuit with conditions because the current step is limited to a white paper, but staffing and architecture must be checked against U.S.-citizen access limits, possible dependency conflicts, aggressive schedule risk, and likely SDR/firmware/cyber-control scope."
       },
       {
         "heading": "Rationale",
-        "body": "The evidence supports continued pursuit, but not an unconditional green light. This is a presolicitation with an invitation-only second step, so the correct near-term decision is whether to invest in capture and prepare a white paper. That favors pursuit because the opportunity is still open for later cycles and implementation believes the scope is plausibly supportable. However, several issues could become hard blockers if left unresolved: foreign participation is prohibited, FOCI mitigation may be required before submission, OCI failures can eliminate the team, export-control approvals may be needed for certain personnel, some work may require cleared facilities and personnel at award, cloud use may require DISA authorization, cost share may be mandatory absent significant nontraditional/nonprofit participation, and a government-approved accounting system may be required for some award paths. Those are serious but currently conditional rather than proven disqualifiers, so the best synthesis is pursue_with_conditions rather than hold_pending_information or do_not_pursue."
+        "body": "All four specialist reviews independently concluded the opportunity is worth pursuing with conditions, and the grounded findings support that posture. The most important point is that this is a presolicitation white-paper gate, not a final proposal decision, so unresolved downstream award details are expected. The file shows several serious capture risks, including OCI, DLIS/export-control participation, pre-award security review, possible classified-work clearance at award, DISA cloud authorization, OT cost-share exposure, accounting-system requirements, and U.S.-citizen access limits. However, none of the provided evidence establishes that these issues are already disqualifying for this company today. Because the opportunity remains plausible and the current next step is limited, the right synthesis is to pursue now under explicit capture gates rather than decline prematurely or hold without action."
       },
       {
         "heading": "Open questions",
-        "body": "Is the intended prime/sub team fully eligible under the foreign participation restriction, and are any FOCI issues present? Are any OCI, SETA/A&AS, or related affiliation issues disqualifying for this team? Can the company accept the likely openness and government-advantageous data-rights posture without undermining core IP strategy? Will the planned staffing model require any non-U.S.-citizen or non-permanent-resident personnel? Does the delivery team already have the facility and personnel clearances required for the likely scope? Will any proposed architecture store or process government or government-related data in the cloud? Does the company already have a BASIC NIST SP 800-171 SPRS assessment and the needed safeguarding controls? Does the team qualify for reduced cost-share treatment through significant nontraditional or nonprofit participation? Is a government-approved accounting system already available for any cost-reimbursement award path? Is there enough technical scope clarity to estimate capture cost and delivery risk credibly for the next cycle? Can the team support the likely SDR, firmware, cyber-control, and integration workload with realistic staffing? Will any critical deliverable depend on third-party software that could complicate licensing or contracting-officer approval?"
+        "body": "Does the company or any teammate have AFRL SETA, A&AS, or similar support relationships that create a disqualifying OCI for a technical-performer role? Is the company already registered and certified with DLIS, and can it satisfy export-control participation requirements? Can the company accept the likely FAR/OT negotiation posture and any case-by-case limits on non-SBIR restricted data rights? Does the delivery organization already have, or can it credibly obtain in time, the facility clearance and cleared personnel that may be required at award? Will any proposed architecture store or process Government or Government-related data in the cloud, and if so, is a DISA-authorized provider path available? Does the company have a BASIC NIST SP 800-171 assessment in SPRS, or a clear path to readiness before the next solicitation step? Would the company qualify for reduced cost-share treatment through significant non-traditional defense contractor or nonprofit participation, or otherwise absorb one-third non-Federal cost share if the OT prototype path is used? Is a government-approved accounting system already in place, or obtainable in time, if the opportunity moves toward a cost-reimbursement vehicle? Can the proposed team cover the likely SDR gateware, firmware, cyber-control, and integration workload without relying on personnel who cannot satisfy U.S.-citizen access requirements?"
       }
     ],
     "note": "The AI synthesis recommends; BD/Ops owns the final capture decision."
@@ -413,43 +468,28 @@
   "conditions": [
     {
       "number": 1,
-      "text": "Treat this as a capture/white-paper pursuit only until invited forward; do not authorize full proposal spend yet.",
-      "department": "Implementation"
+      "text": "Proceed with capture and white-paper development only if Legal confirms no disqualifying OCI, eligibility, foreign participation, DLIS registration, export-control, or unacceptable data-rights issues.",
+      "department": "Legal"
     },
     {
       "number": 2,
-      "text": "Confirm the company and team structure comply with the foreign participation prohibition.",
-      "department": "Legal"
+      "text": "Require Security to assess whether the likely solution and team can satisfy pre-award security review, classified-work clearance posture, SPRS/NIST 800-171 expectations, and any DISA cloud authorization needs before proposal resources scale.",
+      "department": "Security"
     },
     {
       "number": 3,
-      "text": "If any entity has FOCI exposure, obtain approved mitigation documentation before submitting a white paper.",
-      "department": "Legal"
+      "text": "Require Finance to model OT versus FAR scenarios, including cost-share exposure, funding uncertainty, and accounting-system readiness, before authorizing full proposal spend.",
+      "department": "Finance"
     },
     {
       "number": 4,
-      "text": "Complete prime/subcontractor OCI screening and confirm mitigation support is credible.",
-      "department": "Legal"
+      "text": "Require Implementation/Capture to validate that a credible delivery team can meet U.S.-citizen access constraints and likely technical scope in SDR, firmware, cyber-control, software dependency, and integration areas.",
+      "department": "Implementation"
     },
     {
       "number": 5,
-      "text": "Confirm whether any non-U.S.-citizen or non-permanent-resident personnel are needed; if so, determine whether export-control approvals are realistically obtainable.",
-      "department": "Legal"
-    },
-    {
-      "number": 6,
-      "text": "Qualify acceptable award-vehicle and data-rights posture, including whether government-favorable openness/data-rights terms are commercially acceptable.",
-      "department": "Legal"
-    },
-    {
-      "number": 7,
-      "text": "Confirm whether the target solution would require cloud storage or processing of government or government-related data; if yes, map to a DISA-authorized hosting path at the required level.",
-      "department": "Security"
-    },
-    {
-      "number": 8,
-      "text": "Verify BASIC NIST SP 800-171 assessment posture in SPRS and overall safeguarding readiness.",
-      "department": "Security"
+      "text": "Treat this as a staged pursuit: prepare a compliant white paper now and defer any full-proposal build-out unless invited by the Government.",
+      "department": "Implementation"
     }
   ],
   "value_metrics": [
@@ -458,7 +498,7 @@
       "label": "capture decision"
     },
     {
-      "value": "15",
+      "value": "14",
       "label": "evidence phrases"
     },
     {
@@ -499,7 +539,7 @@
     },
     {
       "time": "12:10 AM",
-      "event": "CodexReviewAgent - 19 findings generated and routed."
+      "event": "CodexReviewAgent - 16 findings generated and routed."
     },
     {
       "time": "10:30 AM",
@@ -515,7 +555,7 @@
     },
     {
       "time": "11:05 AM",
-      "event": "Implementation reviewer - Implementation returned worth_pursuing."
+      "event": "Implementation reviewer - Implementation returned worth_pursuing_with_conditions."
     },
     {
       "time": "11:18 AM",
@@ -533,50 +573,34 @@
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
       "page": "1",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.1",
+      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.1",
       "source_phrase": "Only white papers will be accepted as initial submissions; formal proposals will be accepted by invitation only.",
       "full_source": "Only white papers will be accepted as initial submissions; formal proposals will be accepted by invitation only.",
-      "extracted_fact": "The immediate pursuit step is a white paper, and full proposal access depends on government invitation.",
-      "confidence": "98%",
+      "extracted_fact": "The current presolicitation step is limited to a white paper, and a formal proposal requires Government invitation.",
+      "confidence": "97%",
       "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "This is a gated presolicitation pursuit, not an open full-proposal bid. The immediate capture question is whether the team can produce a competitive white paper first and earn invitation into the next step.",
+      "risk": false,
+      "ai_reasoning": "This is a normal presolicitation gate, not a no-pursue blocker: capture should staff a compliant white paper now and defer full-proposal build-out unless invited.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-02",
-      "department": "Implementation",
+      "department": "Security",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
-      "page": "13",
-      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.13",
-      "source_phrase": "FY26 by 8 APR 2026 FY27 by 30 SEP 2026 FY28 by 30 SEP 2027 FY29 by 30 SEP 2028 FY30 by 30 SEP 2029 White papers will be accepte...",
-      "full_source": "FY26 by 8 APR 2026 \nFY27 by 30 SEP 2026 \nFY28 by 30 SEP 2027 \nFY29 by 30 SEP 2028 \nFY30 by 30 SEP 2029 \n \nWhite papers will be accepted until 5:00 PM EST 31 December 2030, but it is less likely that funding \nwill be available in each respective fiscal year after the dates cited.",
-      "extracted_fact": "The FY26 suggested white-paper date has passed, later submissions remain possible through December 31, 2030, and fiscal-year funding becomes less likely after the cited dates.",
-      "confidence": "94%",
+      "page": "14",
+      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.14",
+      "source_phrase": "Security classification guidance in the form of a DD Form 254 (DoD Contract Security Classification Specification) will not be ...",
+      "full_source": "Security classification guidance in the form of a DD Form 254 (DoD Contract Security Classification Specification) will not be provided at this time since AFRL is soliciting ideas only.",
+      "extracted_fact": "The presolicitation package does not yet include DD254 classification guidance.",
+      "confidence": "93%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "The FY26 suggested white-paper window has already passed. Pursuit is still possible, but capture should treat this as a later-cycle effort and align to the FY27 timing unless the customer indicates otherwise.",
+      "ai_reasoning": "Classification handling is still a presolicitation unknown because DD254 guidance is not yet issued; Security should treat this as a follow-up gate before the next solicitation step rather than a present blocker.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-03",
-      "department": "Finance",
-      "document": "AI-normalized packet",
-      "document_id": "ai_normalized_packet",
-      "page": "5",
-      "locator": "FA875026S7002_sam.pdf p.5",
-      "source_phrase": "the Air Force reserves the right to award zero, one, or more Procurement Contracts or Other Transactions for all, some, or none...",
-      "full_source": "the Air\nForce reserves the right to award zero, one,\nor more Procurement Contracts or Other\nTransactions for all, some, or none of the\nsolicited effort based on the offeror\u2019s ability\nto perform desired work and funding fluc-\ntuations.",
-      "extracted_fact": "The agency expressly allows a zero-award outcome and ties awards to funding fluctuations.",
-      "confidence": "95%",
-      "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "Finance should stage-gate pursuit spend because the agency expressly preserves a zero-award outcome and warns that awards depend on funding fluctuations.",
-      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
-    },
-    {
-      "id": "ev-04",
       "department": "Legal",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
@@ -584,11 +608,27 @@
       "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.5",
       "source_phrase": "the Government shall have sole discretion to select award instrument type and to negotiate all instrument terms and conditions ...",
       "full_source": "the Government shall have sole discretion to select award instrument type and to negotiate all instrument terms and conditions with selectees.",
-      "extracted_fact": "The government can choose the award vehicle and negotiate resulting terms later.",
+      "extracted_fact": "The Government has not fixed the award vehicle and expects to negotiate award terms with selectees.",
       "confidence": "98%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "Legal should qualify both FAR and OT paths before deeper capture investment because the government can choose the instrument later and negotiate terms and conditions with selectees.",
+      "ai_reasoning": "Legal should clear readiness for either a FAR contract or an OT path because the Government has kept instrument type and terms open for negotiation.",
+      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
+    },
+    {
+      "id": "ev-04",
+      "department": "Implementation",
+      "document": "AI-normalized packet",
+      "document_id": "ai_normalized_packet",
+      "page": "8",
+      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.8",
+      "source_phrase": "Government Information Technology (IT) networks in connection with the work on contracts or other transactions awarded under th...",
+      "full_source": "Government Information Technology (IT) networks in connection with the work on contracts or other transactions awarded under this BAA or ARA must be U.S.",
+      "extracted_fact": "Personnel needing base, facility, or Government IT access must be U.S. citizens.",
+      "confidence": "99%",
+      "conclusion": "Capture condition",
+      "risk": true,
+      "ai_reasoning": "Implementation staffing is a serious pursuit risk if the delivery plan depends on non-U.S.-citizen personnel for base, facility, or Government-network access.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
@@ -596,67 +636,35 @@
       "department": "Legal",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
-      "page": "7",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.7",
-      "source_phrase": "This ARA is closed to foreign participation.",
-      "full_source": "This ARA is closed to foreign participation.",
-      "extracted_fact": "Foreign participation is prohibited under this ARA.",
-      "confidence": "99%",
+      "page": "9",
+      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.9",
+      "source_phrase": "AFRL has a supplemental OCI policy that prohibits contractors/performers from concurrently providing Scientific Engineering Tec...",
+      "full_source": "AFRL has a supplemental OCI policy that prohibits contractors/performers from concurrently providing Scientific Engineering Technical Assistance (SETA), Advisory and Assistance Services (A&AS) or similar support services and being a technical performer.",
+      "extracted_fact": "AFRL bars concurrent SETA/A&AS-style support roles and technical performer roles.",
+      "confidence": "98%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "This is a conditional eligibility blocker. If the planned prime, subcontractor, or staffing model relies on foreign participation, the opportunity is not pursuit-ready.",
+      "ai_reasoning": "Existing AFRL SETA, A&AS, or similar support by the company or a teammate is a material OCI risk that can undercut capture readiness for a technical-performer role.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-06",
-      "department": "Legal",
+      "department": "Security",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
-      "page": "7",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.7",
-      "source_phrase": "Proof of approved mitigation documentation must be provided to Amber Buckley, Contracting Officer, at Amber.Buckley@us.af.mil p...",
-      "full_source": "Proof of approved mitigation documentation must be provided to Amber Buckley, Contracting Officer, at Amber.Buckley@us.af.mil prior to submitting a white paper and/or a proposal.",
-      "extracted_fact": "Approved FOCI mitigation documentation is required before submitting a white paper or proposal.",
+      "page": "11",
+      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.11",
+      "source_phrase": "(3) In the event a security risk is identified, and the Government has determined the security risk exceeds the acceptable thre...",
+      "full_source": "(3) In the event a security risk is identified, and the Government has determined the security risk exceeds the acceptable threshold, the Applicant/Recipient will be notified and informed of the decline of award.",
+      "extracted_fact": "The Government can decline award if its security review finds risk above the acceptable threshold.",
       "confidence": "98%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "This is a presubmission gate that can become a hard stop. Any FOCI-affected entity needs approved mitigation paperwork before a white paper or proposal can be submitted.",
+      "ai_reasoning": "Pre-award security review is a real pursuit kill gate; the opportunity should only advance if key personnel and the organizational profile are likely to clear the Government's risk threshold.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-07",
-      "department": "Legal",
-      "document": "AI-normalized packet",
-      "document_id": "ai_normalized_packet",
-      "page": "8",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.8",
-      "source_phrase": "citizen or a permanent resident will be restricted from working on any resultant contract unless prior approval of the Departme...",
-      "full_source": "citizen or a permanent resident will be restricted from working on any resultant contract unless prior approval of the Department of State or the Department of Commerce is obtained via a technical assistance agreement or an export license.",
-      "extracted_fact": "Using non-U.S.-citizen or non-permanent-resident personnel requires export-control approval and carries penalty exposure for violations.",
-      "confidence": "95%",
-      "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "If the pursuit depends on non-U.S.-citizen or non-permanent-resident personnel, export-control approval becomes a pre-bid gate with explicit civil and criminal penalty exposure.",
-      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
-    },
-    {
-      "id": "ev-08",
-      "department": "Legal",
-      "document": "AI-normalized packet",
-      "document_id": "ai_normalized_packet",
-      "page": "9",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.9",
-      "source_phrase": "If the Government determines that an offeror failed to fully disclose an OCI; or failed to provide the affirmation of AFRL supp...",
-      "full_source": "If the Government determines that an offeror failed to fully disclose an OCI; or failed to provide the affirmation of AFRL support as described above; or failed to reasonably provide additional information requested by the Government to assist in evaluating the proposer\u2019s OCI mitigation plan, the Government may reject the proposal and withdraw it from consideration for award.",
-      "extracted_fact": "Incomplete OCI disclosure or mitigation support can cause proposal rejection and removal from consideration.",
-      "confidence": "98%",
-      "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "Prime and subcontractor OCI screening is a capture-readiness requirement, not a later cleanup item, because inadequate disclosure or mitigation support can remove the team from consideration.",
-      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
-    },
-    {
-      "id": "ev-09",
       "department": "Security",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
@@ -664,15 +672,79 @@
       "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.6",
       "source_phrase": "if the development proposed requires storage of Government, or Government-related data on the cloud, offerors need to ensure th...",
       "full_source": "if the development proposed requires storage of Government, or Government-related data on the cloud, offerors need to ensure that the cloud service provider proposed has been granted Provisional Authorization by the Defense Information Systems Agency (DISA) at the level appropriate to the requirement.",
-      "extracted_fact": "Any cloud-hosted government or government-related data requires a DISA-provisionally authorized cloud provider at the appropriate level.",
+      "extracted_fact": "Any cloud storage of Government or Government-related data must use a DISA provisionally authorized provider at the required level.",
       "confidence": "99%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "If the proposed solution stores government or government-related data in the cloud, pursuit should continue only with a DISA-authorized hosting path at the required level.",
+      "ai_reasoning": "Any solution architecture that stores Government or Government-related data in the cloud needs an authorized provider path before the next solicitation step.",
+      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
+    },
+    {
+      "id": "ev-08",
+      "department": "Legal",
+      "document": "AI-normalized packet",
+      "document_id": "ai_normalized_packet",
+      "page": "19",
+      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.19",
+      "source_phrase": "Only contractors who are registered and certified with the Defense Logistics Information Service (DLIS) and have a legitimate b...",
+      "full_source": "Only contractors who are registered and certified with the Defense Logistics Information Service (DLIS) and have a legitimate business purpose may participate in this solicitation.",
+      "extracted_fact": "DLIS registration and certification are participation conditions.",
+      "confidence": "98%",
+      "conclusion": "Capture condition",
+      "risk": true,
+      "ai_reasoning": "DLIS registration and certification are a hard participation gate that should be verified before more capture spend is committed.",
+      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
+    },
+    {
+      "id": "ev-09",
+      "department": "Security",
+      "document": "AI-normalized packet",
+      "document_id": "ai_normalized_packet",
+      "page": "19",
+      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.19",
+      "source_phrase": "Depending on the work to be performed, the offeror may require a SECRET or TOP SECRET facility clearance and safeguarding capab...",
+      "full_source": "Depending on the work to be performed, the offeror may require a SECRET or TOP SECRET facility clearance and safeguarding capability; therefore, personnel identified for assignment to a classified effort must be cleared for access to SECRET or TOP SECRET information at the time of award.",
+      "extracted_fact": "Some work may require facility clearance and cleared personnel at award.",
+      "confidence": "98%",
+      "conclusion": "Capture condition",
+      "risk": true,
+      "ai_reasoning": "If the concept could become classified, Security needs a credible facility-clearance and cleared-personnel path because the requirement may apply at award rather than post-award.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-10",
+      "department": "Finance",
+      "document": "AI-normalized packet",
+      "document_id": "ai_normalized_packet",
+      "page": "16",
+      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.16",
+      "source_phrase": "If there is no non-traditional defense contractor nor nonprofit research institution participating to a significant extent, the...",
+      "full_source": "If there is no non-traditional defense contractor nor nonprofit research institution participating to a significant extent, then at least one-third of the total cost of the prototype project must be paid out of funds provided by non-Federal parties to the transaction.",
+      "extracted_fact": "Absent significant participation by a non-traditional defense contractor or nonprofit research institution, the prototype path requires at least one-third non-Federal cost share.",
+      "confidence": "98%",
+      "conclusion": "Capture condition",
+      "risk": true,
+      "ai_reasoning": "Finance should treat OT eligibility and one-third non-Federal cost share as a major pursuit risk unless a qualifying non-traditional defense contractor or nonprofit participant will contribute to a significant extent.",
+      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
+    },
+    {
+      "id": "ev-11",
+      "department": "Finance",
+      "document": "AI-normalized packet",
+      "document_id": "ai_normalized_packet",
+      "page": "15",
+      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.15",
+      "source_phrase": "An offeror must have a government approved accounting system prior to award of a cost-reimbursement contract",
+      "full_source": "An offeror must have a government approved accounting system prior to award of a cost-reimbursement contract",
+      "extracted_fact": "A government-approved accounting system is required before award of a cost-reimbursement contract.",
+      "confidence": "94%",
+      "conclusion": "Capture condition",
+      "risk": true,
+      "ai_reasoning": "If the deal moves toward a cost-reimbursement path, Finance must verify award readiness around a government-approved accounting system.",
+      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
+    },
+    {
+      "id": "ev-12",
       "department": "Security",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
@@ -680,95 +752,48 @@
       "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.16",
       "source_phrase": "Offerors should have a BASIC NIST SP 800 171 DoD Assessment in the SPRS (https://www.sprs.csd.disa.mil/).",
       "full_source": "Offerors should have a BASIC NIST SP 800 171 DoD Assessment in the SPRS (https://www.sprs.csd.disa.mil/).",
-      "extracted_fact": "Offerors are expected to have a BASIC NIST SP 800-171 assessment in SPRS.",
-      "confidence": "97%",
+      "extracted_fact": "The solicitation expects a BASIC NIST SP 800-171 DoD Assessment in SPRS.",
+      "confidence": "95%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "Security readiness is a near-term gate because the solicitation expects a BASIC NIST SP 800-171 SPRS assessment before deeper pursuit investment is justified.",
-      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
-    },
-    {
-      "id": "ev-11",
-      "department": "Security",
-      "document": "AI-normalized packet",
-      "document_id": "ai_normalized_packet",
-      "page": "19",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.19",
-      "source_phrase": "Depending on the work to be performed, the offeror may require a SECRET or TOP SECRET facility clearance and safeguarding capab...",
-      "full_source": "Depending on the work to be performed, the offeror may require a SECRET or TOP SECRET facility clearance and safeguarding capability; therefore, personnel identified for assignment to a classified effort must be cleared for access to SECRET or TOP SECRET information at the time of award.",
-      "extracted_fact": "Some work may require facility clearance and already-cleared personnel at award.",
-      "confidence": "98%",
-      "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "Some work may require cleared facilities and already-cleared personnel at award, so the opportunity is risky if the company lacks a credible classified-delivery path.",
-      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
-    },
-    {
-      "id": "ev-12",
-      "department": "Finance",
-      "document": "AI-normalized packet",
-      "document_id": "ai_normalized_packet",
-      "page": "16",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.16",
-      "source_phrase": "If there is no non-traditional defense contractor nor nonprofit research institution participating to a significant extent, the...",
-      "full_source": "If there is no non-traditional defense contractor nor \nnonprofit research institution participating to a significant extent, then at least one-third of \nthe total cost of the prototype project must be paid out of funds provided by non-Federal \nparties to the transaction.",
-      "extracted_fact": "Without significant nontraditional or nonprofit participation, the prototype OT requires at least one-third non-federal cost share.",
-      "confidence": "99%",
-      "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "If the team lacks significant nontraditional or nonprofit participation, Finance may need to support at least one-third non-federal cost share before this is capture-ready.",
+      "ai_reasoning": "Security should confirm SPRS/NIST 800-171 readiness before the next solicitation step because the notice expects a BASIC assessment on file.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-13",
-      "department": "Finance",
+      "department": "Legal",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
-      "page": "15",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.15",
-      "source_phrase": "An offeror must have a government approved accounting system prior to award of a cost-reimbursement contract per limitations se...",
-      "full_source": "An offeror must have a government \napproved accounting system prior to award of a cost-reimbursement contract per limitations set \nforth in FAR 16.301-3(a) to ensure the system is adequate for determining costs applicable to the \ncontract.",
-      "extracted_fact": "A government-approved accounting system is required before award of a cost-reimbursement contract.",
-      "confidence": "98%",
+      "page": "21",
+      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.21",
+      "source_phrase": "Non-SBIR data rights less than unlimited will be evaluated and negotiated on a case- by-case basis.",
+      "full_source": "Non-SBIR data rights less than unlimited will be evaluated and negotiated on a case- by-case basis.",
+      "extracted_fact": "Restricted non-SBIR data rights will be handled through case-by-case negotiation.",
+      "confidence": "96%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "A cost-reimbursement path cannot be awarded without a government-approved accounting system, making finance-readiness a presolicitation gate rather than a post-selection task.",
+      "ai_reasoning": "Any pursuit strategy that depends on non-SBIR data rights below unlimited rights carries negotiation risk and should be cleared early with Legal.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     },
     {
       "id": "ev-14",
-      "department": "Legal",
-      "document": "AI-normalized packet",
-      "document_id": "ai_normalized_packet",
-      "page": "17",
-      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.17",
-      "source_phrase": "Openness, Data Rights and Potential Impact of the Solution - The extent to which open- access science and standards are leverag...",
-      "full_source": "Openness, Data Rights and Potential Impact of the Solution - The extent to which open- access science and standards are leveraged, the extent to which data rights are advantageous to the Government, and the potential disruptive impact of the proposed technology; - Normalized fact: Evaluation criteria explicitly favor openness and data-rights positions that are advantageous to the Government.",
-      "extracted_fact": "Evaluation favors openness and data-rights positions that are advantageous to the Government.",
-      "confidence": "95%",
-      "conclusion": "Capture condition",
-      "risk": true,
-      "ai_reasoning": "The evaluation criteria favor openness and government-advantageous data rights, so Legal should confirm the company can pursue without undermining its intended IP and data-rights posture.",
-      "specialist_conclusion": "Specialist review accepted pursuit with conditions."
-    },
-    {
-      "id": "ev-15",
       "department": "Implementation",
       "document": "AI-normalized packet",
       "document_id": "ai_normalized_packet",
       "page": "21",
-      "locator": "SAM-Synopsis-Open-ARA-CORTEX-Hallahan-v7.pdf p.21",
+      "locator": "ARA-26-02-amend-1-update-PM-email.pdf p.21",
       "source_phrase": "Prior to delivery of any third party software, the contractor will obtain an appropriate license for the Government, and the wr...",
       "full_source": "Prior to delivery of any third party software, the contractor will obtain an appropriate license for the Government, and the written approval of the contracting officer.",
-      "extracted_fact": "Third-party software in deliverables must be disclosed, licensed for the Government, and approved by the contracting officer.",
+      "extracted_fact": "Third-party software must be disclosed in the proposal and later licensed for the Government with contracting-officer approval.",
       "confidence": "97%",
       "conclusion": "Capture condition",
       "risk": true,
-      "ai_reasoning": "Any deliverable that relies on third-party software will need disclosure, licensing, and contracting-officer approval, so implementation should validate dependency and licensing strategy before the next solicitation step.",
+      "ai_reasoning": "Solutions that embed third-party software need early dependency and licensing review because proposal disclosure and later Government license approval are required.",
       "specialist_conclusion": "Specialist review accepted pursuit with conditions."
     }
   ],
   "kpi_dashboard": {
+    "processing_note": "This run used the large normalized-packet path: AI screened the opportunity, inventoried the package, reviewed page-aware chunks, created a master packet, then routed specialists from that normalized record.",
     "summary": [
       {
         "label": "Total processing time",
@@ -776,8 +801,13 @@
         "detail": "includes overnight AI + human reviews"
       },
       {
+        "label": "Large-package normalization",
+        "value": "13 chunks",
+        "detail": "normalized packet reduced manual review burden"
+      },
+      {
         "label": "Evidence phrases",
-        "value": "15",
+        "value": "14",
         "detail": "grounded from public packet"
       },
       {
@@ -798,8 +828,18 @@
         "group": "ai"
       },
       {
+        "label": "Inventory",
+        "seconds": 30,
+        "group": "ai"
+      },
+      {
+        "label": "Chunk",
+        "seconds": 780,
+        "group": "ai"
+      },
+      {
         "label": "Normalize",
-        "seconds": 120,
+        "seconds": 180,
         "group": "ai"
       },
       {
@@ -831,15 +871,15 @@
     "department_counts": [
       {
         "department": "Legal",
-        "count": 6
+        "count": 4
       },
       {
         "department": "Security",
-        "count": 3
+        "count": 5
       },
       {
         "department": "Finance",
-        "count": 3
+        "count": 2
       },
       {
         "department": "Implementation",

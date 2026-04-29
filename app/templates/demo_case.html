@@ -101,6 +101,28 @@
               {% endfor %}
             </div>
           </section>
+          <section class="processing-path-panel">
+            <div>
+              <p class="muted-label">Processing path</p>
+              <h2>{{ demo.processing_path.label }}</h2>
+              <p>{{ demo.processing_path.summary }}</p>
+            </div>
+            <div class="processing-path-grid">
+              {% for metric in demo.processing_path.metrics %}
+                <div>
+                  <strong>{{ metric.value }}</strong>
+                  <span>{{ metric.label }}</span>
+                </div>
+              {% endfor %}
+            </div>
+            {% if demo.processing_path.trigger_reasons %}
+              <div class="trigger-list" aria-label="Processing path trigger reasons">
+                {% for reason in demo.processing_path.trigger_reasons %}
+                  <span>{{ reason }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </section>
           <div class="finding-grid">
             {% for card in demo.extraction_cards %}
               <div class="finding-card">
@@ -136,6 +158,15 @@
                 <ul class="evidence-list-compact">
                   {% for item in demo.evidence_items %}
                     <li><a href="/demo/source-document?active={{ item.id }}">{{ item.source_phrase }}</a></li>
+                  {% endfor %}
+                </ul>
+              </div>
+              <div>
+                <h3>Large-path artifacts</h3>
+                <p class="proof-note">These static artifacts were produced during local AI processing and exported into the read-only demo wrapper.</p>
+                <ul class="artifact-list">
+                  {% for artifact in demo.processing_path.artifacts %}
+                    <li>{{ artifact }}</li>
                   {% endfor %}
                 </ul>
               </div>

@@ -16,6 +16,12 @@
       This dashboard is case-level because the public demo currently has one flagship case. The time-saved estimate
       includes overnight AI opportunity screening plus downstream document review, routing, human review, and BD/Ops decision support.
     </p>
+    {% if kpi_dashboard.processing_note %}
+      <section class="processing-path-panel compact">
+        <p class="muted-label">Processing path reflected in these KPIs</p>
+        <p>{{ kpi_dashboard.processing_note }}</p>
+      </section>
+    {% endif %}
     <div class="metric-grid kpi-summary">
       {% for metric in kpi_dashboard.summary %}
         <div class="metric-card">
@@ -29,7 +35,7 @@
     <div class="chart-grid">
       <section class="chart-card stage-time-card">
         <h2>Time per workflow stage</h2>
-        <p>Seconds - AI screening, normalization, enrichment, extraction, and routing are fast; human review and BD/Ops decision take the real time</p>
+        <p>Seconds for AI screening, large-package normalization, extraction, and routing; human review and BD/Ops decision remain the longest stages.</p>
         <div class="bar-chart">
           {% for item in kpi_dashboard.stage_times %}
             <div class="bar-wrap">

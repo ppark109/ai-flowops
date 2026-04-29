@@ -492,6 +492,78 @@ h1 {
   line-height: 1.25;
 }
 
+.processing-path-panel {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding: 18px 20px;
+  border: 1px solid #cfd9e8;
+  border-radius: 8px;
+  background: #f7f9fc;
+}
+
+.processing-path-panel.compact {
+  margin-bottom: 24px;
+}
+
+.processing-path-panel h2 {
+  margin: 3px 0 8px;
+  font-size: 1.08rem;
+}
+
+.processing-path-panel p {
+  margin: 0;
+  color: #3f3c36;
+  line-height: 1.45;
+}
+
+.processing-path-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.processing-path-grid div {
+  padding: 12px;
+  border: 1px solid #d8dde5;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.processing-path-grid strong,
+.processing-path-grid span {
+  display: block;
+}
+
+.processing-path-grid strong {
+  margin-bottom: 3px;
+  font-size: 1.24rem;
+}
+
+.processing-path-grid span {
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.25;
+}
+
+.trigger-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.trigger-list span {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #c7d9f0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  color: var(--blue-dark);
+  background: #eef6ff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .risk-list,
 .condition-list {
   border: 1px solid var(--line);
@@ -599,6 +671,25 @@ pre {
   margin: 0;
   padding-left: 20px;
   line-height: 1.7;
+}
+
+.artifact-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.artifact-list li {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f6f4ef;
+  color: #3f3c36;
+  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
 }
 
 .evidence-list-compact li,
@@ -1715,6 +1806,7 @@ button {
   .architecture-flow,
   .chart-grid,
   .proof-grid,
+  .processing-path-grid,
   .evidence-detail-grid,
   .donut-layout {
     grid-template-columns: 1fr;

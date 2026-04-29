@@ -56,6 +56,12 @@ def build_case_room_fixture(case_dir: Path, output_path: Path) -> dict[str, Any]
     state = _read_json(case_dir / "ai_flowops_state.local.json")
     completion = _read_json(case_dir / "ai_flowops_completed_case.local.json")
     manifest = _read_json(case_dir / "manifest.local.json")
+    processing_profile = _read_optional_json(case_dir / "processing_profile.local.json", {})
+    document_inventory = _read_optional_json(case_dir / "document_inventory.local.json", {})
+    document_classification = _read_optional_json(
+        case_dir / "document_classification.local.json", {}
+    )
+    chunk_reviews = _read_optional_json(case_dir / "chunk_reviews.local.json", [])
     findings = [
         finding
         for finding in state.get("findings", [])
@@ -67,7 +73,7 @@ def build_case_room_fixture(case_dir: Path, output_path: Path) -> dict[str, Any]
     audit_events = _audit_events(completion)
 
     return {
-        "case": _case(manifest, state, completion),
+        "case": _case(manifest, state, completion, document_inventory),
         "hero_stats": [
             {"value": "43", "label": "opportunities screened"},
             {"value": "4", "label": "departments routed"},
@@ -78,10 +84,27 @@ def build_case_room_fixture(case_dir: Path, output_path: Path) -> dict[str, Any]
         "source_documents": _source_documents(case_dir, output_path),
         "stages": _stages(completion, len(evidence_items)),
         "received_summary": _received_summary(state),
-        "extraction_time_saved": _extraction_time_saved(len(evidence_items)),
+        "processing_path": _processing_path(
+            processing_profile=processing_profile,
+            document_inventory=document_inventory,
+            document_classification=document_classification,
+            chunk_reviews=chunk_reviews,
+        ),
+        "extraction_time_saved": _extraction_time_saved(
+            len(evidence_items),
+            processing_profile=processing_profile,
+            document_inventory=document_inventory,
+            chunk_reviews=chunk_reviews,
+        ),
         "extraction_cards": _extraction_cards(findings),
         "risk_flags": _risk_flags(findings),
-        "extracted_json": _extracted_json(state, completion, evidence_items),
+        "extracted_json": _extracted_json(
+            state,
+            completion,
+            evidence_items,
+            processing_profile,
+            chunk_reviews,
+        ),
         "routing_logic_intro": (
             "The AI treated this as a presolicitation capture decision. It did not ask "
             "whether to submit a final bid today; it asked which departments need to "
@@ -112,7 +135,12 @@ def build_case_room_fixture(case_dir: Path, output_path: Path) -> dict[str, Any]
         ],
         "audit_events": audit_events,
         "evidence_items": evidence_items,
-        "kpi_dashboard": _kpi_dashboard(evidence_items, audit_events),
+        "kpi_dashboard": _kpi_dashboard(
+            evidence_items,
+            audit_events,
+            processing_profile=processing_profile,
+            chunk_reviews=chunk_reviews,
+        ),
     }
 
 
@@ -122,10 +150,17 @@ def _read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _read_optional_json(path: Path, default: Any) -> Any:
+    if not path.is_file():
+        return default
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
 def _case(
     manifest: dict[str, Any],
     state: dict[str, Any],
     completion: dict[str, Any],
+    document_inventory: dict[str, Any],
 ) -> dict[str, str | int]:
     title = f"{state['case_id']} CORTEX Presolicitation Review"
     return {
@@ -149,7 +184,8 @@ def _case(
         "risk_level": _risk_level(state.get("findings", [])),
         "confidence": f"{round(float(completion['ai_synthesis']['confidence']) * 100)}%",
         "received_at": "12:01 AM",
-        "pages": sum(int(item.get("page_count", 0)) for item in _manifest_documents(manifest)),
+        "pages": int(document_inventory.get("total_pages") or 0)
+        or sum(int(item.get("page_count", 0)) for item in _manifest_documents(manifest)),
         "exhibits": len(_manifest_documents(manifest)),
     }
 
@@ -351,16 +387,125 @@ def _extraction_cards(findings: list[dict[str, Any]]) -> list[dict[str, str]]:
     ]
 
 
-def _extraction_time_saved(evidence_count: int) -> dict[str, Any]:
+def _processing_path(
+    *,
+    processing_profile: dict[str, Any],
+    document_inventory: dict[str, Any],
+    document_classification: dict[str, Any],
+    chunk_reviews: list[dict[str, Any]],
+) -> dict[str, Any]:
+    mode = str(processing_profile.get("processing_mode") or "simple_direct_ai")
+    metrics = processing_profile.get("metrics", {})
+    large_mode = mode == "large_normalized_packet"
+    label = "Large-opportunity path selected" if large_mode else "Simple direct AI path selected"
+    if large_mode:
+        summary = (
+            "The package was too dense for a single safe review pass, so AI FlowOps "
+            "inventoried the source files, classified document purpose, reviewed page-aware "
+            "chunks, reconciled the results, and generated one normalized master packet before "
+            "department routing."
+        )
+    else:
+        summary = (
+            "The package fit in one review pass, so AI FlowOps sent the extracted documents "
+            "directly to AI analysis and department routing."
+        )
+    document_count = document_inventory.get("document_count") or metrics.get("document_count") or 0
+    total_pages = document_inventory.get("total_pages") or metrics.get("total_pages") or 0
     return {
-        "headline": (
+        "mode": mode,
+        "label": label,
+        "summary": summary,
+        "complexity_score": processing_profile.get("complexity_score", 0),
+        "trigger_reasons": [
+            _trigger_reason_label(reason)
+            for reason in processing_profile.get("trigger_reasons", [])
+        ],
+        "metrics": [
+            {
+                "value": str(document_count),
+                "label": "source documents inventoried",
+            },
+            {
+                "value": str(total_pages),
+                "label": "pages normalized",
+            },
+            {
+                "value": str(len(chunk_reviews)),
+                "label": "page-aware chunks reviewed",
+            },
+            {
+                "value": "1" if large_mode else "0",
+                "label": "normalized packet generated",
+            },
+        ],
+        "document_roles": [
+            {
+                "role": role.replace("_", " ").title(),
+                "count": count,
+            }
+            for role, count in (
+                document_classification.get("role_counts")
+                or metrics.get("role_counts")
+                or {}
+            ).items()
+        ],
+        "artifacts": [
+            "processing_profile.local.json",
+            "document_inventory.local.json",
+            "document_classification.local.json",
+            "chunk_reviews.local.json",
+            "extracted/ai_normalized_packet.local.md",
+        ]
+        if large_mode
+        else ["processing_profile.local.json", "ai_flowops_state.local.json"],
+    }
+
+
+def _trigger_reason_label(reason: str) -> str:
+    labels = {
+        "forced_by_cli_large": "Large path selected for production-realistic validation",
+        "manifest_forced_large": "Manifest requested large-package processing",
+        "document_count_gt_8": "Document count exceeded direct-review threshold",
+        "total_pages_gt_75": "Page count exceeded direct-review threshold",
+        "total_chars_gt_threshold": "Extracted text exceeded direct-review threshold",
+        "largest_document_chars_gt_40000": "Largest document exceeded direct-review threshold",
+        "amendment_or_update_detected": "Amendment or update document detected",
+        "qa_document_detected": "Q&A document detected",
+    }
+    return labels.get(reason, reason.replace("_", " "))
+
+
+def _extraction_time_saved(
+    evidence_count: int,
+    *,
+    processing_profile: dict[str, Any],
+    document_inventory: dict[str, Any],
+    chunk_reviews: list[dict[str, Any]],
+) -> dict[str, Any]:
+    large_mode = processing_profile.get("processing_mode") == "large_normalized_packet"
+    headline = (
+        "AI used the large-opportunity path to convert a dense public package into a "
+        "normalized capture-review packet before humans started reading."
+        if large_mode
+        else (
             "AI converted the public package into a routed capture-review packet before "
             "humans started reading."
-        ),
+        )
+    )
+    return {
+        "headline": headline,
         "metrics": [
             {"value": "4h", "label": "opportunity screening avoided"},
             {"value": "~2d", "label": "manual document review avoided"},
-            {"value": "10m", "label": "AI extraction and routing"},
+            {
+                "value": str(len(chunk_reviews)) if large_mode else "direct",
+                "label": "AI chunk reviews" if large_mode else "AI direct review",
+            },
+            {
+                "value": str(document_inventory.get("total_pages") or 0) if large_mode else "10m",
+                "label": "pages normalized" if large_mode else "AI extraction and routing",
+            },
             {"value": str(evidence_count), "label": "source phrases grounded"},
         ],
     }
@@ -425,10 +570,16 @@ def _extracted_json(
     state: dict[str, Any],
     completion: dict[str, Any],
     evidence_items: list[dict[str, Any]],
+    processing_profile: dict[str, Any],
+    chunk_reviews: list[dict[str, Any]],
 ) -> dict[str, Any]:
     return {
         "case_id": state["case_id"],
         "opportunity_stage": "presolicitation",
+        "processing_mode": processing_profile.get("processing_mode") or "simple_direct_ai",
+        "complexity_score": processing_profile.get("complexity_score", 0),
+        "chunks_reviewed": len(chunk_reviews),
+        "normalized_packet_generated": bool(chunk_reviews),
         "decision_question": "Should BD/Ops pursue and prepare for the next solicitation step?",
         "ai_recommendation": completion["ai_synthesis"]["recommendation"],
         "bd_ops_decision": completion["bd_ops_decision"]["decision"],
@@ -548,16 +699,35 @@ def _audit_events(completion: dict[str, Any]) -> list[dict[str, str]]:
 def _kpi_dashboard(
     evidence_items: list[dict[str, Any]],
     audit_events: list[dict[str, str]],
+    *,
+    processing_profile: dict[str, Any],
+    chunk_reviews: list[dict[str, Any]],
 ) -> dict[str, Any]:
     counts = {DEPARTMENT_LABELS[dept]: 0 for dept in DEPARTMENTS}
     for item in evidence_items:
         counts[item["department"]] = counts.get(item["department"], 0) + 1
+    large_mode = processing_profile.get("processing_mode") == "large_normalized_packet"
     return {
+        "processing_note": (
+            "This run used the large normalized-packet path: AI screened the opportunity, "
+            "inventoried the package, reviewed page-aware chunks, created a master packet, "
+            "then routed specialists from that normalized record."
+            if large_mode
+            else (
+                "This run used the simple direct-AI path: extracted documents went directly "
+                "to AI analysis and department routing."
+            )
+        ),
         "summary": [
             {
                 "label": "Total processing time",
                 "value": "11h 29m",
                 "detail": "includes overnight AI + human reviews",
+            },
+            {
+                "label": "Large-package normalization",
+                "value": f"{len(chunk_reviews)} chunks" if large_mode else "direct path",
+                "detail": "normalized packet reduced manual review burden",
             },
             {
                 "label": "Evidence phrases",
@@ -569,7 +739,9 @@ def _kpi_dashboard(
         ],
         "stage_times": [
             {"label": "Screen", "seconds": 240, "group": "ai"},
-            {"label": "Normalize", "seconds": 120, "group": "ai"},
+            {"label": "Inventory", "seconds": 30, "group": "ai"},
+            {"label": "Chunk", "seconds": 780, "group": "ai"},
+            {"label": "Normalize", "seconds": 180, "group": "ai"},
             {"label": "Extract", "seconds": 540, "group": "ai"},
             {"label": "Route", "seconds": 30, "group": "ai"},
             {"label": "Review", "seconds": 5400, "group": "human"},
